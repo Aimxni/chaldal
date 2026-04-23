@@ -69,9 +69,10 @@ const Navbar = () => {
             <Link
               key={l.to + l.label}
               to={l.to}
-              className={`group relative text-sm font-medium transition-colors ${
+              style={onHero ? { textShadow: "0 1px 8px hsl(150 30% 8% / 0.45)" } : undefined}
+              className={`group relative text-sm font-semibold transition-colors ${
                 onHero
-                  ? "text-[hsl(38_45%_96%)]/85 hover:text-[hsl(38_45%_96%)]"
+                  ? "text-[hsl(38_45%_98%)] hover:text-[hsl(38_90%_78%)]"
                   : "text-foreground/75 hover:text-foreground"
               }`}
             >
