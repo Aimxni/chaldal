@@ -24,6 +24,11 @@ const App = () => {
     if (window.__APP_STATE) {
       // @ts-ignore
       window.__APP_STATE.reactMounted = true;
+      // In dev mode (Vite serves CSS via <style> tags, not <link rel="stylesheet">),
+      // the asyncCssPlugin onload handler never fires. Force cssLoaded=true so the
+      // shell can be removed. In prod the onload usually wins first; this is a safety net.
+      // @ts-ignore
+      window.__APP_STATE.cssLoaded = true;
       // @ts-ignore
       if (typeof window.tryRemoveAppShell === "function") {
         // @ts-ignore
