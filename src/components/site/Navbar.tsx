@@ -32,25 +32,35 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const onHero = pathname === "/" && !scrolled;
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-40 transition-[background-color,box-shadow,backdrop-filter] duration-300 ${
         scrolled
-          ? "bg-background/85 shadow-soft backdrop-blur-md"
-          : "bg-background/40 backdrop-blur-sm"
+          ? "bg-background/90 shadow-soft backdrop-blur-md"
+          : "bg-transparent"
       }`}
     >
       <div className="container flex h-[72px] items-center justify-between gap-4">
         <Link
           to="/"
-          className="flex items-center gap-2.5 font-display text-2xl tracking-[-0.02em] text-foreground"
+          className={`flex items-center gap-2.5 font-display text-2xl tracking-[-0.02em] transition-colors ${
+            onHero ? "text-[hsl(38_45%_96%)]" : "text-foreground"
+          }`}
           aria-label="Chaldal — home"
         >
-          <span className="grid h-9 w-9 place-items-center rounded-full bg-primary font-display italic text-primary-foreground">
+          <span
+            className={`grid h-9 w-9 place-items-center rounded-full font-display italic transition-colors ${
+              onHero
+                ? "bg-[hsl(38_45%_96%)] text-[hsl(8_72%_42%)]"
+                : "bg-primary text-primary-foreground"
+            }`}
+          >
             c
           </span>
           <span className="hidden sm:inline">
-            chaldal<span className="text-accent">.</span>
+            chaldal<span className={onHero ? "text-[hsl(38_90%_72%)]" : "text-accent"}>.</span>
           </span>
         </Link>
 
@@ -59,10 +69,18 @@ const Navbar = () => {
             <Link
               key={l.to + l.label}
               to={l.to}
-              className="group relative text-sm font-medium text-foreground/75 transition-colors hover:text-foreground"
+              className={`group relative text-sm font-medium transition-colors ${
+                onHero
+                  ? "text-[hsl(38_45%_96%)]/85 hover:text-[hsl(38_45%_96%)]"
+                  : "text-foreground/75 hover:text-foreground"
+              }`}
             >
               {l.label}
-              <span className="absolute -bottom-1 left-0 h-px w-full origin-right scale-x-0 bg-accent transition-transform duration-300 group-hover:origin-left group-hover:scale-x-100" />
+              <span
+                className={`absolute -bottom-1 left-0 h-px w-full origin-right scale-x-0 transition-transform duration-300 group-hover:origin-left group-hover:scale-x-100 ${
+                  onHero ? "bg-[hsl(38_90%_72%)]" : "bg-accent"
+                }`}
+              />
             </Link>
           ))}
         </nav>
@@ -70,25 +88,39 @@ const Navbar = () => {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="hidden items-center gap-2 rounded-full border border-border px-3.5 py-2 text-xs text-foreground/75 transition-colors hover:bg-secondary md:inline-flex"
+            className={`hidden items-center gap-2 rounded-full border px-3.5 py-2 text-xs transition-colors md:inline-flex ${
+              onHero
+                ? "border-[hsl(38_45%_96%)]/30 text-[hsl(38_45%_96%)]/85 hover:bg-[hsl(38_45%_96%)]/10"
+                : "border-border text-foreground/75 hover:bg-secondary"
+            }`}
           >
             <MapPin className="h-3.5 w-3.5" />
             Dhanmondi 32
           </button>
           <Link
             to="/checkout"
-            className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+            className={`inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] transition-colors ${
+              onHero
+                ? "bg-[hsl(38_45%_96%)] text-[hsl(8_72%_42%)] hover:bg-[hsl(38_90%_72%)] hover:text-[hsl(150_35%_18%)]"
+                : "bg-primary text-primary-foreground hover:bg-accent hover:text-accent-foreground"
+            }`}
           >
             <ShoppingBag className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">Cart</span>
-            <span className="grid h-5 min-w-5 place-items-center rounded-full bg-accent px-1 text-[10px] text-accent-foreground">
+            <span
+              className={`grid h-5 min-w-5 place-items-center rounded-full px-1 text-[10px] ${
+                onHero ? "bg-[hsl(8_72%_42%)] text-[hsl(38_45%_96%)]" : "bg-accent text-accent-foreground"
+              }`}
+            >
               3
             </span>
           </Link>
           <button
             aria-label="Open menu"
             onClick={() => setOpen(true)}
-            className="grid h-10 w-10 place-items-center rounded-full text-foreground transition-colors hover:bg-secondary md:hidden"
+            className={`grid h-10 w-10 place-items-center rounded-full transition-colors md:hidden ${
+              onHero ? "text-[hsl(38_45%_96%)] hover:bg-[hsl(38_45%_96%)]/15" : "text-foreground hover:bg-secondary"
+            }`}
           >
             <Menu className="h-5 w-5" />
           </button>
