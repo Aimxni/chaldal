@@ -40,13 +40,11 @@ const CategoryGrid = () => {
 
         {/* 2x2 on mobile, 4-up on desktop with editorial size variation */}
         <ul className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-          {categories.map((c, i) => (
+          {categories.map((c) => (
             <li key={c.name}>
               <Link
                 to={c.to}
-                className={`group relative block h-full overflow-hidden rounded-3xl bg-card shadow-soft transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-card ${
-                  i === 0 || i === 3 ? "md:translate-y-6" : ""
-                }`}
+                className="group relative block h-full overflow-hidden rounded-3xl bg-card shadow-soft transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-card"
               >
                 <div className="relative aspect-[4/5] w-full overflow-hidden">
                   <img
