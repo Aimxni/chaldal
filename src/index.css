@@ -1,64 +1,67 @@
 /* Fonts loaded via <link> in index.html — not @import — to avoid render-blocking. */
 
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Travela — Editorial hospitality design system.
-   Deep midnight navy, warm bone, brass accent. All colors HSL.
-*/
+/* Chaldal — Fresh & editorial grocery design system.
+   Cream paper, deep leaf green, ripe tomato accent. All colors HSL. */
 
 @layer base {
   :root {
-    /* Soft butter cream */
-    --background: 48 70% 95%;
-    --foreground: 170 35% 10%;
+    /* Soft warm cream paper */
+    --background: 38 45% 96%;
+    --foreground: 150 18% 12%;
 
-    --card: 48 60% 97%;
-    --card-foreground: 170 35% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 150 18% 12%;
 
-    --popover: 48 70% 96%;
-    --popover-foreground: 170 35% 10%;
+    --popover: 38 45% 97%;
+    --popover-foreground: 150 18% 12%;
 
-    /* Deep forest ink */
-    --primary: 170 35% 12%;
-    --primary-foreground: 48 70% 96%;
+    /* Deep leaf green */
+    --primary: 150 35% 18%;
+    --primary-foreground: 38 45% 96%;
 
-    /* Pistachio mint */
-    --secondary: 140 35% 82%;
-    --secondary-foreground: 170 35% 12%;
+    /* Sage / pistachio */
+    --secondary: 90 22% 88%;
+    --secondary-foreground: 150 35% 18%;
 
-    --muted: 48 25% 90%;
-    --muted-foreground: 170 14% 35%;
+    --muted: 38 25% 92%;
+    --muted-foreground: 150 10% 38%;
 
-    /* Warm amber */
-    --accent: 32 90% 55%;
-    --accent-foreground: 170 35% 10%;
+    /* Ripe tomato — the bold accent */
+    --accent: 8 78% 54%;
+    --accent-foreground: 38 45% 97%;
 
-    /* Sun-baked clay */
-    --gold: 14 75% 52%;
-    --gold-foreground: 48 70% 97%;
+    /* Sun / mango yellow secondary accent */
+    --gold: 38 90% 58%;
+    --gold-foreground: 150 35% 14%;
+
+    /* Fresh leaf signature */
+    --leaf: 138 42% 32%;
+    --leaf-foreground: 38 45% 97%;
 
     --destructive: 0 70% 48%;
-    --destructive-foreground: 48 70% 96%;
+    --destructive-foreground: 38 45% 97%;
 
-    --border: 170 14% 84%;
-    --input: 170 14% 84%;
-    --ring: 32 90% 55%;
+    --border: 150 12% 86%;
+    --input: 150 12% 86%;
+    --ring: 8 78% 54%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
     /* Gradients */
-    --gradient-warm: linear-gradient(135deg, hsl(48 70% 95%) 0%, hsl(32 70% 88%) 100%);
-    --gradient-ink: linear-gradient(180deg, hsl(170 35% 10% / 0) 0%, hsl(170 35% 10% / 0.75) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(32 90% 55%) 0%, hsl(14 75% 52%) 100%);
-    --gradient-night: linear-gradient(160deg, hsl(170 38% 14%) 0%, hsl(170 35% 10%) 60%, hsl(175 38% 7%) 100%);
+    --gradient-cream: linear-gradient(180deg, hsl(38 50% 97%) 0%, hsl(38 45% 93%) 100%);
+    --gradient-leaf: linear-gradient(135deg, hsl(138 42% 32%) 0%, hsl(150 38% 22%) 100%);
+    --gradient-sun: linear-gradient(135deg, hsl(38 90% 62%) 0%, hsl(8 78% 58%) 100%);
+    --gradient-fade-bottom: linear-gradient(180deg, transparent 0%, hsl(38 45% 96%) 100%);
 
     /* Shadows */
-    --shadow-soft: 0 1px 2px hsl(170 35% 10% / 0.06), 0 8px 24px -12px hsl(170 35% 20% / 0.18);
-    --shadow-elegant: 0 24px 60px -24px hsl(170 38% 18% / 0.35);
-    --shadow-glow: 0 10px 40px -10px hsl(32 90% 55% / 0.5);
+    --shadow-soft: 0 1px 2px hsl(150 18% 12% / 0.05), 0 8px 24px -12px hsl(150 18% 20% / 0.15);
+    --shadow-card: 0 1px 3px hsl(150 18% 12% / 0.06), 0 12px 32px -16px hsl(150 18% 20% / 0.18);
+    --shadow-elegant: 0 24px 60px -24px hsl(150 28% 18% / 0.30);
+    --shadow-glow: 0 12px 40px -10px hsl(8 78% 54% / 0.45);
 
     /* Motion */
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -75,38 +78,36 @@
   }
 
   .dark {
-    --background: 170 38% 7%;
-    --foreground: 48 60% 93%;
-    --card: 170 35% 11%;
-    --card-foreground: 48 60% 93%;
-    --popover: 170 35% 11%;
-    --popover-foreground: 48 60% 93%;
-    --primary: 48 60% 93%;
-    --primary-foreground: 170 35% 10%;
-    --secondary: 170 22% 16%;
-    --secondary-foreground: 48 60% 93%;
-    --muted: 170 22% 16%;
-    --muted-foreground: 48 20% 70%;
-    --accent: 32 92% 60%;
-    --accent-foreground: 170 35% 10%;
+    --background: 150 22% 8%;
+    --foreground: 38 45% 94%;
+    --card: 150 20% 11%;
+    --card-foreground: 38 45% 94%;
+    --popover: 150 20% 11%;
+    --popover-foreground: 38 45% 94%;
+    --primary: 38 45% 94%;
+    --primary-foreground: 150 35% 14%;
+    --secondary: 150 15% 16%;
+    --secondary-foreground: 38 45% 94%;
+    --muted: 150 15% 16%;
+    --muted-foreground: 38 20% 70%;
+    --accent: 8 80% 60%;
+    --accent-foreground: 38 45% 97%;
+    --leaf: 138 38% 42%;
+    --leaf-foreground: 38 45% 97%;
     --destructive: 0 70% 48%;
-    --destructive-foreground: 48 60% 93%;
-    --border: 170 22% 18%;
-    --input: 170 22% 18%;
-    --ring: 32 92% 60%;
+    --destructive-foreground: 38 45% 94%;
+    --border: 150 15% 18%;
+    --input: 150 15% 18%;
+    --ring: 8 80% 60%;
   }
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  html {
-    scroll-behavior: smooth;
-  }
+  * { @apply border-border; }
+  html { scroll-behavior: smooth; }
   body {
     @apply bg-background text-foreground font-body antialiased;
-    font-feature-settings: "ss01";
+    font-feature-settings: "ss01", "cv11";
   }
   ::selection {
     background: hsl(var(--accent));
@@ -116,14 +117,21 @@
 
 @layer utilities {
   .font-display {
-    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    font-family: 'Fraunces', 'Georgia', serif;
+    font-optical-sizing: auto;
+    font-variation-settings: "SOFT" 50, "WONK" 0;
   }
   .font-body {
     font-family: 'Inter', system-ui, sans-serif;
   }
-
   .text-balance { text-wrap: balance; }
   .text-pretty  { text-wrap: pretty;  }
+
+  /* Subtle grain texture overlay for editorial feel */
+  .bg-grain {
+    background-image: radial-gradient(hsl(150 18% 12% / 0.04) 1px, transparent 1px);
+    background-size: 3px 3px;
+  }
 
   .marquee {
     animation: marquee 40s linear infinite;
@@ -133,14 +141,13 @@
 /* Bangla typography */
 :lang(bn) {
   font-family: "Hind Siliguri", "Inter", sans-serif;
-  font-feature-settings: normal;
 }
 :lang(bn) h1,
 :lang(bn) h2,
 :lang(bn) h3,
 :lang(bn) h4,
 :lang(bn) .font-display {
-  font-family: "Noto Serif Bengali", "Cormorant Garamond", serif;
+  font-family: "Noto Serif Bengali", "Fraunces", serif;
   letter-spacing: -0.01em;
 }
 
@@ -150,11 +157,11 @@
 }
 
 /* Hero entrance — pure CSS, no JS dependency.
-   Runs on CSS parse so LCP text is visible immediately. */
+   LCP rule: opacity must start at 0.01 (not 0) so Lighthouse counts the paint. */
 @keyframes hero-fade-up {
   0% {
     opacity: 0.01;
-    transform: translateY(20px);
+    transform: translateY(16px);
   }
   100% {
     opacity: 1;
@@ -166,8 +173,18 @@
   animation: hero-fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* LCP-safe variant for the actual LCP element — NO delay, NO transform on start. */
+.lcp-fade {
+  animation: lcp-fade 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes lcp-fade {
+  0%   { opacity: 0.01; }
+  100% { opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .hero-fade-up {
+  .hero-fade-up,
+  .lcp-fade {
     animation: none;
   }
 }

@@ -12,7 +12,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['Cormorant Garamond', 'Georgia', 'serif'],
+        display: ['Fraunces', 'Georgia', 'serif'],
         body: ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
@@ -45,6 +45,10 @@ export default {
           DEFAULT: "hsl(var(--gold))",
           foreground: "hsl(var(--gold-foreground))",
         },
+        leaf: {
+          DEFAULT: "hsl(var(--leaf))",
+          foreground: "hsl(var(--leaf-foreground))",
+        },
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
@@ -65,13 +69,14 @@ export default {
         },
       },
       backgroundImage: {
-        'gradient-warm': 'var(--gradient-warm)',
-        'gradient-ink': 'var(--gradient-ink)',
-        'gradient-accent': 'var(--gradient-accent)',
-        'gradient-night': 'var(--gradient-night)',
+        'gradient-cream': 'var(--gradient-cream)',
+        'gradient-leaf': 'var(--gradient-leaf)',
+        'gradient-sun': 'var(--gradient-sun)',
+        'gradient-fade-bottom': 'var(--gradient-fade-bottom)',
       },
       boxShadow: {
         soft: 'var(--shadow-soft)',
+        card: 'var(--shadow-card)',
         elegant: 'var(--shadow-elegant)',
         glow: 'var(--shadow-glow)',
       },
