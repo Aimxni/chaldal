@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
-import catFruits from "@/assets/cat-fruits.jpg";
-import catVeg from "@/assets/cat-vegetables.jpg";
-import catDairy from "@/assets/cat-dairy.jpg";
-import catPantry from "@/assets/cat-pantry.jpg";
+import catFruits from "@/assets/cat-fruits.webp";
+import catVeg from "@/assets/cat-vegetables.webp";
+import catDairy from "@/assets/cat-dairy.webp";
+import catPantry from "@/assets/cat-pantry.webp";
 
 // Mirrors Chaldal's 12 "Popular Categories" tiles.
 const categories = [
