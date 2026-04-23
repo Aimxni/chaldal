@@ -16,11 +16,6 @@ const Index = () => {
     { rootMargin: "600px" },
   );
 
-  const { ref: dealsRef, Component: FeaturedDeals } = useLazyComponent(
-    () => import("@/components/site/FeaturedDeals"),
-    { rootMargin: "600px" },
-  );
-
   const { ref: shopMoreRef, Component: ShopAndGetMore } = useLazyComponent(
     () => import("@/components/site/ShopAndGetMore"),
     { rootMargin: "600px" },
@@ -63,14 +58,6 @@ const Index = () => {
         {PopularBrands && (
           <Suspense fallback={<div className="h-full w-full" />}>
             <PopularBrands />
-          </Suspense>
-        )}
-      </div>
-
-      <div ref={dealsRef} className="min-h-[60vh]">
-        {FeaturedDeals && (
-          <Suspense fallback={<div className="h-full w-full" />}>
-            <FeaturedDeals />
           </Suspense>
         )}
       </div>
