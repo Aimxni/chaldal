@@ -1,22 +1,36 @@
-// "Popular on Chaldal" section — partner / featured brand strip.
-// Uses styled wordmarks instead of remote logo URLs to keep the build self-contained.
+import brandPran from "@/assets/brand-pran.png";
+import brandReckitt from "@/assets/brand-reckitt.png";
+import brandNestle from "@/assets/brand-nestle.png";
+import brandUnilever from "@/assets/brand-unilever.png";
+import brandMarico from "@/assets/brand-marico.png";
+import brandGodrej from "@/assets/brand-godrej.png";
+import brandCocaCola from "@/assets/brand-cocacola.png";
+import brandFresh from "@/assets/brand-fresh.png";
+
+// "Popular on Chaldal" partner-brand strip with real logo artwork.
 const brands = [
-  "Pran",
-  "Reckitt",
-  "Nestlé",
-  "Unilever",
-  "Marico",
-  "Godrej",
-  "Coca-Cola",
-  "Fresh",
+  { name: "Pran", img: brandPran },
+  { name: "Reckitt", img: brandReckitt },
+  { name: "Nestlé", img: brandNestle },
+  { name: "Unilever", img: brandUnilever },
+  { name: "Marico", img: brandMarico },
+  { name: "Godrej", img: brandGodrej },
+  { name: "Coca-Cola", img: brandCocaCola },
+  { name: "Fresh", img: brandFresh },
 ];
 
 const PopularBrands = () => {
   return (
     <section
       id="popular-brands"
-      className="border-t border-border bg-background py-16 md:py-20"
+      className="relative border-t border-border bg-accent/15 py-16 md:py-20"
     >
+      {/* Soft sun-yellow wash to anchor the new brand palette. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent"
+      />
+
       <div className="container">
         <div className="mb-10 max-w-2xl">
           <p className="mb-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.32em] text-leaf">
@@ -31,12 +45,18 @@ const PopularBrands = () => {
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
           {brands.map((b) => (
             <li
-              key={b}
-              className="grid h-20 place-items-center rounded-2xl border border-border bg-card text-center transition-colors duration-200 hover:bg-secondary md:h-24"
+              key={b.name}
+              className="group grid h-24 place-items-center rounded-2xl border border-border bg-card p-4 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-card md:h-28"
             >
-              <span className="font-display text-sm font-semibold tracking-wide text-foreground md:text-base">
-                {b}
-              </span>
+              <img
+                src={b.img}
+                alt={`${b.name} logo`}
+                width={512}
+                height={512}
+                loading="lazy"
+                decoding="async"
+                className="max-h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105 md:max-h-16"
+              />
             </li>
           ))}
         </ul>
