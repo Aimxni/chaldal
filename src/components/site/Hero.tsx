@@ -1,146 +1,131 @@
-import { useState } from "react";
-import { ArrowRight, MapPin, CalendarDays, Users } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useBooking } from "@/stores/booking";
+import heroImg from "@/assets/hero-groceries.jpg";
 
-// Served from public/ and preloaded via <link rel="preload"> in index.html.
-// This lets the browser start fetching during HTML parse — before JS executes.
-const HERO_SRC = "/images/hero-room.webp";
+// Preloaded as WebP via <link rel="preload"> in index.html for fastest LCP.
+const HERO_WEBP = "/images/hero-groceries.webp";
 
 /**
- * Hero section — the LCP element.
- *
- * ALL above-the-fold text uses CSS @keyframes instead of framer-motion so
- * the content is visible immediately when CSS loads — no JS execution delay.
- * This eliminates ~2.8s of "Element Render Delay" that Lighthouse penalises.
- *
- * framer-motion is NOT imported here to keep this critical-path component
- * light and to avoid TBT overhead from motion's initial JS setup.
+ * Hero — the LCP element. Pure CSS animations, NO framer-motion.
+ * - LCP h1 has no animation-delay
+ * - LCP fade starts at opacity: 0.01 (Lighthouse rule)
+ * - Hero image preloaded with fetchpriority="high" in index.html
  */
 const Hero = () => {
-  const navigate = useNavigate();
-  const setDates = useBooking((s) => s.setDates);
-  const setGuests = useBooking((s) => s.setGuests);
-
-  const today = new Date().toISOString().slice(0, 10);
-  const tmrw = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
-  const [checkIn, setCheckIn] = useState(today);
-  const [checkOut, setCheckOut] = useState(tmrw);
-  const [guests, setGuestCount] = useState(2);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setDates(checkIn, checkOut);
-    setGuests(guests);
-    navigate("/rooms");
-  };
-
   return (
-    <section className="relative min-h-screen w-full overflow-hidden bg-primary">
-      {/* Background — fixed dimensions reserve space, no parallax to keep main thread free */}
-      <div className="absolute inset-0">
-        <img
-          src={HERO_SRC}
-          alt="A warmly lit private bedroom in Dhaka at golden hour"
-          width={1600}
-          height={900}
-          fetchPriority="high"
-          decoding="sync"
-          className="h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/55 via-primary/30 to-primary/85" />
-      </div>
+    <section className="relative min-h-screen w-full overflow-hidden bg-background bg-grain">
+      {/* Decorative ripe-tomato blob — pure CSS, no main-thread cost */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-32 -top-32 h-[480px] w-[480px] rounded-full bg-accent/10 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-40 top-40 h-[520px] w-[520px] rounded-full bg-leaf/10 blur-3xl"
+      />
 
-      <div className="container relative z-10 flex min-h-screen flex-col justify-end pb-12 pt-32 text-primary-foreground md:pb-20 md:pt-28">
-        {/* Subtitle — CSS animation: fade-up, 0ms delay */}
-        <p className="hero-fade-up mb-6 flex items-center gap-3 text-[11px] uppercase tracking-[0.32em] text-primary-foreground/75">
-          <span className="h-px w-10 bg-accent" /> Stays in Dhaka · Curated since 2019
-        </p>
+      <div className="container relative z-10 grid min-h-screen grid-cols-1 items-center gap-10 pb-12 pt-28 md:grid-cols-12 md:gap-8 md:pb-16 md:pt-32">
+        {/* LEFT: Text column */}
+        <div className="md:col-span-7">
+          <p className="mb-5 flex items-center gap-3 text-[11px] uppercase tracking-[0.32em] text-leaf">
+            <span className="h-px w-10 bg-accent" />
+            Dhaka's freshest market
+          </p>
 
-        {/* h1 — THE LCP element. Must be visible from first CSS paint. */}
-        <h1 className="max-w-5xl font-display text-[clamp(3rem,9vw,7rem)] leading-[0.95] tracking-tight">
-          <span className="block">
-            An address
-          </span>
-          <span className="block italic text-accent">
-            in Dhaka.
-          </span>
-        </h1>
+          {/* h1 — THE LCP element. Visible from first CSS paint. */}
+          <h1 className="lcp-fade max-w-[18ch] font-display text-[clamp(2.75rem,8vw,6rem)] font-medium leading-[0.98] tracking-[-0.02em] text-foreground">
+            Today's market,{" "}
+            <em className="font-medium not-italic text-primary">
+              <span className="italic">at your door.</span>
+            </em>
+          </h1>
 
-        {/* Subtext — Often the LCP element on mobile due to text wrapping */}
-        <p className="mt-8 max-w-md text-pretty text-base leading-relaxed text-primary-foreground/80">
-          Hand-picked rooms and apartments across Dhanmondi, Lalmatia and the city's quieter corners.
-          Verified hosts, transparent pricing, an arrival that feels like coming home.
-        </p>
+          <p className="hero-fade-up mt-6 max-w-md text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
+            Hand-picked fruits, vegetables, dairy and pantry essentials —
+            delivered across Dhaka in <span className="text-foreground font-medium">under an hour</span>.
+            Real prices, real freshness, no surprises.
+          </p>
 
-        {/* Search panel — CSS animation */}
-        <form
-          onSubmit={handleSearch}
-          className="hero-fade-up mt-10 grid w-full max-w-4xl grid-cols-1 gap-px overflow-hidden bg-background/95 text-foreground shadow-elegant backdrop-blur md:grid-cols-[1.4fr_1fr_1fr_auto]"
-          style={{ animationDelay: "450ms" }}
-        >
-          <label className="flex flex-col gap-1 px-5 py-4 transition-colors focus-within:bg-background">
-            <span className="flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-              <MapPin className="h-3 w-3" /> Where
-            </span>
-            <select
-              defaultValue="dhaka"
-              className="w-full bg-transparent font-display text-lg outline-none"
-            >
-              <option value="dhaka">Dhaka</option>
-              <option value="dhanmondi">Dhanmondi</option>
-              <option value="lalmatia">Lalmatia</option>
-            </select>
-          </label>
-          <label className="flex flex-col gap-1 border-t border-border px-5 py-4 transition-colors focus-within:bg-background md:border-l md:border-t-0">
-            <span className="flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-              <CalendarDays className="h-3 w-3" /> Check-in
-            </span>
-            <input
-              type="date"
-              value={checkIn}
-              min={today}
-              onChange={(e) => setCheckIn(e.target.value)}
-              className="w-full bg-transparent font-display text-lg outline-none"
-            />
-          </label>
-          <label className="flex flex-col gap-1 border-t border-border px-5 py-4 transition-colors focus-within:bg-background md:border-l md:border-t-0">
-            <span className="flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-              <Users className="h-3 w-3" /> Guests
-            </span>
-            <input
-              type="number"
-              min={1}
-              max={10}
-              value={guests}
-              onChange={(e) => setGuestCount(Number(e.target.value) || 1)}
-              className="w-full bg-transparent font-display text-lg outline-none"
-            />
-          </label>
-          <button
-            type="submit"
-            className="group flex items-center justify-center gap-3 bg-accent px-7 py-5 text-[11px] uppercase tracking-[0.25em] text-accent-foreground transition-[background-color,transform] duration-150 hover:bg-foreground hover:text-background active:scale-[0.97]"
+          {/* Search bar */}
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="hero-fade-up mt-8 flex w-full max-w-xl items-center gap-2 rounded-full border border-border bg-card p-1.5 shadow-card"
+            style={{ animationDelay: "150ms" }}
           >
-            Find rooms
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </button>
-        </form>
+            <span aria-hidden className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-secondary text-secondary-foreground">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="7" />
+                <path d="m20 20-3.5-3.5" />
+              </svg>
+            </span>
+            <input
+              type="search"
+              placeholder="Try mango, eggs, basmati rice…"
+              aria-label="Search groceries"
+              className="min-w-0 flex-1 bg-transparent px-1 text-sm outline-none placeholder:text-muted-foreground/70 md:text-base"
+            />
+            <button
+              type="submit"
+              className="shrink-0 rounded-full bg-accent px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-accent-foreground transition-[background-color,transform] duration-150 hover:bg-primary active:scale-[0.97] md:px-6"
+            >
+              Shop
+            </button>
+          </form>
 
-        {/* Stats row — CSS animation */}
-        <div
-          className="hero-fade-up mt-12 flex flex-wrap items-center gap-x-10 gap-y-3 border-t border-primary-foreground/15 pt-6 text-primary-foreground/70"
-          style={{ animationDelay: "650ms" }}
-        >
-          {[
-            { v: "2,746", l: "Homes in Dhaka" },
-            { v: "4.91★", l: "Average rating" },
-            { v: "24/7", l: "Self check-in" },
-          ].map((s) => (
-            <div key={s.l} className="flex items-baseline gap-3">
-              <div className="font-display text-2xl text-primary-foreground">{s.v}</div>
-              <div className="text-[10px] uppercase tracking-[0.22em]">{s.l}</div>
+          {/* Trust row */}
+          <div
+            className="hero-fade-up mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-muted-foreground"
+            style={{ animationDelay: "300ms" }}
+          >
+            <span className="inline-flex items-center gap-2">
+              <span className="grid h-7 w-7 place-items-center rounded-full bg-leaf/10 text-leaf">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </span>
+              <span>1-hour delivery</span>
+            </span>
+            <span className="inline-flex items-center gap-2">
+              <span className="grid h-7 w-7 place-items-center rounded-full bg-leaf/10 text-leaf">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </span>
+              <span>Always-fresh promise</span>
+            </span>
+            <span className="inline-flex items-center gap-2">
+              <span className="grid h-7 w-7 place-items-center rounded-full bg-leaf/10 text-leaf">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </span>
+              <span>Cash or bKash</span>
+            </span>
+          </div>
+        </div>
+
+        {/* RIGHT: Hero image */}
+        <div className="md:col-span-5">
+          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[2rem] bg-secondary shadow-elegant">
+            <img
+              src={heroImg}
+              alt="Fresh produce — tomatoes, basil, mangoes, milk and bread on a cream linen surface"
+              width={1600}
+              height={2000}
+              fetchPriority="high"
+              decoding="sync"
+              className="h-full w-full object-cover"
+              style={{ objectPosition: "center" }}
+            />
+            {/* Floating price tag */}
+            <div className="absolute bottom-5 left-5 flex items-center gap-3 rounded-full bg-card/95 px-4 py-2.5 text-sm shadow-card backdrop-blur">
+              <span className="grid h-8 w-8 place-items-center rounded-full bg-accent text-accent-foreground font-display italic">
+                ৳
+              </span>
+              <span className="leading-tight">
+                <span className="block text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Today</span>
+                <span className="block font-semibold text-foreground">Mango ৳120/kg</span>
+              </span>
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </section>

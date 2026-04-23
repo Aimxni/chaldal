@@ -5,51 +5,47 @@ import Footer from "@/components/site/Footer";
 import { useLazyComponent } from "@/hooks/useLazyComponent";
 
 const Index = () => {
-  // Only trigger JS downloads for these sections when the user scrolls near them.
-  // This frees up the network and main thread for a blazing fast initial Hero paint.
-  const { ref: featuredRef, Component: FeaturedRooms } = useLazyComponent(
-    () => import("@/components/site/FeaturedRooms"),
-    { rootMargin: "600px" }
-  );
-  
-  const { ref: neighRef, Component: Neighbourhoods } = useLazyComponent(
-    () => import("@/components/site/Neighbourhoods"),
-    { rootMargin: "600px" }
+  // Below-the-fold sections — only fetch their JS when the user scrolls near them.
+  const { ref: catRef, Component: CategoryGrid } = useLazyComponent(
+    () => import("@/components/site/CategoryGrid"),
+    { rootMargin: "600px" },
   );
 
-  const { ref: storyRef, Component: Story } = useLazyComponent(
-    () => import("@/components/site/Story"),
-    { rootMargin: "600px" }
+  const { ref: dealsRef, Component: FeaturedDeals } = useLazyComponent(
+    () => import("@/components/site/FeaturedDeals"),
+    { rootMargin: "600px" },
+  );
+
+  const { ref: whyRef, Component: ValueProps } = useLazyComponent(
+    () => import("@/components/site/ValueProps"),
+    { rootMargin: "600px" },
   );
 
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
       <Hero />
-      
-      {/* Featured Rooms Section */}
-      <div ref={featuredRef} className="min-h-screen">
-        {FeaturedRooms && (
+
+      <div ref={catRef} className="min-h-[60vh]">
+        {CategoryGrid && (
           <Suspense fallback={<div className="h-full w-full" />}>
-            <FeaturedRooms />
+            <CategoryGrid />
           </Suspense>
         )}
       </div>
 
-      {/* Neighbourhoods Section */}
-      <div ref={neighRef} className="min-h-[80vh]">
-        {Neighbourhoods && (
+      <div ref={dealsRef} className="min-h-[60vh]">
+        {FeaturedDeals && (
           <Suspense fallback={<div className="h-full w-full" />}>
-            <Neighbourhoods />
+            <FeaturedDeals />
           </Suspense>
         )}
       </div>
 
-      {/* Story Section */}
-      <div ref={storyRef} className="min-h-[60vh]">
-        {Story && (
+      <div ref={whyRef} className="min-h-[40vh]">
+        {ValueProps && (
           <Suspense fallback={<div className="h-full w-full" />}>
-            <Story />
+            <ValueProps />
           </Suspense>
         )}
       </div>
