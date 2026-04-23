@@ -15,7 +15,7 @@
       rel="preload"
       as="image"
       type="image/webp"
-      href="/images/hero-groceries.webp"
+      href="/images/hero-market.webp"
       fetchpriority="high"
     />
 
@@ -49,7 +49,7 @@
     <meta name="twitter:description" content="Hand-picked fruits, vegetables, dairy, and pantry essentials delivered to your door in 1 hour." />
   </head>
 
-  <body class="bg-background text-foreground antialiased" style="margin: 0; padding: 0; background-color: #faf4e7;">
+  <body class="bg-background text-foreground antialiased" style="margin: 0; padding: 0; background-color: #d63a23;">
     <script>
       window.__APP_STATE = { cssLoaded: false, reactMounted: false };
       window.tryRemoveAppShell = function() {
@@ -68,36 +68,27 @@
 
     <!--
       APP SHELL — outside React root so React doesn't unmount it.
-      Provides the LCP image instantly so Lighthouse stops the LCP timer here.
+      Mirrors the split-color hero layout so the LCP image paints instantly
+      and there is zero CLS when React hydrates.
     -->
-    <div id="app-shell" style="position: absolute; inset: 0; z-index: 50; transition: opacity 0.5s ease-in-out; background-color: #faf4e7;">
-      <section style="position: relative; min-height: 100vh; width: 100%; overflow: hidden; background-color: #faf4e7;">
-        <!-- Top bar skeleton -->
-        <div style="position: absolute; top: 0; left: 0; right: 0; height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; font-family: Georgia, serif;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 36px; height: 36px; border-radius: 999px; background: #2a4d3e; display: grid; place-items: center; color: #faf4e7; font-weight: 600; font-style: italic;">c</div>
-            <div style="font-size: 22px; color: #1a2620; letter-spacing: -0.02em;">chaldal<span style="color: #e0492c;">.</span></div>
-          </div>
+    <div id="app-shell" style="position: absolute; inset: 0; z-index: 50; transition: opacity 0.5s ease-in-out; background-color: #d63a23;">
+      <div style="display: grid; grid-template-columns: 1fr; min-height: 100vh; width: 100%;">
+        <!-- Right panel image — appears as full-width on mobile, on the right on desktop -->
+        <div style="position: relative; width: 100%; min-height: 60vh; overflow: hidden; background-color: #1a2218;">
+          <img src="/images/hero-market.webp" fetchpriority="high" decoding="sync" width="1920" height="1280" alt="" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" />
         </div>
+      </div>
 
-        <!-- Hero content skeleton mirroring real layout to prevent CLS -->
-        <div style="position: relative; z-index: 10; max-width: 1440px; margin: 0 auto; padding: 7rem 1.5rem 3rem; display: grid; grid-template-columns: 1fr; gap: 2rem;">
-          <div>
-            <div style="font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase; color: #4a6358; margin-bottom: 1.25rem;">
-              <span style="display: inline-block; width: 28px; height: 1px; background: #e0492c; vertical-align: middle; margin-right: 12px;"></span>
-              Dhaka's freshest market
-            </div>
-            <h1 style="margin: 0; font-family: Georgia, serif; font-size: clamp(2.75rem, 8vw, 6rem); line-height: 0.98; letter-spacing: -0.02em; color: #1a2620; font-weight: 500; max-width: 18ch;">
-              Today's market, <em style="color: #2a4d3e; font-weight: 500;">at your door.</em>
-            </h1>
-          </div>
-        </div>
-
-        <!-- Hero image (LCP) -->
-        <div style="position: absolute; right: 0; bottom: 0; width: 100%; max-width: 60vw; aspect-ratio: 16/9; pointer-events: none;">
-          <img src="/images/hero-groceries.webp" fetchpriority="high" decoding="sync" width="1600" height="900" alt="" style="width: 100%; height: 100%; object-fit: cover; object-position: center right;" />
-        </div>
-      </section>
+      <!-- Left red sidebar text skeleton (visible on top so the LCP h1 paints instantly) -->
+      <div style="position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 6rem 1.5rem 2.5rem; color: #faf4e7; font-family: Inter, system-ui, sans-serif; pointer-events: none;">
+        <div style="font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase; opacity: 0.75;">Est. 2013 · Dhaka</div>
+        <h1 style="margin: 0; font-family: Inter, system-ui, sans-serif; font-weight: 700; text-transform: uppercase; font-size: clamp(3rem, 11vw, 7.5rem); line-height: 0.86; letter-spacing: -0.04em;">
+          <span style="display: block;">Real food.</span>
+          <span style="display: block; color: #f5c971;">Real fast.</span>
+          <span style="display: block;">Real cheap.</span>
+        </h1>
+        <div style="font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; opacity: 0.65;">Where should we deliver?</div>
+      </div>
     </div>
 
     <div id="root"></div>
