@@ -74,10 +74,12 @@
       and there is zero CLS when React hydrates.
     -->
     <div id="app-shell" style="position: absolute; inset: 0; z-index: 50; transition: opacity 0.5s ease-in-out; background-color: #d63a23;">
-      <div style="display: grid; grid-template-columns: 1fr; min-height: 100vh; width: 100%;">
-        <!-- Right panel image — appears as full-width on mobile, on the right on desktop -->
-        <div style="position: relative; width: 100%; min-height: 60vh; overflow: hidden; background-color: #1a2218;">
-          <img src="/images/hero-market.webp" srcset="/images/hero-market-960.webp 960w, /images/hero-market.webp 1920w" sizes="(max-width: 1024px) 100vw, 60vw" fetchpriority="high" decoding="sync" width="1920" height="1280" alt="" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" />
+      <div style="display: grid; grid-template-columns: 1fr; min-height: 100vh; width: 100%; background-color: #d63a23;">
+        <!-- Right panel image — appears as full-width on mobile, on the right on desktop.
+             Background stays tomato red so the page reads as red instantly,
+             even before the hero image has finished downloading. -->
+        <div style="position: relative; width: 100%; min-height: 60vh; overflow: hidden; background-color: #d63a23;">
+          <img src="/images/hero-market.webp" srcset="/images/hero-market-960.webp 960w, /images/hero-market.webp 1920w" sizes="(max-width: 1024px) 100vw, 60vw" fetchpriority="high" decoding="async" width="1920" height="1280" alt="" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; opacity: 0; transition: opacity 0.4s ease-out;" onload="this.style.opacity='1'" />
         </div>
       </div>
 
