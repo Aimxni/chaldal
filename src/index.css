@@ -30,13 +30,13 @@
     --muted: 38 25% 92%;
     --muted-foreground: 150 10% 38%;
 
-    /* Ripe tomato — the bold accent */
-    --accent: 8 78% 54%;
-    --accent-foreground: 38 45% 97%;
+    /* Chaldal sun yellow — the bold brand accent */
+    --accent: 45 96% 56%;
+    --accent-foreground: 150 35% 14%;
 
-    /* Sun / mango yellow secondary accent */
-    --gold: 38 90% 58%;
-    --gold-foreground: 150 35% 14%;
+    /* Tomato — secondary warm accent (kept for badges / sale tags) */
+    --gold: 8 78% 54%;
+    --gold-foreground: 38 45% 97%;
 
     /* Fresh leaf signature */
     --leaf: 138 42% 32%;
@@ -47,21 +47,21 @@
 
     --border: 150 12% 86%;
     --input: 150 12% 86%;
-    --ring: 8 78% 54%;
+    --ring: 45 96% 56%;
 
     --radius: 1rem;
 
     /* Gradients */
     --gradient-cream: linear-gradient(180deg, hsl(38 50% 97%) 0%, hsl(38 45% 93%) 100%);
     --gradient-leaf: linear-gradient(135deg, hsl(138 42% 32%) 0%, hsl(150 38% 22%) 100%);
-    --gradient-sun: linear-gradient(135deg, hsl(38 90% 62%) 0%, hsl(8 78% 58%) 100%);
+    --gradient-sun: linear-gradient(135deg, hsl(48 98% 64%) 0%, hsl(38 95% 56%) 100%);
     --gradient-fade-bottom: linear-gradient(180deg, transparent 0%, hsl(38 45% 96%) 100%);
 
     /* Shadows */
     --shadow-soft: 0 1px 2px hsl(150 18% 12% / 0.05), 0 8px 24px -12px hsl(150 18% 20% / 0.15);
     --shadow-card: 0 1px 3px hsl(150 18% 12% / 0.06), 0 12px 32px -16px hsl(150 18% 20% / 0.18);
     --shadow-elegant: 0 24px 60px -24px hsl(150 28% 18% / 0.30);
-    --shadow-glow: 0 12px 40px -10px hsl(8 78% 54% / 0.45);
+    --shadow-glow: 0 12px 40px -10px hsl(45 96% 56% / 0.55);
 
     /* Motion */
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -90,15 +90,15 @@
     --secondary-foreground: 38 45% 94%;
     --muted: 150 15% 16%;
     --muted-foreground: 38 20% 70%;
-    --accent: 8 80% 60%;
-    --accent-foreground: 38 45% 97%;
+    --accent: 45 96% 60%;
+    --accent-foreground: 150 35% 14%;
     --leaf: 138 38% 42%;
     --leaf-foreground: 38 45% 97%;
     --destructive: 0 70% 48%;
     --destructive-foreground: 38 45% 94%;
     --border: 150 15% 18%;
     --input: 150 15% 18%;
-    --ring: 8 80% 60%;
+    --ring: 45 96% 60%;
   }
 }
 
