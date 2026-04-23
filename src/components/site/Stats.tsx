@@ -1,12 +1,55 @@
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
+
 // Mirrors Chaldal's stats strip + "Currently Delivering in" cities.
-const stats = [
-  { value: "26", label: "warehouses all over Bangladesh" },
-  { value: "5M+", label: "orders have been delivered" },
-  { value: "100K", label: "families are being served" },
-  { value: "৳340M", label: "in customer savings" },
+type Stat = {
+  // The numeric portion that animates
+  target: number;
+  // Optional prefix (e.g. "৳") and suffix (e.g. "M+", "K")
+  prefix?: string;
+  suffix?: string;
+  label: string;
+};
+
+const stats: Stat[] = [
+  { target: 26, label: "warehouses all over Bangladesh" },
+  { target: 5, suffix: "M+", label: "orders have been delivered" },
+  { target: 100, suffix: "K", label: "families are being served" },
+  { target: 340, prefix: "৳", suffix: "M", label: "in customer savings" },
 ];
 
 const cities = ["Dhaka", "Chattogram", "Jashore"];
+
+// Smoothly counts up from 0 → target when scrolled into view.
+const AnimatedNumber = ({
+  target,
+  prefix = "",
+  suffix = "",
+}: {
+  target: number;
+  prefix?: string;
+  suffix?: string;
+}) => {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const motionValue = useMotionValue(0);
+  const spring = useSpring(motionValue, { duration: 1800, bounce: 0 });
+  const display = useTransform(spring, (latest) =>
+    `${prefix}${Math.round(latest).toLocaleString()}${suffix}`,
+  );
+  const [text, setText] = useState(`${prefix}0${suffix}`);
+
+  useEffect(() => {
+    if (inView) motionValue.set(target);
+  }, [inView, target, motionValue]);
+
+  useEffect(() => {
+    const unsub = display.on("change", (v) => setText(v));
+    return () => unsub();
+  }, [display]);
+
+  return <span ref={ref}>{text}</span>;
+};
 
 const Stats = () => {
   return (
@@ -16,15 +59,22 @@ const Stats = () => {
     >
       <div className="container">
         <ul className="grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-border bg-border md:grid-cols-4">
-          {stats.map((s) => (
-            <li key={s.label} className="bg-card p-7 md:p-8">
+          {stats.map((s, i) => (
+            <motion.li
+              key={s.label}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.5, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-card p-7 md:p-8"
+            >
               <p className="font-display text-[clamp(2rem,4vw,3.25rem)] font-medium leading-none tracking-tight text-foreground">
-                {s.value}
+                <AnimatedNumber target={s.target} prefix={s.prefix} suffix={s.suffix} />
               </p>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                 {s.label}
               </p>
-            </li>
+            </motion.li>
           ))}
         </ul>
 
@@ -39,15 +89,19 @@ const Stats = () => {
             </h2>
           </div>
           <ul className="md:col-span-7 grid grid-cols-3 gap-3 md:gap-5">
-            {cities.map((city) => (
-              <li
+            {cities.map((city, i) => (
+              <motion.li
                 key={city}
+                initial={{ opacity: 0, scale: 0.92 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.45, delay: 0.2 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
                 className="rounded-2xl border border-border bg-card p-5 text-center md:p-7"
               >
                 <span className="font-display text-lg font-medium text-foreground md:text-2xl">
                   {city}
                 </span>
-              </li>
+              </motion.li>
             ))}
           </ul>
         </div>
