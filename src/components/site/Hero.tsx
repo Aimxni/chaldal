@@ -186,7 +186,7 @@ const Hero = () => {
         </div>
 
         {/* RIGHT — Full-bleed produce image (LCP image) with parallax */}
-        <div className="relative min-h-[60svh] overflow-hidden lg:min-h-[100svh]">
+        <div className="relative min-h-[60svh] overflow-hidden bg-[hsl(8_72%_42%)] lg:min-h-[100svh]">
           <motion.img
             src={HERO_WEBP}
             srcSet={`${HERO_WEBP_960} 960w, ${HERO_WEBP} 1920w`}
