@@ -62,12 +62,12 @@ const CategoryGrid = () => {
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 flex items-end justify-between gap-3 p-4 md:p-5">
                   <div>
-                    <h3 className="font-display text-xl font-medium text-card md:text-2xl" style={{ color: "hsl(var(--card))" }}>
-                      <span className="text-card-foreground" style={{ color: "white" }}>{c.name}</span>
+                    <h3 className="font-display text-xl font-medium leading-tight text-white md:text-2xl">
+                      {c.name}
                     </h3>
                     <p className="mt-0.5 text-xs text-white/80">{c.count}</p>
                   </div>
-                  <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full bg-card text-foreground shadow-soft transition-transform duration-300 group-hover:rotate-45`}>
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-card text-foreground shadow-soft transition-transform duration-300 group-hover:rotate-45">
                     <ArrowUpRight className="h-4 w-4" />
                   </span>
                 </div>
