@@ -31,7 +31,7 @@ const AnimatedNumber = ({
   suffix?: string;
 }) => {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const inView = useInView(ref, { margin: "-80px" });
   const motionValue = useMotionValue(0);
   const spring = useSpring(motionValue, { duration: 1800, bounce: 0 });
   const display = useTransform(spring, (latest) =>
@@ -40,7 +40,13 @@ const AnimatedNumber = ({
   const [text, setText] = useState(`${prefix}0${suffix}`);
 
   useEffect(() => {
-    if (inView) motionValue.set(target);
+    if (inView) {
+      motionValue.set(0);
+      // next frame so spring registers the change
+      requestAnimationFrame(() => motionValue.set(target));
+    } else {
+      motionValue.set(0);
+    }
   }, [inView, target, motionValue]);
 
   useEffect(() => {
@@ -64,7 +70,7 @@ const Stats = () => {
               key={s.label}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
+              viewport={{ margin: "-80px" }}
               transition={{ duration: 0.5, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
               className="bg-card p-7 md:p-8"
             >
@@ -94,7 +100,7 @@ const Stats = () => {
                 key={city}
                 initial={{ opacity: 0, scale: 0.92 }}
                 whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, margin: "-80px" }}
+                viewport={{ margin: "-80px" }}
                 transition={{ duration: 0.45, delay: 0.2 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
                 className="rounded-2xl border border-border bg-card p-5 text-center md:p-7"
               >
