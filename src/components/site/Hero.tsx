@@ -6,18 +6,10 @@ import { useRef } from "react";
 const HERO_WEBP = "/images/hero-market.webp";
 const HERO_WEBP_960 = "/images/hero-market-960.webp";
 
-// Word-by-word reveal for the headline. Stagger handled by parent.
-const WORD_VARIANTS = {
-  hidden: { y: "110%" },
-  visible: {
-    y: "0%",
-    transition: { duration: 0.85, ease: [0.16, 1, 0.3, 1] as const },
-  },
-};
-
+// Headline parent — staggers the per-line letter animations.
 const HEADLINE_PARENT = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
+  visible: { transition: { staggerChildren: 0.18, delayChildren: 0.05 } },
 };
 
 // Per-letter pop-in used inside each masked word, before the shimmer sweep.
