@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Menu, X, ShoppingBag, MapPin } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import chaldalLogo from "@/assets/chaldal-logo.png";
 import chaldalLogoWhite from "@/assets/chaldal-logo-white.png";
+import { useCart, selectCartCount } from "@/stores/cart";
 
 const links = [
   { label: "Shop", to: "/rooms" },
@@ -14,6 +16,19 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
+  const cartCount = useCart(selectCartCount);
+  const [bump, setBump] = useState(false);
+  const prevCount = useRef(cartCount);
+
+  // Bump the badge any time the count goes up.
+  useEffect(() => {
+    if (cartCount > prevCount.current) {
+      setBump(true);
+      const t = window.setTimeout(() => setBump(false), 450);
+      return () => window.clearTimeout(t);
+    }
+    prevCount.current = cartCount;
+  }, [cartCount]);
 
   useEffect(() => {
     let ticking = false;
