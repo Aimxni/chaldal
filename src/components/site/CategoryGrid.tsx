@@ -46,7 +46,18 @@ const CategoryGrid = () => {
           </div>
         </div>
 
-        <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-6 lg:grid-cols-6">
+        <ul ref={(el) => {
+          if (!el) return;
+          const io = new IntersectionObserver((entries, obs) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                (e.target as HTMLElement).setAttribute("data-revealed", "true");
+                obs.unobserve(e.target);
+              }
+            });
+          }, { threshold: 0.1, rootMargin: "0px 0px -60px 0px" });
+          io.observe(el);
+        }} className="reveal-stagger grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-6 lg:grid-cols-6">
           {categories.map((c) => (
             <li key={c.name}>
               <Link
