@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Menu, X, ShoppingBag, MapPin } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import chaldalLogo from "@/assets/chaldal-logo.png";
+import chaldalLogoWhite from "@/assets/chaldal-logo-white.png";
 
 const links = [
   { label: "Shop", to: "/rooms" },
@@ -56,7 +57,7 @@ const Navbar = () => {
           aria-label="Chaldal — home"
         >
           <img
-            src={chaldalLogo}
+            src={onHero ? chaldalLogoWhite : chaldalLogo}
             alt="Chaldal"
             width={1000}
             height={300}

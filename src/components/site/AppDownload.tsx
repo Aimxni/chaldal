@@ -92,9 +92,9 @@ const AppDownload = () => {
               </div>
             </div>
 
-            {/* Phone — positioned on the right, doesn't grow the box */}
+            {/* Phone — enlarged and vertically centered, doesn't grow the box */}
             <div className="relative md:col-span-4">
-              <div className="relative mx-auto h-[260px] w-full max-w-[200px] md:absolute md:-top-10 md:right-0 md:h-[340px] md:max-w-[240px] lg:h-[380px] lg:max-w-[260px]">
+              <div className="relative mx-auto h-[300px] w-full max-w-[240px] md:absolute md:right-4 md:top-1/2 md:h-[420px] md:max-w-[300px] md:-translate-y-1/2 lg:right-8 lg:h-[460px] lg:max-w-[330px]">
                 <img
                   src={phoneImg}
                   alt="Chaldal mobile app"
@@ -102,7 +102,7 @@ const AppDownload = () => {
                   height={1200}
                   loading="lazy"
                   decoding="async"
-                  className="h-full w-full object-contain drop-shadow-[0_24px_48px_hsl(150_30%_8%/0.45)]"
+                  className="h-full w-full object-contain drop-shadow-[0_28px_56px_hsl(150_30%_8%/0.5)]"
                 />
               </div>
             </div>
