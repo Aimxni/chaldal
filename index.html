@@ -58,11 +58,8 @@
         if (window.__APP_STATE.cssLoaded && window.__APP_STATE.reactMounted) {
           var shell = document.getElementById("app-shell");
           if (shell) {
-            setTimeout(function() {
-              shell.style.opacity = "0";
-              shell.style.pointerEvents = "none";
-              setTimeout(function() { shell.remove(); }, 500);
-            }, 50);
+            shell.style.opacity = "0";
+            setTimeout(function() { shell.remove(); }, 250);
           }
         }
       };
@@ -76,7 +73,7 @@
     <style>
       #app-shell-grid { display: grid; grid-template-columns: 1fr; min-height: 100vh; width: 100%; }
       #app-shell-left { background-color: #d63a23; color: #faf4e7; padding: 6rem 1.5rem 2.5rem; display: flex; flex-direction: column; justify-content: space-between; font-family: Inter, system-ui, sans-serif; min-height: 40vh; }
-      #app-shell-right { position: relative; width: 100%; min-height: 60vh; overflow: hidden; background-image: url('data:image/webp;base64,UklGRqYBAABXRUJQVlA4IJoBAABwCACdASooABcAPuleqU2pJSQiKq35IB0JbACdM0KJOGV7yYjfpwErR7qyauJvqqzyMpuyVcQzij09+WBYdUEDpOHcaog8Z0tK6ImwAP65woDC3TqSk6RK2h9GGepn2jWvgTUpg8dzK2l/jhqAWCu7CVaTZTwgMwT7oIN6eU9iLw5vGzyOOkjzoxvagVJsSwa8oqutq9jbSd11ZXG9foyLYh4eOYeANpiVXR4MbEnGi8R1A3+ZsZRFwCEoUSfkJuYk90N3hEnSJXRbUnsZhSpWmpgtoEfUXKDt5vKBwuBoAVaqIPldsfuAKgxceIqYSZRJKcWMm5qP+hFQAB5Ff+cVl/KugvapX+x3ssp8u97gBS13TNg/08Po3SpWdKZaX0XEndujoqXzffHazxVLwL0f6TwIbGb0TjNq2r76wjIVsAIbqJJSfZkN13GDzQCXnu75qeJyMN1SblFCLhfqMe30qESgFSUehOUQBPMZniu8rml1953+G64TC6gaTmxUoqNsC/G2Mm6pK8Nm+lpkUACc0P3NpFS+YgAAAA=='); background-size: cover; background-position: center; }
+      #app-shell-right { position: relative; width: 100%; min-height: 60vh; overflow: hidden; }
       @media (min-width: 1024px) {
         #app-shell-grid { grid-template-columns: minmax(0, 520px) 1fr; }
         #app-shell-left { padding: 8rem 3.5rem 2.5rem; min-height: 100vh; }
@@ -84,12 +81,11 @@
       }
     </style>
     <!--
-      APP SHELL — mirrors the React Hero exactly so red sidebar + image both
-      paint on the very first frame. No layout shift when React hydrates.
+      APP SHELL — mirrors the React Hero layout but stays non-interactive so
+      scrolling works immediately while the real app hydrates underneath.
     -->
-    <div id="app-shell" style="position: absolute; inset: 0; z-index: 50; transition: opacity 0.5s ease-in-out;">
+    <div id="app-shell" style="position: absolute; inset: 0; z-index: 50; transition: opacity 0.25s ease-out; pointer-events: none;">
       <div id="app-shell-grid">
-        <!-- LEFT — Tomato red panel matching Hero.tsx -->
         <div id="app-shell-left">
           <div style="font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase; opacity: 0.75;">Est. 2013 · Dhaka</div>
           <h1 style="margin: 0; font-family: Inter, system-ui, sans-serif; font-weight: 700; text-transform: uppercase; font-size: clamp(3rem, 11vw, 7.5rem); line-height: 0.86; letter-spacing: -0.04em;">
@@ -100,9 +96,8 @@
           <div style="font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; opacity: 0.65;">Where should we deliver?</div>
         </div>
 
-        <!-- RIGHT — Hero image. Inline LQIP shows instantly; full-res fades in. -->
         <div id="app-shell-right">
-          <img src="/images/hero-market.webp" srcset="/images/hero-market-960.webp 960w, /images/hero-market.webp 1920w" sizes="(max-width: 1024px) 100vw, 60vw" fetchpriority="high" decoding="async" width="1920" height="1280" alt="" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s ease-out;" onload="this.style.opacity='1'" />
+          <img src="/images/hero-market.webp" srcset="/images/hero-market-960.webp 960w, /images/hero-market.webp 1920w" sizes="(max-width: 1024px) 100vw, 60vw" fetchpriority="high" decoding="sync" width="1920" height="1280" alt="" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" />
         </div>
       </div>
     </div>
