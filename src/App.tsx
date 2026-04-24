@@ -18,27 +18,31 @@ const Sonner = lazy(() => import("@/components/ui/sonner").then((module) => ({ d
 const queryClient = new QueryClient();
 
 const App = () => {
-  // Fade out App Shell ONLY when both React has mounted AND CSS has loaded.
-  // In dev, Vite injects CSS via <style> tags so the asyncCssPlugin onload
-  // never fires — force cssLoaded so the shell can be removed.
-  // In production the CSS link's onload sets cssLoaded; we only signal
-  // reactMounted here and let tryRemoveAppShell gate on both flags.
+  // In dev, Vite serves CSS inline via <style> (no <link>), so the onload
+  // handler baked into the <link> tag never fires — we force cssLoaded=true.
+  // In PROD the async <link> onload must win, otherwise the shell gets removed
+  // before the stylesheet arrives and the user sees unstyled React content.
   useEffect(() => {
-    // @ts-ignore
-    if (window.__APP_STATE) {
-      // @ts-ignore
-      window.__APP_STATE.reactMounted = true;
-      // @ts-ignore
-      if (import.meta.env.DEV) {
-        // @ts-ignore
-        window.__APP_STATE.cssLoaded = true;
-      }
-      // @ts-ignore
-      if (typeof window.tryRemoveAppShell === "function") {
-        // @ts-ignore
-        window.tryRemoveAppShell();
-      }
+    const appState = (window as unknown as {
+      __APP_STATE?: { cssLoaded: boolean; reactMounted: boolean };
+      tryRemoveAppShell?: () => void;
+    }).__APP_STATE;
+    if (!appState) return;
+    appState.reactMounted = true;
+    if (import.meta.env.DEV) {
+      appState.cssLoaded = true;
     }
+    (window as unknown as { tryRemoveAppShell?: () => void }).tryRemoveAppShell?.();
+
+    // Watchdog: on catastrophic CSS failure, force-remove the shell after 5s
+    // rather than leaving the user staring at the skeleton indefinitely.
+    const watchdog = window.setTimeout(() => {
+      if (!appState.cssLoaded) {
+        appState.cssLoaded = true;
+        (window as unknown as { tryRemoveAppShell?: () => void }).tryRemoveAppShell?.();
+      }
+    }, 5000);
+    return () => window.clearTimeout(watchdog);
   }, []);
 
   return (
