@@ -87,7 +87,8 @@ const CategoryGrid = () => {
                 </div>
               </Link>
             </li>
-          ))}
+            );
+          })}
         </ul>
       </div>
     </section>
