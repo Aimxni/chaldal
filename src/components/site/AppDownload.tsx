@@ -119,9 +119,20 @@ const AppDownload = () => {
               </div>
             </div>
 
-            {/* Phone — enlarged and vertically centered, doesn't grow the box */}
-            <div className="relative md:col-span-4">
-              <div className="relative mx-auto h-[300px] w-full max-w-[240px] md:absolute md:right-4 md:top-1/2 md:h-[420px] md:max-w-[300px] md:-translate-y-1/2 lg:right-8 lg:h-[460px] lg:max-w-[330px]">
+            {/* Phone — scroll-driven 3D tilt: starts upright, lays flat to reveal screen */}
+            <div className="relative md:col-span-4" style={{ perspective: "1200px" }}>
+              <motion.div
+                className="relative mx-auto h-[300px] w-full max-w-[240px] md:absolute md:right-4 md:top-1/2 md:h-[420px] md:max-w-[300px] md:-translate-y-1/2 lg:right-8 lg:h-[460px] lg:max-w-[330px]"
+                style={{
+                  rotateX,
+                  rotateZ,
+                  scale,
+                  y: translateY,
+                  transformStyle: "preserve-3d",
+                  transformOrigin: "center center",
+                  willChange: "transform",
+                }}
+              >
                 <img
                   src={phoneImg}
                   alt="Chaldal mobile app"
@@ -131,8 +142,9 @@ const AppDownload = () => {
                   decoding="async"
                   className="h-full w-full object-contain drop-shadow-[0_28px_56px_hsl(150_30%_8%/0.5)]"
                 />
-              </div>
+              </motion.div>
             </div>
+
           </div>
         </div>
       </div>
