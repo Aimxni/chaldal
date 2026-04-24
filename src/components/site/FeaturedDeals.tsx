@@ -3,6 +3,8 @@ import prodMango from "@/assets/prod-mango.jpg";
 import prodMilk from "@/assets/prod-milk.jpg";
 import prodBread from "@/assets/prod-bread.jpg";
 import prodStrawberry from "@/assets/prod-strawberry.jpg";
+import { useCart } from "@/stores/cart";
+import { toast } from "@/hooks/use-toast";
 
 type Deal = {
   name: string;
@@ -23,6 +25,7 @@ const deals: Deal[] = [
 ];
 
 const FeaturedDeals = () => {
+  const addToCart = useCart((s) => s.add);
   return (
     <section id="deals" className="border-t border-border bg-gradient-cream py-20 md:py-28">
       <div className="container">
@@ -86,6 +89,19 @@ const FeaturedDeals = () => {
                 <button
                   type="button"
                   aria-label={`Add ${d.name} to cart`}
+                  onClick={() => {
+                    addToCart({
+                      id: `deal-${i}-${d.name}`,
+                      name: d.name,
+                      unit: d.unit,
+                      price: d.price,
+                      img: d.img,
+                    });
+                    toast({
+                      title: "Added to cart",
+                      description: `${d.name} · ${d.unit}`,
+                    });
+                  }}
                   className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground transition-[background-color,transform] duration-150 hover:bg-accent hover:text-accent-foreground active:scale-90"
                 >
                   <Plus className="h-4 w-4" />
