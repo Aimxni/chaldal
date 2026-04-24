@@ -202,8 +202,7 @@ const Hero = () => {
           >
             <div className="font-body text-[10px] uppercase tracking-[0.32em] opacity-80"></div>
             <div className="font-body text-3xl font-bold tracking-tight">
-              ৳ 120
-              <span className="ml-1 text-xs font-medium uppercase tracking-[0.2em] opacity-80">/kg mango</span>
+              <span className="ml-1 text-xs font-medium uppercase tracking-[0.2em] opacity-80"></span>
             </div>
           </motion.div>
         </div>
