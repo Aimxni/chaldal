@@ -6,18 +6,38 @@ import { useRef } from "react";
 const HERO_WEBP = "/images/hero-market.webp";
 const HERO_WEBP_960 = "/images/hero-market-960.webp";
 
-// Word-by-word reveal for the headline. Stagger handled by parent.
-const WORD_VARIANTS = {
-  hidden: { y: "110%" },
+// Headline parent — staggers the per-line letter animations.
+const HEADLINE_PARENT = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.18, delayChildren: 0.05 } },
+};
+
+// Per-letter pop-in used inside each masked word, before the shimmer sweep.
+const LETTER_VARIANTS = {
+  hidden: { opacity: 0, y: "40%" },
   visible: {
+    opacity: 1,
     y: "0%",
-    transition: { duration: 0.85, ease: [0.16, 1, 0.3, 1] as const },
+    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const },
   },
 };
 
-const HEADLINE_PARENT = {
+const LETTER_PARENT = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
+  visible: { transition: { staggerChildren: 0.035, delayChildren: 0.15 } },
+};
+
+// SVG underline draw — runs once after the headline finishes revealing.
+const UNDERLINE_DRAW = {
+  hidden: { pathLength: 0, opacity: 0 },
+  visible: {
+    pathLength: 1,
+    opacity: 1,
+    transition: {
+      pathLength: { duration: 1.1, ease: [0.65, 0, 0.35, 1] as const, delay: 1.4 },
+      opacity: { duration: 0.2, delay: 1.4 },
+    },
+  },
 };
 
 const FADE_UP = {
@@ -77,12 +97,14 @@ const Hero = () => {
 
           {/* Headline block — pushed to vertical center */}
           <div className="mt-4 lg:mt-0">
-            {/* h1 — THE LCP element. Word-mask reveal preserves LCP. */}
+            {/* h1 — THE LCP element. Per-letter masked reveal + post-reveal shimmer. */}
             <h1 className="font-body text-[clamp(2.25rem,5vw,3.75rem)] font-bold uppercase leading-[0.86] tracking-[-0.04em] text-[hsl(38_45%_96%)]">
               {reduce ? (
                 <>
                   <span className="block">{headline[0]}</span>
-                  <span className="block text-[hsl(38_90%_72%)]">{headline[1]}</span>
+                  <span className="relative block text-[hsl(38_90%_72%)]">
+                    {headline[1]}
+                  </span>
                   <span className="block">{headline[2]}</span>
                 </>
               ) : (
@@ -92,24 +114,63 @@ const Hero = () => {
                   variants={HEADLINE_PARENT}
                   className="block"
                 >
-                  {headline.map((line, i) => (
-                    <span
-                      key={line}
-                      className="block overflow-hidden pb-[0.05em]"
-                      style={{ lineHeight: 0.92 }}
-                    >
-                      <motion.span
-                        variants={WORD_VARIANTS}
+                  {headline.map((line, i) => {
+                    const isAccent = i === 1;
+                    return (
+                      <span
+                        key={line}
                         className={
-                          i === 1
-                            ? "block text-[hsl(38_90%_72%)]"
-                            : "block"
+                          isAccent
+                            ? "relative block overflow-visible pb-[0.05em]"
+                            : "block overflow-hidden pb-[0.05em]"
                         }
+                        style={{ lineHeight: 0.92 }}
                       >
-                        {line}
-                      </motion.span>
-                    </span>
-                  ))}
+                        <motion.span
+                          variants={LETTER_PARENT}
+                          aria-label={line}
+                          className={
+                            isAccent
+                              ? "hero-shimmer-accent inline-block text-[hsl(38_90%_72%)]"
+                              : "hero-shimmer inline-block"
+                          }
+                        >
+                          {Array.from(line).map((char, ci) => (
+                            <motion.span
+                              key={`${line}-${ci}`}
+                              variants={LETTER_VARIANTS}
+                              aria-hidden
+                              className="inline-block"
+                              style={{ whiteSpace: "pre" }}
+                            >
+                              {char}
+                            </motion.span>
+                          ))}
+                        </motion.span>
+
+                        {/* Animated SVG underline beneath the accent line */}
+                        {isAccent && (
+                          <motion.svg
+                            aria-hidden
+                            viewBox="0 0 300 14"
+                            preserveAspectRatio="none"
+                            className="pointer-events-none absolute -bottom-1 left-0 h-[0.32em] w-full text-[hsl(38_90%_72%)]"
+                            initial="hidden"
+                            animate="visible"
+                          >
+                            <motion.path
+                              d="M2 8 C 60 2, 130 12, 200 6 S 290 4, 298 8"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth={2.5}
+                              strokeLinecap="round"
+                              variants={UNDERLINE_DRAW}
+                            />
+                          </motion.svg>
+                        )}
+                      </span>
+                    );
+                  })}
                 </motion.span>
               )}
             </h1>

@@ -260,4 +260,52 @@
   }
 }
 
+/* Hero headline shimmer — a moving highlight sweeps across each headline line
+   once on load, using a clipped linear-gradient as the text fill. */
+@keyframes hero-shimmer {
+  0%   { background-position: -150% 0; }
+  100% { background-position: 250% 0; }
+}
+
+.hero-shimmer,
+.hero-shimmer-accent {
+  background-size: 250% 100%;
+  background-position: -150% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: hero-shimmer 2.6s cubic-bezier(0.4, 0, 0.2, 1) 1.6s 1 forwards;
+}
+
+.hero-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    hsl(38 45% 96%) 0%,
+    hsl(38 45% 96%) 38%,
+    hsl(38 95% 88%) 50%,
+    hsl(38 45% 96%) 62%,
+    hsl(38 45% 96%) 100%
+  );
+}
+
+.hero-shimmer-accent {
+  background-image: linear-gradient(
+    100deg,
+    hsl(38 90% 72%) 0%,
+    hsl(38 90% 72%) 38%,
+    hsl(45 100% 92%) 50%,
+    hsl(38 90% 72%) 62%,
+    hsl(38 90% 72%) 100%
+  );
+  animation-delay: 1.9s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-shimmer,
+  .hero-shimmer-accent {
+    animation: none;
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
+}
 
