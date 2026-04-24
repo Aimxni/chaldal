@@ -42,11 +42,11 @@ const PopularBrands = () => {
           </h2>
         </div>
 
-        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
+        <ul className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           {brands.map((b) => (
             <li
               key={b.name}
-              className="group grid h-24 place-items-center rounded-2xl border border-border bg-card p-4 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-card md:h-28"
+              className="group grid h-28 place-items-center rounded-lg border border-border bg-card px-6 py-5 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-card md:h-32"
             >
               <img
                 src={b.img}
@@ -55,7 +55,7 @@ const PopularBrands = () => {
                 height={512}
                 loading="lazy"
                 decoding="async"
-                className="max-h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105 md:max-h-16"
+                className="h-full max-h-20 w-full max-w-[82%] object-contain transition-transform duration-300 group-hover:scale-105 md:max-h-24"
               />
             </li>
           ))}
