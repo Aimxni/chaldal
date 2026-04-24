@@ -8,6 +8,7 @@ import ValueProps from "@/components/site/ValueProps";
 import Stats from "@/components/site/Stats";
 import CommonQuestions from "@/components/site/CommonQuestions";
 import JoinFamily from "@/components/site/JoinFamily";
+import Reveal from "@/components/Reveal";
 
 /**
  * Landing page.
@@ -16,22 +17,22 @@ import JoinFamily from "@/components/site/JoinFamily";
  * smooth — every section is parsed and ready in the initial bundle, with no
  * per-section JS fetch + mount delay as the user scrolls.
  *
- * The hero image is still preloaded via <link rel="preload"> in index.html,
- * and other images use loading="lazy" so bandwidth stays in check.
+ * Each section below the hero is wrapped in <Reveal> for a Cluely-style
+ * fade/slide-in as it enters the viewport.
  */
 const Index = () => {
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
       <Hero />
-      <CategoryGrid />
-      <PopularBrands />
-      <ShopAndGetMore />
-      <ValueProps />
-      <Stats />
-      <CommonQuestions />
-      <JoinFamily />
-      <Footer />
+      <Reveal><CategoryGrid /></Reveal>
+      <Reveal><PopularBrands /></Reveal>
+      <Reveal><ShopAndGetMore /></Reveal>
+      <Reveal><ValueProps /></Reveal>
+      <Reveal><Stats /></Reveal>
+      <Reveal><CommonQuestions /></Reveal>
+      <Reveal><JoinFamily /></Reveal>
+      <Reveal variant="fade"><Footer /></Reveal>
     </main>
   );
 };

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
+import Reveal from "@/components/Reveal";
 import catFruits from "@/assets/cat-fruits.webp";
 import catVeg from "@/assets/cat-vegetables.webp";
 import catDairy from "@/assets/cat-dairy.webp";
@@ -46,7 +47,7 @@ const CategoryGrid = () => {
           </div>
         </div>
 
-        <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-6 lg:grid-cols-6">
+        <Reveal as="ul" stagger className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-6 lg:grid-cols-6">
           {categories.map((c) => (
             <li key={c.name}>
               <Link
@@ -73,7 +74,7 @@ const CategoryGrid = () => {
               </Link>
             </li>
           ))}
-        </ul>
+        </Reveal>
       </div>
     </section>
   );
