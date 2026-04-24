@@ -1,4 +1,6 @@
 import { Sparkles } from "lucide-react";
+import { useRef } from "react";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import badgeAppStore from "@/assets/badge-appstore.png";
 import badgeGooglePlay from "@/assets/badge-googleplay.png";
 import phoneImg from "@/assets/app-phone.png";
@@ -9,12 +11,37 @@ import phoneImg from "@/assets/app-phone.png";
  * phone illustration anchored to the right.
  */
 const AppDownload = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Track scroll progress: 0 when section's top hits viewport bottom,
+  // 1 when section's bottom hits viewport top.
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  // Smooth the raw scroll progress for a more cinematic feel.
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 80,
+    damping: 20,
+    mass: 0.4,
+  });
+
+  // Phone starts upright (-15deg tilt) and lays flat as it enters view,
+  // then gently tilts back as it exits.
+  const rotateX = useTransform(smoothProgress, [0, 0.45, 0.7, 1], [-12, 62, 62, 30]);
+  const rotateZ = useTransform(smoothProgress, [0, 0.45, 0.7, 1], [-8, 0, 0, 6]);
+  const scale = useTransform(smoothProgress, [0, 0.45, 0.7, 1], [0.92, 1.05, 1.05, 0.98]);
+  const translateY = useTransform(smoothProgress, [0, 0.5, 1], [40, -10, -30]);
+
   return (
     <section
+      ref={sectionRef}
       id="download-app"
       className="relative border-t border-border bg-background py-16 md:py-20"
     >
       <div className="container">
+
         <div className="relative overflow-hidden rounded-[1.75rem] border border-border bg-[hsl(150_35%_18%)] shadow-elegant md:rounded-[2rem]">
           {/* Background flourishes */}
           <div
@@ -92,9 +119,20 @@ const AppDownload = () => {
               </div>
             </div>
 
-            {/* Phone — enlarged and vertically centered, doesn't grow the box */}
-            <div className="relative md:col-span-4">
-              <div className="relative mx-auto h-[300px] w-full max-w-[240px] md:absolute md:right-4 md:top-1/2 md:h-[420px] md:max-w-[300px] md:-translate-y-1/2 lg:right-8 lg:h-[460px] lg:max-w-[330px]">
+            {/* Phone — scroll-driven 3D tilt: starts upright, lays flat to reveal screen */}
+            <div className="relative md:col-span-4" style={{ perspective: "1200px" }}>
+              <motion.div
+                className="relative mx-auto h-[300px] w-full max-w-[240px] md:absolute md:right-4 md:top-1/2 md:h-[420px] md:max-w-[300px] md:-translate-y-1/2 lg:right-8 lg:h-[460px] lg:max-w-[330px]"
+                style={{
+                  rotateX,
+                  rotateZ,
+                  scale,
+                  y: translateY,
+                  transformStyle: "preserve-3d",
+                  transformOrigin: "center center",
+                  willChange: "transform",
+                }}
+              >
                 <img
                   src={phoneImg}
                   alt="Chaldal mobile app"
@@ -104,8 +142,9 @@ const AppDownload = () => {
                   decoding="async"
                   className="h-full w-full object-contain drop-shadow-[0_28px_56px_hsl(150_30%_8%/0.5)]"
                 />
-              </div>
+              </motion.div>
             </div>
+
           </div>
         </div>
       </div>
