@@ -8,7 +8,6 @@ const links = [
   { label: "Shop", to: "/rooms" },
   { label: "Categories", to: "/#categories" },
   { label: "Deals", to: "/#deals" },
-  { label: "Why Chaldal", to: "/#why" },
 ];
 
 const Navbar = () => {
