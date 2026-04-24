@@ -58,7 +58,10 @@ const CategoryGrid = () => {
         </div>
 
         <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-6 lg:grid-cols-6">
-          {categories.map((c) => (
+          {categories.map((c, i) => {
+            // First 6 tiles are above-the-fold on most viewports → load eagerly to avoid pop-in.
+            const eager = i < 6;
+            return (
             <li key={c.name}>
               <Link
                 to={c.to}
@@ -70,7 +73,8 @@ const CategoryGrid = () => {
                     alt={c.name}
                     width={600}
                     height={600}
-                    loading="lazy"
+                    loading={eager ? "eager" : "lazy"}
+                    fetchPriority={eager ? "high" : "auto"}
                     decoding="async"
                     className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
                   />
@@ -83,7 +87,8 @@ const CategoryGrid = () => {
                 </div>
               </Link>
             </li>
-          ))}
+            );
+          })}
         </ul>
       </div>
     </section>
