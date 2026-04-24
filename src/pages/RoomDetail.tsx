@@ -292,7 +292,7 @@ const RoomDetail = () => {
               <button
                 type="button"
                 onClick={handleReserve}
-                className="group mt-5 flex w-full items-center justify-center gap-3 bg-accent px-6 py-4 text-[11px] uppercase tracking-[0.25em] text-accent-foreground transition-[background-color,transform] duration-150 hover:bg-foreground hover:text-background active:scale-[0.98]"
+                className="btn btn-lg btn-accent group mt-5 w-full !rounded-md"
               >
                 Reserve
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

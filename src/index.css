@@ -107,6 +107,221 @@
   }
 }
 
+/* ============================================================
+   Premium button system
+   - Restraint of "Quiet Luxury" (typography, tight tracking, no flips)
+   - Tactile depth of "Soft Glass" (subtle gradient, layered shadow, lift)
+   - Sun-yellow accent reserved for top-priority CTAs
+   - Pure CSS. No JS, no framer-motion, no layout thrash.
+   - Animates only `transform` and `box-shadow` (compositor-only).
+   ============================================================ */
+@layer components {
+  /* Shared base — applied to every variant via the React component. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      transform 220ms var(--ease-out-expo),
+      box-shadow 220ms var(--ease-out-expo),
+      background-color 220ms var(--ease-out-expo),
+      color 220ms var(--ease-out-expo),
+      border-color 220ms var(--ease-out-expo);
+    will-change: transform;
+  }
+  .btn:focus-visible {
+    outline: 2px solid hsl(var(--accent));
+    outline-offset: 3px;
+  }
+  .btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Sizes */
+  .btn-sm { padding: 0.5rem 0.95rem; font-size: 0.6875rem; border-radius: 9999px; }
+  .btn-md { padding: 0.7rem 1.4rem;   font-size: 0.75rem;   border-radius: 9999px; }
+  .btn-lg { padding: 0.95rem 1.75rem; font-size: 0.8125rem; border-radius: 9999px; }
+
+  /* ---------- PRIMARY (deep leaf) — workhorse CTA ---------- */
+  .btn-primary {
+    color: hsl(var(--primary-foreground));
+    background-image: linear-gradient(
+      180deg,
+      hsl(150 35% 22%) 0%,
+      hsl(150 35% 16%) 100%
+    );
+    box-shadow:
+      inset 0 1px 0 hsl(38 45% 96% / 0.10),
+      0 1px 1px hsl(150 35% 8% / 0.40),
+      0 6px 14px -6px hsl(150 35% 10% / 0.45);
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 1px 0 hsl(38 45% 96% / 0.14),
+      0 2px 2px hsl(150 35% 8% / 0.40),
+      0 14px 28px -10px hsl(150 35% 10% / 0.55);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
+    box-shadow:
+      inset 0 2px 4px hsl(150 35% 8% / 0.45),
+      0 0 0 1px hsl(150 35% 10% / 0.25);
+  }
+
+  /* ---------- ACCENT (sun yellow) — top-priority CTA ---------- */
+  .btn-accent {
+    color: hsl(var(--accent-foreground));
+    background-image: var(--gradient-sun);
+    box-shadow:
+      inset 0 1px 0 hsl(38 100% 92% / 0.65),
+      inset 0 -1px 0 hsl(38 80% 40% / 0.20),
+      0 1px 1px hsl(38 80% 30% / 0.25),
+      0 8px 18px -6px hsl(45 96% 50% / 0.45);
+  }
+  .btn-accent:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 1px 0 hsl(38 100% 92% / 0.75),
+      inset 0 -1px 0 hsl(38 80% 40% / 0.20),
+      0 2px 2px hsl(38 80% 30% / 0.25),
+      0 16px 30px -8px hsl(45 96% 50% / 0.55);
+  }
+  .btn-accent:active {
+    transform: translateY(0);
+    box-shadow:
+      inset 0 2px 4px hsl(38 80% 30% / 0.30),
+      0 0 0 1px hsl(38 80% 30% / 0.20);
+  }
+
+  /* ---------- SECONDARY (ghost on cream — hairline) ---------- */
+  .btn-secondary {
+    color: hsl(var(--foreground));
+    background-color: transparent;
+    border: 1px solid hsl(var(--foreground) / 0.20);
+    box-shadow: 0 1px 0 hsl(var(--foreground) / 0.04);
+  }
+  .btn-secondary:hover {
+    background-color: hsl(var(--foreground));
+    color: hsl(var(--background));
+    border-color: hsl(var(--foreground));
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px -8px hsl(var(--foreground) / 0.30);
+  }
+  .btn-secondary:active {
+    transform: translateY(0);
+    box-shadow: inset 0 1px 2px hsl(var(--foreground) / 0.20);
+  }
+
+  /* ---------- GLASS (frosted — for image / colored backgrounds) ---------- */
+  .btn-glass {
+    color: hsl(38 45% 98%);
+    background-color: hsl(38 45% 98% / 0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid hsl(38 45% 98% / 0.28);
+    box-shadow:
+      inset 0 1px 0 hsl(38 45% 98% / 0.20),
+      0 6px 16px -8px hsl(0 0% 0% / 0.30);
+  }
+  .btn-glass:hover {
+    background-color: hsl(38 45% 98% / 0.22);
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 1px 0 hsl(38 45% 98% / 0.28),
+      0 12px 24px -10px hsl(0 0% 0% / 0.40);
+  }
+  .btn-glass:active {
+    transform: translateY(0);
+    box-shadow: inset 0 2px 4px hsl(0 0% 0% / 0.20);
+  }
+
+  /* ---------- IVORY (cream pill — used on dark/red hero panels) ---------- */
+  .btn-ivory {
+    color: hsl(8 72% 38%);
+    background-image: linear-gradient(180deg, hsl(38 50% 98%) 0%, hsl(38 40% 92%) 100%);
+    box-shadow:
+      inset 0 1px 0 hsl(0 0% 100% / 0.85),
+      0 1px 1px hsl(0 0% 0% / 0.10),
+      0 6px 14px -6px hsl(0 0% 0% / 0.25);
+  }
+  .btn-ivory:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 1px 0 hsl(0 0% 100% / 0.95),
+      0 2px 2px hsl(0 0% 0% / 0.10),
+      0 14px 26px -10px hsl(0 0% 0% / 0.30);
+  }
+  .btn-ivory:active {
+    transform: translateY(0);
+    box-shadow: inset 0 2px 4px hsl(0 0% 0% / 0.18);
+  }
+
+  /* ---------- ICON button (round, depth) ---------- */
+  .btn-icon {
+    display: inline-grid;
+    place-items: center;
+    border-radius: 9999px;
+    height: 2.5rem;
+    width: 2.5rem;
+    color: hsl(var(--primary-foreground));
+    background-image: linear-gradient(180deg, hsl(150 35% 22%) 0%, hsl(150 35% 16%) 100%);
+    box-shadow:
+      inset 0 1px 0 hsl(38 45% 96% / 0.12),
+      0 1px 1px hsl(150 35% 8% / 0.35),
+      0 6px 14px -6px hsl(150 35% 10% / 0.45);
+    transition:
+      transform 180ms var(--ease-out-expo),
+      box-shadow 180ms var(--ease-out-expo),
+      background-color 180ms var(--ease-out-expo);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-icon:focus-visible {
+    outline: 2px solid hsl(var(--accent));
+    outline-offset: 3px;
+  }
+  .btn-icon:hover {
+    transform: translateY(-1px);
+    background-image: var(--gradient-sun);
+    color: hsl(var(--accent-foreground));
+    box-shadow:
+      inset 0 1px 0 hsl(38 100% 92% / 0.7),
+      0 2px 2px hsl(38 80% 30% / 0.25),
+      0 12px 24px -8px hsl(45 96% 50% / 0.55);
+  }
+  .btn-icon:active {
+    transform: translateY(0) scale(0.94);
+    box-shadow: inset 0 2px 4px hsl(0 0% 0% / 0.25);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn,
+    .btn-icon {
+      transition: none;
+    }
+    .btn:hover,
+    .btn-icon:hover,
+    .btn:active,
+    .btn-icon:active {
+      transform: none;
+    }
+  }
+}
+
 @layer utilities {
   .font-display {
     font-family: 'Fraunces', 'Georgia', serif;

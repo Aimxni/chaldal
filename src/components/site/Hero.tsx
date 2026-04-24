@@ -1,4 +1,5 @@
 import { ArrowRight, MapPin } from "lucide-react";
+import { Btn } from "@/components/ui/btn";
 
 // Preloaded as WebP via <link rel="preload"> in index.html for fastest LCP.
 const HERO_WEBP = "/images/hero-market.webp";
@@ -66,14 +67,16 @@ const Hero = () => {
                 aria-label="Enter your postcode or area"
                 className="min-w-0 flex-1 bg-transparent py-2 font-body text-lg text-[hsl(38_45%_96%)] outline-none placeholder:text-[hsl(38_45%_96%)]/45"
               />
-              <button
+              <Btn
                 type="submit"
-                className="group inline-flex shrink-0 items-center gap-2 bg-[hsl(38_45%_96%)] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.18em] text-[hsl(8_72%_42%)] transition-colors hover:bg-[hsl(150_35%_18%)] hover:text-[hsl(38_45%_96%)]"
+                variant="ivory"
+                size="sm"
+                className="group shrink-0 !rounded-none"
                 aria-label="Check delivery to my area"
               >
                 Start
                 <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
-              </button>
+              </Btn>
             </div>
 
             <div
