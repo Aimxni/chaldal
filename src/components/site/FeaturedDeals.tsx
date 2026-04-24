@@ -102,7 +102,7 @@ const FeaturedDeals = () => {
                       description: `${d.name} · ${d.unit}`,
                     });
                   }}
-                  className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground transition-[background-color,transform] duration-150 hover:bg-accent hover:text-accent-foreground active:scale-90"
+                  className="btn-icon shrink-0"
                 >
                   <Plus className="h-4 w-4" />
                 </button>
