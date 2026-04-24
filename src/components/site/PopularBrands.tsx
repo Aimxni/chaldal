@@ -46,7 +46,7 @@ const PopularBrands = () => {
           {brands.map((b) => (
             <li
               key={b.name}
-              className="group grid h-28 place-items-center rounded-lg border border-border bg-card px-6 py-5 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-card md:h-32"
+              className="group grid h-28 place-items-center px-4 py-3 transition-transform duration-300 hover:-translate-y-1 md:h-32"
             >
               <img
                 src={b.img}
@@ -55,7 +55,7 @@ const PopularBrands = () => {
                 height={512}
                 loading="lazy"
                 decoding="async"
-                className="h-full max-h-20 w-full max-w-[82%] object-contain transition-transform duration-300 group-hover:scale-105 md:max-h-24"
+                className="h-full max-h-24 w-full max-w-[88%] object-contain drop-shadow-[0_8px_18px_rgba(21,36,27,0.12)] transition-transform duration-300 group-hover:scale-105 md:max-h-28"
               />
             </li>
           ))}
