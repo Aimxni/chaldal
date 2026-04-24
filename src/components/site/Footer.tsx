@@ -105,7 +105,7 @@ const Footer = () => {
               />
               <button
                 type="button"
-                className="m-1 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground transition-colors hover:bg-gold hover:text-gold-foreground"
+                className="btn btn-sm btn-accent m-1"
               >
                 Get app
               </button>
@@ -161,14 +161,14 @@ const Footer = () => {
             <SocialLink label="Facebook" icon={Facebook} />
             <SocialLink label="Twitter" icon={Twitter} />
             <SocialLink label="Instagram" icon={Instagram} />
-            <button className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-2 font-medium text-primary-foreground/80 shadow-soft transition-colors hover:bg-primary-foreground hover:text-primary">
+            <button className="btn btn-sm btn-glass">
               <Globe2 className="h-4 w-4" />
               English
             </button>
             <a
               href="/contact"
               aria-label="Help"
-              className="grid h-12 w-12 place-items-center rounded-full bg-gold text-gold-foreground shadow-glow transition-transform hover:-translate-y-0.5"
+              className="btn-icon"
             >
               <MessageCircleQuestion className="h-5 w-5" />
             </a>
