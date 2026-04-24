@@ -95,9 +95,9 @@ const Navbar = () => {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className={`hidden items-center gap-2 rounded-full border px-3.5 py-2 text-xs transition-colors md:inline-flex ${
+            className={`hidden items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-medium transition-colors md:inline-flex ${
               onHero
-                ? "border-[hsl(38_45%_96%)]/30 text-[hsl(38_45%_96%)]/85 hover:bg-[hsl(38_45%_96%)]/10"
+                ? "border-[hsl(38_45%_98%)]/70 bg-[hsl(38_45%_98%)]/15 text-[hsl(38_45%_98%)] hover:bg-[hsl(38_45%_98%)]/25"
                 : "border-border text-foreground/75 hover:bg-secondary"
             }`}
           >
