@@ -27,12 +27,14 @@ const AppDownload = () => {
     mass: 0.4,
   });
 
-  // Phone starts upright (-15deg tilt) and lays flat as it enters view,
-  // then gently tilts back as it exits.
-  const rotateX = useTransform(smoothProgress, [0, 0.45, 0.7, 1], [-12, 62, 62, 30]);
-  const rotateZ = useTransform(smoothProgress, [0, 0.45, 0.7, 1], [-8, 0, 0, 6]);
-  const scale = useTransform(smoothProgress, [0, 0.45, 0.7, 1], [0.92, 1.05, 1.05, 0.98]);
-  const translateY = useTransform(smoothProgress, [0, 0.5, 1], [40, -10, -30]);
+  // Pop-up motion: phone starts hidden below + tilted upright, springs up
+  // and lays flat (screen facing camera) as the section enters view, holds
+  // flat while centered, then gently recedes.
+  const rotateX = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [-25, 55, 55, 35]);
+  const rotateZ = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [-10, 0, 0, 4]);
+  const scale = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [0.7, 1.05, 1.05, 1]);
+  const translateY = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [120, 0, 0, -10]);
+  const opacity = useTransform(smoothProgress, [0, 0.15, 0.3], [0, 0.6, 1]);
 
   return (
     <section
@@ -119,18 +121,22 @@ const AppDownload = () => {
               </div>
             </div>
 
-            {/* Phone — scroll-driven 3D tilt: starts upright, lays flat to reveal screen */}
-            <div className="relative md:col-span-4" style={{ perspective: "1200px" }}>
+            {/* Phone — scroll-driven 3D tilt: pops up and lays flat to reveal screen */}
+            <div
+              className="relative md:col-span-4 md:min-h-[420px] lg:min-h-[460px]"
+              style={{ perspective: "1200px" }}
+            >
               <motion.div
-                className="relative mx-auto h-[300px] w-full max-w-[240px] md:absolute md:right-4 md:top-1/2 md:h-[420px] md:max-w-[300px] md:-translate-y-1/2 lg:right-8 lg:h-[460px] lg:max-w-[330px]"
+                className="relative mx-auto h-[300px] w-full max-w-[240px] md:absolute md:inset-y-0 md:right-4 md:my-auto md:h-[420px] md:max-w-[300px] lg:right-8 lg:h-[460px] lg:max-w-[330px]"
                 style={{
                   rotateX,
                   rotateZ,
                   scale,
                   y: translateY,
+                  opacity,
                   transformStyle: "preserve-3d",
                   transformOrigin: "center center",
-                  willChange: "transform",
+                  willChange: "transform, opacity",
                 }}
               >
                 <img
@@ -144,6 +150,7 @@ const AppDownload = () => {
                 />
               </motion.div>
             </div>
+
 
           </div>
         </div>
