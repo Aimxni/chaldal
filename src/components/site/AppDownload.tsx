@@ -1,10 +1,12 @@
 import { Sparkles } from "lucide-react";
 import badgeAppStore from "@/assets/badge-appstore.png";
 import badgeGooglePlay from "@/assets/badge-googleplay.png";
+import phoneImg from "@/assets/app-phone.png";
 
 /**
  * Compact "Download the Chaldal app" promo. Deep leaf-green panel with
- * sun-yellow discount accent and the official-looking store badges.
+ * sun-yellow discount accent, store badges centered on the left, and a
+ * phone illustration anchored to the right.
  */
 const AppDownload = () => {
   return (
@@ -38,9 +40,9 @@ const AppDownload = () => {
             }}
           />
 
-          <div className="relative flex flex-col items-start gap-6 p-7 md:flex-row md:items-center md:justify-between md:gap-10 md:p-10">
-            {/* Copy */}
-            <div className="max-w-2xl">
+          <div className="relative grid grid-cols-1 items-center gap-6 p-7 md:grid-cols-12 md:gap-8 md:p-10">
+            {/* Copy + badges (centered as a block) */}
+            <div className="md:col-span-8">
               <p className="mb-3 inline-flex items-center gap-2 rounded-full bg-[hsl(38_45%_96%)]/10 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-[hsl(38_90%_72%)]">
                 <Sparkles className="h-3 w-3" />
                 Mobile exclusive
@@ -54,40 +56,55 @@ const AppDownload = () => {
                 Faster checkout, real-time tracking, and in-app deals — all in
                 your pocket.
               </p>
+
+              {/* Badges centered horizontally within the copy column */}
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <a
+                  href="#"
+                  aria-label="Download on the App Store"
+                  className="inline-block transition-transform duration-300 hover:-translate-y-0.5"
+                >
+                  <img
+                    src={badgeAppStore}
+                    alt="Download on the App Store"
+                    width={1584}
+                    height={672}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-12 w-auto md:h-14"
+                  />
+                </a>
+                <a
+                  href="#"
+                  aria-label="Get it on Google Play"
+                  className="inline-block transition-transform duration-300 hover:-translate-y-0.5"
+                >
+                  <img
+                    src={badgeGooglePlay}
+                    alt="Get it on Google Play"
+                    width={1584}
+                    height={672}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-12 w-auto md:h-14"
+                  />
+                </a>
+              </div>
             </div>
 
-            {/* Store badges */}
-            <div className="flex flex-wrap items-center gap-3 md:flex-col md:items-end md:gap-3">
-              <a
-                href="#"
-                aria-label="Download on the App Store"
-                className="inline-block transition-transform duration-300 hover:-translate-y-0.5"
-              >
+            {/* Phone — positioned on the right, doesn't grow the box */}
+            <div className="relative md:col-span-4">
+              <div className="relative mx-auto h-[260px] w-full max-w-[200px] md:absolute md:-top-10 md:right-0 md:h-[340px] md:max-w-[240px] lg:h-[380px] lg:max-w-[260px]">
                 <img
-                  src={badgeAppStore}
-                  alt="Download on the App Store"
-                  width={1584}
-                  height={672}
+                  src={phoneImg}
+                  alt="Chaldal mobile app"
+                  width={896}
+                  height={1200}
                   loading="lazy"
                   decoding="async"
-                  className="h-12 w-auto md:h-14"
+                  className="h-full w-full object-contain drop-shadow-[0_24px_48px_hsl(150_30%_8%/0.45)]"
                 />
-              </a>
-              <a
-                href="#"
-                aria-label="Get it on Google Play"
-                className="inline-block transition-transform duration-300 hover:-translate-y-0.5"
-              >
-                <img
-                  src={badgeGooglePlay}
-                  alt="Get it on Google Play"
-                  width={1584}
-                  height={672}
-                  loading="lazy"
-                  decoding="async"
-                  className="h-12 w-auto md:h-14"
-                />
-              </a>
+              </div>
             </div>
           </div>
         </div>
