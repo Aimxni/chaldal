@@ -61,7 +61,7 @@ const Navbar = () => {
             width={1000}
             height={300}
             className={`h-9 w-auto transition-[filter] duration-300 md:h-10 ${
-              onHero ? "brightness-0 invert" : ""
+              onHero ? "[filter:drop-shadow(0_2px_8px_hsl(150_30%_8%/0.5))_brightness(0)_invert(1)]" : ""
             }`}
           />
         </Link>
