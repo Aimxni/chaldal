@@ -42,7 +42,21 @@ export function useLazyComponent<T extends ComponentType<any>>(
     );
 
     observer.observe(el);
-    return () => observer.disconnect();
+
+    // Safety fallback: IntersectionObserver callbacks are throttled in hidden
+    // tabs and some prerender environments. After the browser is idle, trigger
+    // loading so the site is interactive even in those edge cases.
+    const ric: (cb: () => void) => number =
+      (window as unknown as { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback ??
+      ((cb) => window.setTimeout(cb, 1500));
+    const idleId = ric(() => setHasIntersected((prev) => prev || true));
+
+    return () => {
+      observer.disconnect();
+      const cic = (window as unknown as { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback;
+      if (cic) cic(idleId);
+      else clearTimeout(idleId);
+    };
   }, [hasIntersected, rootMargin, threshold]);
 
   // Create the lazy component once, on first intersection.
