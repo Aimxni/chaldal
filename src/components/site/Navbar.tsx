@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Menu, X, ShoppingBag, MapPin } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import chaldalLogo from "@/assets/chaldal-logo.png";
 
 const links = [
   { label: "Shop", to: "/rooms" },
@@ -51,23 +52,18 @@ const Navbar = () => {
       >
         <Link
           to="/"
-          className={`flex items-center gap-2.5 font-display text-2xl tracking-[-0.02em] transition-colors ${
-            onHero ? "text-[hsl(38_45%_96%)]" : "text-foreground"
-          }`}
+          className="flex items-center"
           aria-label="Chaldal — home"
         >
-          <span
-            className={`grid h-9 w-9 place-items-center rounded-full font-display italic transition-colors ${
-              onHero
-                ? "bg-[hsl(38_45%_96%)] text-[hsl(8_72%_42%)]"
-                : "bg-primary text-primary-foreground"
+          <img
+            src={chaldalLogo}
+            alt="Chaldal"
+            width={1000}
+            height={300}
+            className={`h-9 w-auto transition-[filter] duration-300 md:h-10 ${
+              onHero ? "brightness-0 invert" : ""
             }`}
-          >
-            c
-          </span>
-          <span className="hidden sm:inline">
-            chaldal<span className={onHero ? "text-[hsl(38_90%_72%)]" : "text-accent"}>.</span>
-          </span>
+          />
         </Link>
 
         <nav className="hidden items-center gap-7 md:flex">
