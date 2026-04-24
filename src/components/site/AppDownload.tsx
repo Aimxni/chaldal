@@ -144,7 +144,7 @@ const AppDownload = () => {
                   alt="Chaldal mobile app showing the home screen with grocery categories"
                   width={848}
                   height={1264}
-                  loading="eager"
+                  loading="lazy"
                   decoding="async"
                   className="absolute inset-0 h-full w-full object-contain object-center drop-shadow-[0_28px_56px_hsl(150_30%_8%/0.5)]"
                   style={{ aspectRatio: "848 / 1264" }}
