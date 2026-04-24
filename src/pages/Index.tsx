@@ -1,46 +1,27 @@
-import { Suspense, type ComponentType } from "react";
 import Navbar from "@/components/site/Navbar";
 import Hero from "@/components/site/Hero";
+import Footer from "@/components/site/Footer";
+import CategoryGrid from "@/components/site/CategoryGrid";
+import PopularBrands from "@/components/site/PopularBrands";
+import ShopAndGetMore from "@/components/site/ShopAndGetMore";
+import ValueProps from "@/components/site/ValueProps";
+import Stats from "@/components/site/Stats";
+import CommonQuestions from "@/components/site/CommonQuestions";
+import JoinFamily from "@/components/site/JoinFamily";
+import AppDownload from "@/components/site/AppDownload";
 import Reveal from "@/components/Reveal";
-import { useLazyComponent } from "@/hooks/useLazyComponent";
 
 /**
  * Landing page.
  *
- * Above the fold (Navbar + Hero) is imported eagerly so LCP paints on the
- * first bundle. Every below-the-fold section is deferred via
- * IntersectionObserver (200px rootMargin) — the dynamic import is only
- * kicked off once the user scrolls within range. This keeps initial JS
- * parse/eval small and dramatically improves TBT on mobile.
+ * Sections are imported eagerly so the whole page is parsed and ready in the
+ * initial bundle. Vite's manualChunks still splits vendor code (vendor-react,
+ * vendor-motion, vendor-radix) so cachability stays good; only the app code
+ * is bundled together, which keeps the "once it's up, it's all up" feel.
  *
- * Each section is still wrapped in <Reveal> so its entrance animation
- * (variant-driven CSS fade/slide/scale) plays once content mounts.
+ * Each section below the hero is wrapped in <Reveal> for a fade/slide-in as
+ * it enters the viewport.
  */
-
-type RevealVariant = "up" | "up-soft" | "fade" | "scale" | "slide-left" | "slide-right";
-
-const SECTION_FALLBACK_CLASS = "min-h-[40vh] w-full";
-
-type LazyRevealSectionProps = {
-  loader: () => Promise<{ default: ComponentType }>;
-  variant: RevealVariant;
-};
-
-const LazyRevealSection = ({ loader, variant }: LazyRevealSectionProps) => {
-  const { ref, Component } = useLazyComponent(loader, { rootMargin: "200px" });
-  return (
-    <div ref={ref} className={Component ? undefined : SECTION_FALLBACK_CLASS}>
-      {Component ? (
-        <Suspense fallback={<div className={SECTION_FALLBACK_CLASS} />}>
-          <Reveal variant={variant}>
-            <Component />
-          </Reveal>
-        </Suspense>
-      ) : null}
-    </div>
-  );
-};
-
 const Index = () => {
   return (
     <main className="min-h-screen bg-background">
@@ -48,15 +29,15 @@ const Index = () => {
       <Hero />
       {/* Editorial sequence — each section gets a deliberate motion shape.
           Durations are unified via --reveal-duration; only the shape varies. */}
-      <LazyRevealSection variant="up"          loader={() => import("@/components/site/CategoryGrid")} />
-      <LazyRevealSection variant="slide-right" loader={() => import("@/components/site/PopularBrands")} />
-      <LazyRevealSection variant="scale"       loader={() => import("@/components/site/ShopAndGetMore")} />
-      <LazyRevealSection variant="up-soft"     loader={() => import("@/components/site/ValueProps")} />
-      <LazyRevealSection variant="scale"       loader={() => import("@/components/site/AppDownload")} />
-      <LazyRevealSection variant="fade"        loader={() => import("@/components/site/Stats")} />
-      <LazyRevealSection variant="slide-left"  loader={() => import("@/components/site/CommonQuestions")} />
-      <LazyRevealSection variant="scale"       loader={() => import("@/components/site/JoinFamily")} />
-      <LazyRevealSection variant="fade"        loader={() => import("@/components/site/Footer")} />
+      <Reveal variant="up"><CategoryGrid /></Reveal>
+      <Reveal variant="slide-right"><PopularBrands /></Reveal>
+      <Reveal variant="scale"><ShopAndGetMore /></Reveal>
+      <Reveal variant="up-soft"><ValueProps /></Reveal>
+      <Reveal variant="scale"><AppDownload /></Reveal>
+      <Reveal variant="fade"><Stats /></Reveal>
+      <Reveal variant="slide-left"><CommonQuestions /></Reveal>
+      <Reveal variant="scale"><JoinFamily /></Reveal>
+      <Reveal variant="fade"><Footer /></Reveal>
     </main>
   );
 };
