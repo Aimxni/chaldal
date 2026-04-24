@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Instagram, Facebook, Mail, Apple, Smartphone } from "lucide-react";
+import chaldalLogo from "@/assets/chaldal-logo.png";
 
 const Footer = () => {
   return (
@@ -7,11 +8,14 @@ const Footer = () => {
       <div className="container py-16 md:py-24">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-10">
           <div className="md:col-span-5">
-            <Link to="/" className="flex items-center gap-2.5 font-display text-3xl tracking-[-0.02em]">
-              <span className="grid h-10 w-10 place-items-center rounded-full bg-accent font-display italic text-accent-foreground">
-                c
-              </span>
-              chaldal<span className="text-accent">.</span>
+            <Link to="/" className="inline-flex items-center" aria-label="Chaldal — home">
+              <img
+                src={chaldalLogo}
+                alt="Chaldal"
+                width={1000}
+                height={300}
+                className="h-12 w-auto brightness-0 invert md:h-14"
+              />
             </Link>
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-primary-foreground/70">
               Hand-picked groceries delivered across Dhaka in under an hour.
