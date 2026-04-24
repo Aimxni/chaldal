@@ -58,11 +58,8 @@
         if (window.__APP_STATE.cssLoaded && window.__APP_STATE.reactMounted) {
           var shell = document.getElementById("app-shell");
           if (shell) {
-            setTimeout(function() {
-              shell.style.opacity = "0";
-              shell.style.pointerEvents = "none";
-              setTimeout(function() { shell.remove(); }, 500);
-            }, 50);
+            shell.style.opacity = "0";
+            setTimeout(function() { shell.remove(); }, 250);
           }
         }
       };
