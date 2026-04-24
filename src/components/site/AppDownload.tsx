@@ -1,4 +1,6 @@
 import { Sparkles } from "lucide-react";
+import { useRef } from "react";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import badgeAppStore from "@/assets/badge-appstore.png";
 import badgeGooglePlay from "@/assets/badge-googleplay.png";
 import phoneImg from "@/assets/app-phone.png";
