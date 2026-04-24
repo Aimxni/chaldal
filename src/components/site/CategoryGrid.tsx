@@ -10,6 +10,7 @@ import catBeverages from "@/assets/cat-beverages.webp";
 import catCooking from "@/assets/cat-cooking.webp";
 import catPestControl from "@/assets/cat-pest-control.webp";
 import catCleaning from "@/assets/cat-cleaning.webp";
+import catStationery from "@/assets/cat-stationery.webp";
 
 // Mirrors Chaldal's 12 "Popular Categories" tiles.
 const categories = [
@@ -19,7 +20,7 @@ const categories = [
   { name: "Beverages", img: catBeverages, to: "/rooms?cat=beverages" },
   { name: "Home & Cleaning", img: catCleaning, to: "/rooms?cat=cleaning" },
   { name: "Pest Control", img: catPestControl, to: "/rooms?cat=pest-control" },
-  { name: "Stationery & Office", img: catDairy, to: "/rooms?cat=stationery-office" },
+  { name: "Stationery & Office", img: catStationery, to: "/rooms?cat=stationery-office" },
   { name: "Beauty Products", img: catFruits, to: "/rooms?cat=personal-care" },
   { name: "Health Products", img: catVeg, to: "/rooms?cat=hygiene" },
   { name: "Pet Care", img: catDairy, to: "/rooms?cat=pet-care" },
