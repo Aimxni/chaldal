@@ -68,8 +68,8 @@ const CategoryGrid = () => {
                   <img
                     src={c.img}
                     alt={c.name}
-                    width={600}
-                    height={600}
+                    width={400}
+                    height={400}
                     loading="lazy"
                     decoding="async"
                     className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
