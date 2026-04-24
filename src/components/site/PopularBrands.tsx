@@ -51,8 +51,8 @@ const PopularBrands = () => {
               <img
                 src={b.img}
                 alt={`${b.name} logo`}
-                width={512}
-                height={512}
+                width={256}
+                height={256}
                 loading="lazy"
                 decoding="async"
                 className="h-full max-h-24 w-full max-w-[88%] object-contain drop-shadow-[0_8px_18px_rgba(21,36,27,0.12)] transition-transform duration-300 group-hover:scale-105 md:max-h-28"
