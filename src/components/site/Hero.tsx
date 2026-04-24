@@ -52,7 +52,7 @@ const Hero = () => {
   const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
   const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
 
-  const headline = ["Real food.", "Real fast.", "Real cheap."];
+  const headline = ["Grocery", "Delivered at", "your Doorstep"];
 
   return (
     <section
