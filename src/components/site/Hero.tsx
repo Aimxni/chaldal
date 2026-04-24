@@ -195,7 +195,7 @@ const Hero = () => {
             width={1920}
             height={1280}
             fetchPriority="high"
-            decoding="sync"
+            decoding="async"
             style={reduce ? undefined : { y: imageY, scale: imageScale }}
             initial={reduce ? false : { scale: 1.08, opacity: 0.6 }}
             animate={reduce ? undefined : { scale: 1, opacity: 1 }}
