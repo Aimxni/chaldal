@@ -18,17 +18,21 @@ const Sonner = lazy(() => import("@/components/ui/sonner").then((module) => ({ d
 const queryClient = new QueryClient();
 
 const App = () => {
-  // Fade out App Shell ONLY when both React has mounted AND CSS has loaded
+  // Fade out App Shell ONLY when both React has mounted AND CSS has loaded.
+  // In dev, Vite injects CSS via <style> tags so the asyncCssPlugin onload
+  // never fires — force cssLoaded so the shell can be removed.
+  // In production the CSS link's onload sets cssLoaded; we only signal
+  // reactMounted here and let tryRemoveAppShell gate on both flags.
   useEffect(() => {
     // @ts-ignore
     if (window.__APP_STATE) {
       // @ts-ignore
       window.__APP_STATE.reactMounted = true;
-      // In dev mode (Vite serves CSS via <style> tags, not <link rel="stylesheet">),
-      // the asyncCssPlugin onload handler never fires. Force cssLoaded=true so the
-      // shell can be removed. In prod the onload usually wins first; this is a safety net.
       // @ts-ignore
-      window.__APP_STATE.cssLoaded = true;
+      if (import.meta.env.DEV) {
+        // @ts-ignore
+        window.__APP_STATE.cssLoaded = true;
+      }
       // @ts-ignore
       if (typeof window.tryRemoveAppShell === "function") {
         // @ts-ignore
