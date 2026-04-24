@@ -8,6 +8,7 @@ import ValueProps from "@/components/site/ValueProps";
 import Stats from "@/components/site/Stats";
 import CommonQuestions from "@/components/site/CommonQuestions";
 import JoinFamily from "@/components/site/JoinFamily";
+import AppDownload from "@/components/site/AppDownload";
 import Reveal from "@/components/Reveal";
 
 /**
@@ -31,6 +32,7 @@ const Index = () => {
       <Reveal variant="slide-right"><PopularBrands /></Reveal>
       <Reveal variant="scale"><ShopAndGetMore /></Reveal>
       <Reveal variant="up-soft"><ValueProps /></Reveal>
+      <Reveal variant="scale"><AppDownload /></Reveal>
       <Reveal variant="fade"><Stats /></Reveal>
       <Reveal variant="slide-left"><CommonQuestions /></Reveal>
       <Reveal variant="scale"><JoinFamily /></Reveal>
