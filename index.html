@@ -95,7 +95,7 @@
       APP SHELL — mirrors the React Hero layout but stays non-interactive so
       scrolling works immediately while the real app hydrates underneath.
     -->
-    <div id="app-shell" style="position: absolute; inset: 0; z-index: 50; transition: opacity 0.25s ease-out; pointer-events: none;">
+    <div id="app-shell" style="position: fixed; inset: 0; z-index: 50; transition: opacity 0.25s ease-out; pointer-events: none; overflow: hidden;">
 
       <!-- Shell navbar — mirrors the React Navbar on-hero state (not scrolled) -->
       <div style="position: fixed; left: 50%; transform: translateX(-50%); top: 1rem; width: calc(100% - 24px); max-width: 1600px; z-index: 40;">
