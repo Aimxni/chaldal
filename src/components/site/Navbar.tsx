@@ -75,16 +75,16 @@ const Navbar = () => {
           <img
             src={chaldalLogo}
             alt="Chaldal"
-            width={320}
-            height={104}
+            width={240}
+            height={78}
             className={`h-9 w-auto md:h-10 ${onHero ? "invisible" : "visible"}`}
           />
           <img
             src={chaldalLogoWhite}
             alt=""
             aria-hidden="true"
-            width={320}
-            height={104}
+            width={240}
+            height={78}
             className={`absolute inset-0 h-9 w-auto md:h-10 ${onHero ? "visible" : "invisible"}`}
           />
         </Link>
