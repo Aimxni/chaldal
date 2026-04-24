@@ -12,7 +12,7 @@ const AppDownload = () => {
   return (
     <section
       id="download-app"
-      className="relative border-t border-border bg-background py-14 md:py-16"
+      className="relative border-t border-border bg-background py-16 md:py-20"
     >
       <div className="container">
         <div className="relative overflow-hidden rounded-[1.75rem] border border-border bg-[hsl(150_35%_18%)] shadow-elegant md:rounded-[2rem]">
@@ -40,7 +40,7 @@ const AppDownload = () => {
             }}
           />
 
-          <div className="relative grid grid-cols-1 items-center gap-6 p-7 md:grid-cols-12 md:gap-8 md:p-10">
+          <div className="relative grid grid-cols-1 items-center gap-8 p-9 md:grid-cols-12 md:gap-10 md:p-14">
             {/* Copy + badges (centered as a block) */}
             <div className="md:col-span-8">
               <p className="mb-3 inline-flex items-center gap-2 rounded-full bg-[hsl(38_45%_96%)]/10 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-[hsl(38_90%_72%)]">
