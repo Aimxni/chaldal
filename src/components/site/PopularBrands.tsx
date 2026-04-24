@@ -1,32 +1,22 @@
 import brandPran from "@/assets/brand-pran.webp";
-import brandPranHalf from "@/assets/brand-pran-half.webp";
 import brandReckitt from "@/assets/brand-reckitt.webp";
-import brandReckittHalf from "@/assets/brand-reckitt-half.webp";
 import brandNestle from "@/assets/brand-nestle.webp";
-import brandNestleHalf from "@/assets/brand-nestle-half.webp";
 import brandUnilever from "@/assets/brand-unilever.webp";
-import brandUnileverHalf from "@/assets/brand-unilever-half.webp";
 import brandMarico from "@/assets/brand-marico.webp";
-import brandMaricoHalf from "@/assets/brand-marico-half.webp";
 import brandGodrej from "@/assets/brand-godrej.webp";
-import brandGodrejHalf from "@/assets/brand-godrej-half.webp";
 import brandCocaCola from "@/assets/brand-cocacola.png";
-import brandCocaColaHalf from "@/assets/brand-cocacola-half.png";
 import brandFresh from "@/assets/brand-fresh.webp";
-import brandFreshHalf from "@/assets/brand-fresh-half.webp";
 
-// "Popular on Chaldal" partner-brand strip with real logo artwork. Each entry
-// ships a half-resolution variant so 1× displays save bytes while 2× displays
-// still render the full-res file.
+// "Popular on Chaldal" partner-brand strip with real logo artwork.
 const brands = [
-  { name: "Pran", img: brandPran, imgHalf: brandPranHalf, w: 240, h: 158 },
-  { name: "Reckitt", img: brandReckitt, imgHalf: brandReckittHalf, w: 240, h: 124 },
-  { name: "Nestlé", img: brandNestle, imgHalf: brandNestleHalf, w: 232, h: 240 },
-  { name: "Unilever", img: brandUnilever, imgHalf: brandUnileverHalf, w: 216, h: 240 },
-  { name: "Marico", img: brandMarico, imgHalf: brandMaricoHalf, w: 240, h: 208 },
-  { name: "Godrej", img: brandGodrej, imgHalf: brandGodrejHalf, w: 240, h: 116 },
-  { name: "Coca-Cola", img: brandCocaCola, imgHalf: brandCocaColaHalf, w: 240, h: 145 },
-  { name: "Fresh", img: brandFresh, imgHalf: brandFreshHalf, w: 240, h: 128 },
+  { name: "Pran", img: brandPran, w: 240, h: 158 },
+  { name: "Reckitt", img: brandReckitt, w: 240, h: 124 },
+  { name: "Nestlé", img: brandNestle, w: 232, h: 240 },
+  { name: "Unilever", img: brandUnilever, w: 216, h: 240 },
+  { name: "Marico", img: brandMarico, w: 240, h: 208 },
+  { name: "Godrej", img: brandGodrej, w: 240, h: 116 },
+  { name: "Coca-Cola", img: brandCocaCola, w: 240, h: 145 },
+  { name: "Fresh", img: brandFresh, w: 240, h: 128 },
 ];
 
 const PopularBrands = () => {
@@ -60,7 +50,6 @@ const PopularBrands = () => {
             >
               <img
                 src={b.img}
-                srcSet={`${b.imgHalf} 1x, ${b.img} 2x`}
                 alt={`${b.name} logo`}
                 width={b.w}
                 height={b.h}
