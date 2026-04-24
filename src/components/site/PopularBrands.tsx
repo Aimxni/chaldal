@@ -1,3 +1,4 @@
+import Reveal from "@/components/Reveal";
 import brandPran from "@/assets/brand-pran.png";
 import brandReckitt from "@/assets/brand-reckitt.png";
 import brandNestle from "@/assets/brand-nestle.png";
@@ -42,18 +43,7 @@ const PopularBrands = () => {
           </h2>
         </div>
 
-        <ul ref={(el) => {
-          if (!el) return;
-          const io = new IntersectionObserver((entries, obs) => {
-            entries.forEach((e) => {
-              if (e.isIntersecting) {
-                (e.target as HTMLElement).setAttribute("data-revealed", "true");
-                obs.unobserve(e.target);
-              }
-            });
-          }, { threshold: 0.1, rootMargin: "0px 0px -60px 0px" });
-          io.observe(el);
-        }} className="reveal-stagger grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <Reveal as="ul" stagger className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           {brands.map((b) => (
             <li
               key={b.name}
@@ -70,7 +60,7 @@ const PopularBrands = () => {
               />
             </li>
           ))}
-        </ul>
+        </Reveal>
       </div>
     </section>
   );
