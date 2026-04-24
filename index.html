@@ -51,7 +51,7 @@
     <meta name="twitter:description" content="Hand-picked fruits, vegetables, dairy, and pantry essentials delivered to your door in 1 hour." />
   </head>
 
-  <body class="bg-background text-foreground antialiased" style="margin: 0; padding: 0; background-color: #d63a23;">
+  <body class="bg-background text-foreground antialiased" style="margin: 0; padding: 0; background-color: #1a1a1a;">
     <script>
       window.__APP_STATE = { cssLoaded: false, reactMounted: false };
       window.tryRemoveAppShell = function() {
@@ -73,25 +73,26 @@
       Mirrors the split-color hero layout so the LCP image paints instantly
       and there is zero CLS when React hydrates.
     -->
-    <div id="app-shell" style="position: absolute; inset: 0; z-index: 50; transition: opacity 0.5s ease-in-out; background-color: #d63a23;">
-      <div style="display: grid; grid-template-columns: 1fr; min-height: 100vh; width: 100%; background-color: #d63a23;">
-        <!-- Right panel image — appears as full-width on mobile, on the right on desktop.
-             Background stays tomato red so the page reads as red instantly,
-             even before the hero image has finished downloading. -->
-        <div style="position: relative; width: 100%; min-height: 60vh; overflow: hidden; background-color: #d63a23;">
-          <img src="/images/hero-market.webp" srcset="/images/hero-market-960.webp 960w, /images/hero-market.webp 1920w" sizes="(max-width: 1024px) 100vw, 60vw" fetchpriority="high" decoding="async" width="1920" height="1280" alt="" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; opacity: 0; transition: opacity 0.4s ease-out;" onload="this.style.opacity='1'" />
+    <div id="app-shell" style="position: absolute; inset: 0; z-index: 50; transition: opacity 0.5s ease-in-out;">
+      <div style="display: grid; grid-template-columns: 1fr; min-height: 100vh; width: 100%;">
+        <!-- Hero image area. A tiny inline LQIP (base64 webp, ~450 bytes) paints
+             instantly so the user sees the actual hero photo (blurred) on first
+             frame — no red flash. The full-resolution image fades over it once loaded. -->
+        <div style="position: relative; width: 100%; min-height: 60vh; overflow: hidden; background-image: url('data:image/webp;base64,UklGRkYBAABXRUJQVlA4IDoBAABwBwCdASooABcAPu1krE4ppaSiKqwBMB2JbACpJ5gFKFjXgoNrc4U5ZK3V6UOZf/7TIt8gB1pQ/dsgcKAbW5D87XfwAAD+3G5gA596U8FmRAKv5acqC9Jp7miaAY9t3boTKaa1+w1pf9eDQNgIaD49v/Vugcc0UFlK8lpP3FLqTNDbGiggPMzPWE07LClUZmAaMxpRxcsj+K9eoTZKlR94g9warRs914POQqwMQ/reZpK67YageNvBLCsdwvVdjPmOAjwt0oQ+8LPqoQL0ChzMk07MSKemdQuv0MOKj4j36vayvBBAbWlK5XmjtU8ZFSEO1tScfo8Tbyl3A9/f/Fyojq8k7GlazMuW3pwNlS2H36XlPqeuZEtJmLf1W7zQZW4zSJSCwcj7Emf/Ex5KfIxVqcgFjLclznAAAA=='); background-size: cover; background-position: center;">
+          <img src="/images/hero-market.webp" srcset="/images/hero-market-960.webp 960w, /images/hero-market.webp 1920w" sizes="(max-width: 1024px) 100vw, 60vw" fetchpriority="high" decoding="async" width="1920" height="1280" alt="" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s ease-out;" onload="this.style.opacity='1'" />
         </div>
       </div>
 
-      <!-- Left red sidebar text skeleton (visible on top so the LCP h1 paints instantly) -->
-      <div style="position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 6rem 1.5rem 2.5rem; color: #faf4e7; font-family: Inter, system-ui, sans-serif; pointer-events: none;">
-        <div style="font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase; opacity: 0.75;">Est. 2013 · Dhaka</div>
-        <h1 style="margin: 0; font-family: Inter, system-ui, sans-serif; font-weight: 700; text-transform: uppercase; font-size: clamp(3rem, 11vw, 7.5rem); line-height: 0.86; letter-spacing: -0.04em;">
+      <!-- Headline overlay. Subtle dark gradient at the bottom keeps the bottom
+           caption readable over the photo without tinting the whole hero red. -->
+      <div style="position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 6rem 1.5rem 2.5rem; color: #faf4e7; font-family: Inter, system-ui, sans-serif; pointer-events: none; background: linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.55) 100%);">
+        <div style="font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase; opacity: 0.9; text-shadow: 0 1px 8px rgba(0,0,0,0.4);">Est. 2013 · Dhaka</div>
+        <h1 style="margin: 0; font-family: Inter, system-ui, sans-serif; font-weight: 700; text-transform: uppercase; font-size: clamp(3rem, 11vw, 7.5rem); line-height: 0.86; letter-spacing: -0.04em; text-shadow: 0 2px 24px rgba(0,0,0,0.45);">
           <span style="display: block;">Real food.</span>
           <span style="display: block; color: #f5c971;">Real fast.</span>
           <span style="display: block;">Real cheap.</span>
         </h1>
-        <div style="font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; opacity: 0.65;">Where should we deliver?</div>
+        <div style="font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; opacity: 0.85; text-shadow: 0 1px 8px rgba(0,0,0,0.4);">Where should we deliver?</div>
       </div>
     </div>
 
