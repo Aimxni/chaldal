@@ -267,6 +267,39 @@
   100% { background-position: 250% 0; }
 }
 
+/* Navbar cart bump — fires when cart count increases. Pure CSS so we can
+   drop framer-motion from the initial critical path. */
+@keyframes cart-icon-bump {
+  0%   { transform: rotate(0); }
+  25%  { transform: rotate(-12deg); }
+  50%  { transform: rotate(10deg); }
+  75%  { transform: rotate(-6deg); }
+  100% { transform: rotate(0); }
+}
+@keyframes cart-badge-bump {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.35); }
+}
+.cart-icon-bump  { animation: cart-icon-bump 0.45s ease-out; }
+.cart-badge-bump { animation: cart-badge-bump 0.4s ease-out; }
+
+/* AppDownload phone pop-in — entry-only, triggered when section intersects. */
+.phone-popin {
+  opacity: 0;
+  transform: translateY(60px) scale(0.88) rotateX(8deg) rotateZ(-4deg);
+  transition:
+    opacity 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+  will-change: transform, opacity;
+}
+.phone-popin.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1) rotateX(0) rotateZ(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .phone-popin { opacity: 1; transform: none; transition: none; }
+}
+
 .hero-shimmer,
 .hero-shimmer-accent {
   background-size: 250% 100%;

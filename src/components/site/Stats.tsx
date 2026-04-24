@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 // Mirrors Chaldal's stats strip + "Currently Delivering in" cities.
 type Stat = {
@@ -21,40 +20,58 @@ const stats: Stat[] = [
 const cities = ["Dhaka", "Chattogram", "Jashore"];
 
 // Smoothly counts up from 0 → target when scrolled into view.
+// Pure rAF — no framer-motion, keeps the vendor-motion chunk off critical path.
 const AnimatedNumber = ({
   target,
   prefix = "",
   suffix = "",
+  duration = 1800,
 }: {
   target: number;
   prefix?: string;
   suffix?: string;
+  duration?: number;
 }) => {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { margin: "-80px" });
-  const motionValue = useMotionValue(0);
-  const spring = useSpring(motionValue, { duration: 1800, bounce: 0 });
-  const display = useTransform(spring, (latest) =>
-    `${prefix}${Math.round(latest).toLocaleString()}${suffix}`,
-  );
-  const [text, setText] = useState(`${prefix}0${suffix}`);
+  const [value, setValue] = useState(0);
 
   useEffect(() => {
-    if (inView) {
-      motionValue.set(0);
-      // next frame so spring registers the change
-      requestAnimationFrame(() => motionValue.set(target));
-    } else {
-      motionValue.set(0);
-    }
-  }, [inView, target, motionValue]);
+    const el = ref.current;
+    if (!el) return;
+    let raf = 0;
+    let start = 0;
+    const ease = (t: number) => 1 - Math.pow(1 - t, 3);
 
-  useEffect(() => {
-    const unsub = display.on("change", (v) => setText(v));
-    return () => unsub();
-  }, [display]);
+    const run = () => {
+      const step = (ts: number) => {
+        if (!start) start = ts;
+        const p = Math.min(1, (ts - start) / duration);
+        setValue(Math.round(ease(p) * target));
+        if (p < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    };
 
-  return <span ref={ref}>{text}</span>;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            start = 0;
+            run();
+            io.disconnect();
+          }
+        }
+      },
+      { rootMargin: "-80px" },
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }, [target, duration]);
+
+  return <span ref={ref}>{`${prefix}${value.toLocaleString()}${suffix}`}</span>;
 };
 
 const Stats = () => {
@@ -65,13 +82,9 @@ const Stats = () => {
     >
       <div className="container">
         <ul className="grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-border bg-border md:grid-cols-4">
-          {stats.map((s, i) => (
-            <motion.li
+          {stats.map((s) => (
+            <li
               key={s.label}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ margin: "-80px" }}
-              transition={{ duration: 0.5, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
               className="bg-card p-7 md:p-8"
             >
               <p className="font-display text-[clamp(2rem,4vw,3.25rem)] font-medium leading-none tracking-tight text-foreground">
@@ -80,7 +93,7 @@ const Stats = () => {
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                 {s.label}
               </p>
-            </motion.li>
+            </li>
           ))}
         </ul>
 
@@ -95,19 +108,15 @@ const Stats = () => {
             </h2>
           </div>
           <ul className="md:col-span-7 grid grid-cols-3 gap-3 md:gap-5">
-            {cities.map((city, i) => (
-              <motion.li
+            {cities.map((city) => (
+              <li
                 key={city}
-                initial={{ opacity: 0, scale: 0.92 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ margin: "-80px" }}
-                transition={{ duration: 0.45, delay: 0.2 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
                 className="rounded-2xl border border-border bg-card p-5 text-center md:p-7"
               >
                 <span className="font-display text-lg font-medium text-foreground md:text-2xl">
                   {city}
                 </span>
-              </motion.li>
+              </li>
             ))}
           </ul>
         </div>

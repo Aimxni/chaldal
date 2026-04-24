@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Menu, X, ShoppingBag, MapPin } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import chaldalLogo from "@/assets/chaldal-logo.png";
 import chaldalLogoWhite from "@/assets/chaldal-logo-white.png";
 import { useCart, selectCartCount } from "@/stores/cart";
@@ -133,33 +132,20 @@ const Navbar = () => {
                 : "bg-primary text-primary-foreground hover:bg-accent hover:text-accent-foreground"
             }`}
           >
-            <motion.span
-              animate={bump ? { rotate: [0, -12, 10, -6, 0] } : { rotate: 0 }}
-              transition={{ duration: 0.45, ease: "easeOut" }}
-              className="inline-flex"
-            >
+            <span key={`icon-${bump ? "b" : "r"}`} className={`inline-flex ${bump ? "cart-icon-bump" : ""}`}>
               <ShoppingBag className="h-3.5 w-3.5" />
-            </motion.span>
+            </span>
             <span className="hidden sm:inline">Cart</span>
-            <motion.span
-              animate={bump ? { scale: [1, 1.35, 1] } : { scale: 1 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
+            <span
+              key={`badge-${bump ? "b" : "r"}`}
               className={`grid h-5 min-w-5 place-items-center overflow-hidden rounded-full px-1 text-[10px] tabular-nums ${
+                bump ? "cart-badge-bump" : ""
+              } ${
                 onHero ? "bg-[hsl(8_72%_42%)] text-[hsl(38_45%_96%)]" : "bg-accent text-accent-foreground"
               }`}
             >
-              <AnimatePresence mode="popLayout" initial={false}>
-                <motion.span
-                  key={cartCount}
-                  initial={{ y: -10, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: 10, opacity: 0 }}
-                  transition={{ duration: 0.18, ease: "easeOut" }}
-                >
-                  {cartCount}
-                </motion.span>
-              </AnimatePresence>
-            </motion.span>
+              {cartCount}
+            </span>
           </Link>
           <button
             aria-label="Open menu"

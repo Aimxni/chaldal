@@ -1,6 +1,5 @@
 import { Sparkles } from "lucide-react";
-import { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import badgeAppStore from "@/assets/badge-appstore.png";
 import badgeGooglePlay from "@/assets/badge-googleplay.png";
 import phoneImg from "@/assets/app-phone.webp";
@@ -14,28 +13,28 @@ import phoneImg636 from "@/assets/app-phone-636.webp";
  */
 const AppDownload = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const phoneRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
 
-  // Track scroll progress: 0 when section's top hits viewport bottom,
-  // 1 when section's bottom hits viewport top.
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  // Smooth the raw scroll progress for a more cinematic feel.
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 80,
-    damping: 20,
-    mass: 0.4,
-  });
-
-  // Apple-style pop-up: phone rises from below and settles upright (screen
-  // facing camera, no tilt). Subtle parallax drift while in view.
-  const rotateX = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [8, 0, 0, -4]);
-  const rotateZ = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [-4, 0, 0, 2]);
-  const scale = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [0.85, 1, 1, 0.98]);
-  const translateY = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [80, 0, 0, -20]);
-  const opacity = useTransform(smoothProgress, [0, 0.15, 0.3], [0, 0.7, 1]);
+  // Trigger the phone pop-in once when the section enters the viewport.
+  // Pure IntersectionObserver + CSS keyframes — no framer-motion on critical path.
+  useEffect(() => {
+    const el = phoneRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            setVisible(true);
+            io.disconnect();
+          }
+        }
+      },
+      { rootMargin: "-80px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   return (
     <section
@@ -129,18 +128,13 @@ const AppDownload = () => {
               className="relative flex items-center justify-center md:col-span-4 md:min-h-[420px] lg:min-h-[480px]"
               style={{ perspective: "1200px" }}
             >
-              <motion.div
-                className="relative w-[180px] sm:w-[200px] md:w-[220px] lg:w-[260px] xl:w-[280px]"
+              <div
+                ref={phoneRef}
+                className={`phone-popin relative w-[180px] sm:w-[200px] md:w-[220px] lg:w-[260px] xl:w-[280px] ${visible ? "is-visible" : ""}`}
                 style={{
                   aspectRatio: "848 / 1264",
-                  rotateX,
-                  rotateZ,
-                  scale,
-                  y: translateY,
-                  opacity,
                   transformStyle: "preserve-3d",
                   transformOrigin: "center center",
-                  willChange: "transform, opacity",
                 }}
               >
                 <img
@@ -155,7 +149,7 @@ const AppDownload = () => {
                   className="absolute inset-0 h-full w-full object-contain object-center drop-shadow-[0_28px_56px_hsl(150_30%_8%/0.5)]"
                   style={{ aspectRatio: "848 / 1264" }}
                 />
-              </motion.div>
+              </div>
             </div>
 
 
