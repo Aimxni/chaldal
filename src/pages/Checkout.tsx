@@ -339,7 +339,12 @@ const Checkout = () => {
                   type="button"
                   onClick={handlePay}
                   disabled={!isOnline}
-                  className="group flex w-full items-center justify-center gap-3 bg-[#E2136E] px-6 py-4 text-[11px] uppercase tracking-[0.25em] text-white transition-all duration-150 hover:bg-[#C8105F] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="btn btn-lg group w-full !rounded-md text-white"
+                  style={{
+                    backgroundImage: "linear-gradient(180deg, #E83A85 0%, #C8105F 100%)",
+                    boxShadow:
+                      "inset 0 1px 0 hsl(0 0% 100% / 0.18), 0 1px 1px hsl(330 80% 20% / 0.4), 0 8px 18px -6px hsl(330 80% 35% / 0.5)",
+                  }}
                 >
                   Pay {formatBDT(total)} with bKash
                 </button>
@@ -349,7 +354,8 @@ const Checkout = () => {
                 <button
                   type="button"
                   disabled
-                  className="flex w-full items-center justify-center gap-3 bg-[#E2136E]/80 px-6 py-4 text-[11px] uppercase tracking-[0.25em] text-white"
+                  className="btn btn-lg w-full !rounded-md text-white"
+                  style={{ backgroundColor: "#E2136E", opacity: 0.85 }}
                 >
                   <Loader2 className="h-4 w-4 animate-spin" />
                   Processing…
@@ -364,7 +370,7 @@ const Checkout = () => {
                     type="button"
                     onClick={retry}
                     disabled={!isOnline}
-                    className="group flex w-full items-center justify-center gap-3 border border-border bg-background px-6 py-4 text-[11px] uppercase tracking-[0.25em] text-foreground transition-all duration-150 hover:bg-foreground hover:text-background active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+                    className="btn btn-lg btn-secondary group w-full !rounded-md"
                   >
                     <RefreshCw className="h-4 w-4 transition-transform group-hover:rotate-180" />
                     Retry payment
@@ -375,7 +381,7 @@ const Checkout = () => {
                 <button
                   type="button"
                   onClick={handleDone}
-                  className="group flex w-full items-center justify-center gap-3 bg-accent px-6 py-4 text-[11px] uppercase tracking-[0.25em] text-accent-foreground transition-all duration-150 hover:bg-foreground hover:text-background active:scale-[0.98]"
+                  className="btn btn-lg btn-accent group w-full !rounded-md"
                 >
                   <Check className="h-4 w-4" />
                   Done — back to home
