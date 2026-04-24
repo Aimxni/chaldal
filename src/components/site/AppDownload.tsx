@@ -4,6 +4,8 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import badgeAppStore from "@/assets/badge-appstore.png";
 import badgeGooglePlay from "@/assets/badge-googleplay.png";
 import phoneImg from "@/assets/app-phone.png";
+import phoneImg424 from "@/assets/app-phone-424.png";
+import phoneImg636 from "@/assets/app-phone-636.png";
 
 /**
  * Compact "Download the Chaldal app" promo. Deep leaf-green panel with
