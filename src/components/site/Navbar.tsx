@@ -20,14 +20,14 @@ const Navbar = () => {
     const onScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setScrolled(window.scrollY > 32);
+          setScrolled(window.scrollY > 16);
           ticking = false;
         });
         ticking = true;
       }
     };
 
-    window.requestAnimationFrame(() => setScrolled(window.scrollY > 32));
+    window.requestAnimationFrame(() => setScrolled(window.scrollY > 16));
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -36,13 +36,19 @@ const Navbar = () => {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-40 transition-[background-color,box-shadow,backdrop-filter] duration-300 ${
-        scrolled
-          ? "bg-background/90 shadow-soft backdrop-blur-md"
-          : "bg-transparent"
+      className={`fixed left-1/2 z-40 -translate-x-1/2 transition-all duration-500 ease-[var(--ease-out-expo)] ${
+        scrolled ? "top-3 w-[calc(100%-32px)] max-w-5xl" : "top-4 w-[calc(100%-24px)] max-w-[1600px]"
       }`}
     >
-      <div className="container flex h-[72px] items-center justify-between gap-4">
+      <div
+        className={`flex items-center justify-between gap-4 rounded-full border px-4 transition-all duration-500 ease-[var(--ease-out-expo)] sm:px-6 ${
+          scrolled
+            ? "h-[56px] border-border/60 bg-background/75 shadow-elegant backdrop-blur-xl"
+            : onHero
+              ? "h-[64px] border-white/15 bg-foreground/25 backdrop-blur-md"
+              : "h-[64px] border-border/40 bg-background/60 backdrop-blur-md"
+        }`}
+      >
         <Link
           to="/"
           className={`flex items-center gap-2.5 font-display text-2xl tracking-[-0.02em] transition-colors ${
