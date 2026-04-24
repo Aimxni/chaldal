@@ -14,7 +14,7 @@ const Footer = () => {
                 alt="Chaldal"
                 width={1000}
                 height={300}
-                className="h-12 w-auto brightness-0 invert md:h-14"
+                className="h-12 w-auto md:h-14"
               />
             </Link>
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-primary-foreground/70">
