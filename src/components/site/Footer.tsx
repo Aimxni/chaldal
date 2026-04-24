@@ -38,8 +38,8 @@ const Footer = () => {
           <img
             src={chaldalLogoWhite}
             alt="Chaldal"
-            width={1000}
-            height={326}
+            width={320}
+            height={104}
             className="h-11 w-auto md:h-12"
           />
         </Link>
