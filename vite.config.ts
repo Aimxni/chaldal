@@ -14,48 +14,6 @@ const asyncCssPlugin = () => ({
   },
 });
 
-/**
- * Emit <link rel="modulepreload"> for below-the-fold section chunks so the
- * browser fetches them in parallel with the main bundle instead of waiting
- * for React to request them on mount. Cuts a round-trip per chunk on cold
- * loads.
- */
-const SECTION_NAMES = [
-  "CategoryGrid",
-  "PopularBrands",
-  "ShopAndGetMore",
-  "ValueProps",
-  "AppDownload",
-  "Stats",
-  "CommonQuestions",
-  "JoinFamily",
-  "Footer",
-];
-
-const preloadSectionChunks = () => ({
-  name: "preload-section-chunks",
-  enforce: "post" as const,
-  transformIndexHtml: {
-    order: "post" as const,
-    handler(html: string, ctx: { bundle?: Record<string, { fileName: string; type: string }> }) {
-      if (!ctx.bundle) return html;
-      const hrefs: string[] = [];
-      for (const chunk of Object.values(ctx.bundle)) {
-        if (chunk.type !== "chunk") continue;
-        const base = chunk.fileName.split("/").pop() ?? "";
-        if (SECTION_NAMES.some((name) => base.startsWith(`${name}-`))) {
-          hrefs.push(`/${chunk.fileName}`);
-        }
-      }
-      if (!hrefs.length) return html;
-      const tags = hrefs
-        .map((h) => `    <link rel="modulepreload" crossorigin href="${h}">`)
-        .join("\n");
-      return html.replace("</head>", `${tags}\n  </head>`);
-    },
-  },
-});
-
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   server: {
@@ -65,7 +23,7 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
-  plugins: [react(), asyncCssPlugin(), preloadSectionChunks(), mode === "development" && componentTagger()].filter(Boolean),
+  plugins: [react(), asyncCssPlugin(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
