@@ -1,11 +1,11 @@
-import brandPran from "@/assets/brand-pran.png";
-import brandReckitt from "@/assets/brand-reckitt.png";
-import brandNestle from "@/assets/brand-nestle.png";
-import brandUnilever from "@/assets/brand-unilever.png";
-import brandMarico from "@/assets/brand-marico.png";
-import brandGodrej from "@/assets/brand-godrej.png";
+import brandPran from "@/assets/brand-pran.webp";
+import brandReckitt from "@/assets/brand-reckitt.webp";
+import brandNestle from "@/assets/brand-nestle.webp";
+import brandUnilever from "@/assets/brand-unilever.webp";
+import brandMarico from "@/assets/brand-marico.webp";
+import brandGodrej from "@/assets/brand-godrej.webp";
 import brandCocaCola from "@/assets/brand-cocacola.png";
-import brandFresh from "@/assets/brand-fresh.png";
+import brandFresh from "@/assets/brand-fresh.webp";
 
 // "Popular on Chaldal" partner-brand strip with real logo artwork.
 const brands = [
@@ -53,7 +53,7 @@ const PopularBrands = () => {
                 alt={`${b.name} logo`}
                 width={512}
                 height={512}
-                loading="eager"
+                loading="lazy"
                 decoding="async"
                 className="h-full max-h-24 w-full max-w-[88%] object-contain drop-shadow-[0_8px_18px_rgba(21,36,27,0.12)] transition-transform duration-300 group-hover:scale-105 md:max-h-28"
               />

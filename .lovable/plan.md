@@ -1,46 +1,54 @@
+# Recover desktop PageSpeed score (49 → ~99)
 
+## Root cause recap
 
-## Floating Glass Pill Navbar (untillabs.com style)
+The previous change set `loading="eager"` + `fetchPriority="high"` on ~22 below-the-fold images (6 category tiles, 8 brand logos, 1 phone image). On desktop these now compete with the hero LCP image for bandwidth and main-thread decode time, and the 8 brand PNGs alone weigh ~734KB. That tanked LCP and Total Blocking Time → score dropped to 49.
 
-Transform the current full-width navbar into an animated floating pill that shrinks on scroll-down and expands on scroll-up, with a frosted glass effect throughout.
+## Step 1 — Revert eager loading on below-fold images
 
-### Behavior
+**`src/components/site/CategoryGrid.tsx`**
+- Remove the `eager = i < 6` logic.
+- Restore `loading="lazy"` and `fetchPriority="auto"` (or just drop the prop) for all 12 tiles.
 
-**At top of hero (expanded state):**
-- Navbar spans nearly full width with small side margins (~24px)
-- Subtle translucent tint with light glass blur so it floats over the hero image
-- Tall pill height (~64px), generous horizontal padding
+**`src/components/site/PopularBrands.tsx`**
+- Change all 8 brand `<img>` tags from `loading="eager"` to `loading="lazy"`.
 
-**On scroll down (collapsed state):**
-- Navbar shrinks horizontally to ~max 1100px, centered, with larger side gutters
-- Slightly shorter height (~52px)
-- Stronger frosted glass: heavier `backdrop-blur`, more opaque tinted background, soft drop shadow, fine inner border for the "glass rim" look
-- All transitions animate together (width, height, padding, radius, blur, shadow, bg) using a smooth easing curve (`--ease-out-expo`, ~500ms)
+**`src/components/site/AppDownload.tsx`**
+- Change the phone `<img>` from `loading="eager"` back to `loading="lazy"`.
 
-**Scroll up:** reverses smoothly back to the expanded state.
+These sections sit well below the fold; lazy loading is the correct default and frees the network for the hero LCP.
 
-### Visual treatment
+## Step 2 — Convert brand PNGs to WebP (~734KB → ~70-80KB)
 
-- Pill shape: `rounded-full` at all times
-- Glass: `backdrop-blur-xl` + semi-transparent `bg-foreground/30` (dark green tint matching brand) when over hero; switches to a cream-tinted glass after scrolling past hero
-- Border: 1px translucent inner border for glass rim (`border-white/15`)
-- Shadow: soft elevated shadow appears once collapsed (`shadow-elegant`)
-- "Join Us"-style CTA: the existing Cart button stays as the cream/red pill on the right (already matches reference)
+For each of the 8 logos in `src/assets/`:
+- `brand-cocacola.png` (9.2K), `brand-fresh.png` (108K), `brand-godrej.png` (181K), `brand-marico.png` (49K), `brand-nestle.png` (133K), `brand-pran.png` (19K), `brand-reckitt.png` (77K), `brand-unilever.png` (158K)
 
-### Technical changes
+Actions:
+1. Use `cwebp -q 85` (or `sharp` via a quick Node script) to produce `brand-*.webp` versions at 512×512.
+2. Update imports in `src/components/site/PopularBrands.tsx` from `.png` → `.webp`.
+3. Delete the original `.png` files to keep the bundle clean.
 
-**`src/components/site/Navbar.tsx`**
-- Replace the `inset-x-0` fixed header with a centered wrapper using `left-1/2 -translate-x-1/2` and an animated `max-width` (e.g. `max-w-[calc(100vw-32px)]` expanded → `max-w-5xl` collapsed)
-- Animate `height`, `padding-x`, `max-width`, `background`, `backdrop-filter`, `box-shadow`, and `border-color` together via Tailwind transitions (`transition-all duration-500 ease-[var(--ease-out-expo)]`)
-- Keep the existing `scrolled` boolean (already debounced via rAF) but lower threshold to ~16px so the morph triggers sooner
-- Mobile (<md): keep the navbar pill but skip the width-shrink (already nearly full width on small viewports); preserve current mobile drawer
-- Keep `onHero` color logic for text/icons; tune the hero state to use a darkened glass tint instead of fully transparent so the pill shape is visible from the start (matches reference)
+Expected per-logo size: 5-15KB. Total drop: ~734KB → ~80KB across the strip.
 
-**`src/index.css`**
-- No new tokens required — reuse existing `--ease-out-expo`, `--shadow-elegant`, brand HSLs
+## Step 3 — Verify
 
-### Files touched
-- `src/components/site/Navbar.tsx` (main change)
+After redeploy, re-run PageSpeed on the published URL. Expected outcome:
+- Desktop score back to ~95-99
+- LCP improves (hero no longer competing with brand PNG downloads)
+- Total page weight drops by ~650KB
 
-No other files need edits. No new dependencies.
+## What we are NOT doing
 
+- Not touching the hero image, fonts, or `index.html` — those are already optimal.
+- Not removing `LazyRoomCard` or `whileInView` (none present on homepage anyway).
+- Not changing route-level lazy loading.
+
+## Files edited
+
+- `src/components/site/CategoryGrid.tsx` (revert eager flags)
+- `src/components/site/PopularBrands.tsx` (lazy + .webp imports)
+- `src/components/site/AppDownload.tsx` (lazy phone)
+- `src/assets/brand-*.webp` (8 new files)
+- `src/assets/brand-*.png` (8 files deleted)
+
+Approve to switch to default mode and execute.
