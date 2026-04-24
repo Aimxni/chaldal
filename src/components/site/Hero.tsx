@@ -3,6 +3,7 @@ import { ArrowRight, MapPin } from "lucide-react";
 // Preloaded as WebP via <link rel="preload"> in index.html for fastest LCP.
 const HERO_WEBP = "/images/hero-market.webp";
 const HERO_WEBP_960 = "/images/hero-market-960.webp";
+const HERO_WEBP_480 = "/images/hero-market-480.webp";
 
 /**
  * Hero — Split-color panel.
@@ -98,9 +99,9 @@ const Hero = () => {
         {/* RIGHT — Full-bleed produce image (LCP image). Plain <img>, no JS animation. */}
         <div className="relative min-h-[60svh] overflow-hidden bg-[hsl(8_72%_42%)] lg:min-h-[100svh]">
           <img
-            src={HERO_WEBP}
-            srcSet={`${HERO_WEBP_960} 960w, ${HERO_WEBP} 1920w`}
-            sizes="(max-width: 1024px) 100vw, 60vw"
+            src={HERO_WEBP_480}
+            srcSet={`${HERO_WEBP_480} 480w, ${HERO_WEBP_960} 960w, ${HERO_WEBP} 1920w`}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 60vw"
             alt="An overhead market display of fresh produce — leafy greens, tomatoes, mangoes, eggplants, strawberries, eggs and milk"
             width={1920}
             height={1280}

@@ -10,14 +10,15 @@
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- LCP image preload — responsive: pulls 960w on mobile, 1920w on desktop -->
+    <!-- LCP image preload — responsive: 480w on small phones (~19 KB),
+         960w on tablets, 1920w on desktop. Slow 4G picks 480w → paints on first frame. -->
     <link
       rel="preload"
       as="image"
       type="image/webp"
-      href="/images/hero-market.webp"
-      imagesrcset="/images/hero-market-960.webp 960w, /images/hero-market.webp 1920w"
-      imagesizes="(max-width: 1024px) 100vw, 60vw"
+      href="/images/hero-market-480.webp"
+      imagesrcset="/images/hero-market-480.webp 480w, /images/hero-market-960.webp 960w, /images/hero-market.webp 1920w"
+      imagesizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 60vw"
       fetchpriority="high"
     />
 
@@ -79,7 +80,13 @@
     <style>
       #app-shell-grid { display: grid; grid-template-columns: 1fr; min-height: 100vh; width: 100%; }
       #app-shell-left { background-color: #d63a23; color: #faf4e7; padding: 6rem 1.5rem 2.5rem; display: flex; flex-direction: column; justify-content: space-between; font-family: Inter, system-ui, sans-serif; min-height: 40vh; }
-      #app-shell-right { position: relative; width: 100%; min-height: 60vh; overflow: hidden; }
+      #app-shell-right {
+        position: relative; width: 100%; min-height: 60vh; overflow: hidden;
+        /* LQIP — 388-byte blurred preview painted on first frame so the right
+           panel never appears empty while the WebP downloads. */
+        background-image: url("data:image/jpeg;base64,/9j/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAOABgDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAQFAv/EACUQAAEDAwMDBQAAAAAAAAAAAAECAxEABDESISIFMkETFCNhof/EABYBAQEBAAAAAAAAAAAAAAAAAAMCBP/EABkRAQEBAQEBAAAAAAAAAAAAAAECAAMREv/aAAwDAQACEQMRAD8AlLd4pS3JJjGa2y6VadQVpycE5+sUy1eNXHSCp5r5rUpRrA70nwanIebQsqW36jZnSDsQT5JGazMpr5Ei/Wc6khVvcuNO7BCuEzyB38UVI9wtTgnuiAZnOfzaikYMk9qk8N//2Q==");
+        background-size: cover; background-position: center;
+      }
       @media (min-width: 1024px) {
         #app-shell-grid { grid-template-columns: minmax(0, 520px) 1fr; }
         #app-shell-left { padding: 8rem 3.5rem 2.5rem; min-height: 100vh; }
@@ -103,7 +110,7 @@
         </div>
 
         <div id="app-shell-right">
-          <img src="/images/hero-market.webp" srcset="/images/hero-market-960.webp 960w, /images/hero-market.webp 1920w" sizes="(max-width: 1024px) 100vw, 60vw" fetchpriority="high" decoding="async" width="1920" height="1280" alt="" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" />
+          <img src="/images/hero-market-480.webp" srcset="/images/hero-market-480.webp 480w, /images/hero-market-960.webp 960w, /images/hero-market.webp 1920w" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 60vw" fetchpriority="high" decoding="async" width="1920" height="1280" alt="" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" />
         </div>
       </div>
     </div>
