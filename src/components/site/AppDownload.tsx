@@ -121,14 +121,16 @@ const AppDownload = () => {
               </div>
             </div>
 
-            {/* Phone — scroll-driven 3D tilt: pops up and lays flat to reveal screen */}
+            {/* Phone — scroll-driven 3D tilt: pops up and lays flat to reveal screen.
+                Aspect ratio matches the source image (848:1264) so the device never stretches. */}
             <div
-              className="relative md:col-span-4 md:min-h-[420px] lg:min-h-[460px]"
+              className="relative md:col-span-4 md:min-h-[420px] lg:min-h-[480px]"
               style={{ perspective: "1200px" }}
             >
               <motion.div
-                className="relative mx-auto h-[300px] w-full max-w-[240px] md:absolute md:inset-y-0 md:right-4 md:my-auto md:h-[420px] md:max-w-[300px] lg:right-8 lg:h-[460px] lg:max-w-[330px]"
+                className="relative mx-auto w-full max-w-[200px] md:absolute md:inset-y-0 md:right-4 md:my-auto md:max-w-[240px] lg:right-8 lg:max-w-[280px]"
                 style={{
+                  aspectRatio: "848 / 1264",
                   rotateX,
                   rotateZ,
                   scale,
@@ -141,15 +143,16 @@ const AppDownload = () => {
               >
                 <img
                   src={phoneImg}
-                  alt="Chaldal mobile app"
-                  width={896}
-                  height={1200}
+                  alt="Chaldal mobile app showing the home screen with grocery categories"
+                  width={848}
+                  height={1264}
                   loading="lazy"
                   decoding="async"
                   className="h-full w-full object-contain drop-shadow-[0_28px_56px_hsl(150_30%_8%/0.5)]"
                 />
               </motion.div>
             </div>
+
 
 
           </div>
