@@ -5,11 +5,12 @@ import catFruits from "@/assets/cat-fruits.webp";
 import catVeg from "@/assets/cat-vegetables.webp";
 import catDairy from "@/assets/cat-dairy.webp";
 import catPantry from "@/assets/cat-pantry.webp";
+import catMeatFish from "@/assets/cat-meat-fish.webp";
 
 // Mirrors Chaldal's 12 "Popular Categories" tiles.
 const categories = [
   { name: "Fruits & Vegetables", img: catFruits, to: "/rooms?cat=fruits-vegetables" },
-  { name: "Meat & Fish", img: catVeg, to: "/rooms?cat=meat-fish" },
+  { name: "Meat & Fish", img: catMeatFish, to: "/rooms?cat=meat-fish" },
   { name: "Cooking", img: catPantry, to: "/rooms?cat=cooking" },
   { name: "Beverages", img: catDairy, to: "/rooms?cat=beverages" },
   { name: "Home & Cleaning", img: catPantry, to: "/rooms?cat=cleaning" },
