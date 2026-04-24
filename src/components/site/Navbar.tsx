@@ -53,15 +53,26 @@ const Navbar = () => {
       >
         <Link
           to="/"
-          className="flex items-center"
+          className="relative flex items-center"
           aria-label="Chaldal — home"
         >
+          {/* Both variants render on mount; we just toggle which one is visible.
+              No transition / opacity animation — the swap is instant so the
+              logo color matches the navbar background change in the same paint. */}
           <img
-            src={onHero ? chaldalLogoWhite : chaldalLogo}
+            src={chaldalLogo}
             alt="Chaldal"
             width={1000}
             height={300}
-            className="h-9 w-auto md:h-10"
+            className={`h-9 w-auto md:h-10 ${onHero ? "invisible" : "visible"}`}
+          />
+          <img
+            src={chaldalLogoWhite}
+            alt=""
+            aria-hidden="true"
+            width={1000}
+            height={300}
+            className={`absolute inset-0 h-9 w-auto md:h-10 ${onHero ? "visible" : "invisible"}`}
           />
         </Link>
 
