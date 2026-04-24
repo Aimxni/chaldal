@@ -120,14 +120,15 @@ const AppDownload = () => {
               </div>
             </div>
 
-            {/* Phone — scroll-driven 3D tilt: pops up and lays flat to reveal screen.
-                Aspect ratio matches the source image (848:1264) so the device never stretches. */}
+            {/* Phone — scroll-driven pop-up. Wrapper width is the single source of
+                truth; height is derived from the 848:1264 aspect ratio so the device
+                never stretches at any breakpoint. */}
             <div
-              className="relative md:col-span-4 md:min-h-[420px] lg:min-h-[480px]"
+              className="relative flex items-center justify-center md:col-span-4 md:min-h-[420px] lg:min-h-[480px]"
               style={{ perspective: "1200px" }}
             >
               <motion.div
-                className="relative mx-auto w-full max-w-[200px] md:absolute md:inset-y-0 md:right-4 md:my-auto md:max-w-[240px] lg:right-8 lg:max-w-[280px]"
+                className="relative w-[180px] sm:w-[200px] md:w-[220px] lg:w-[260px] xl:w-[280px]"
                 style={{
                   aspectRatio: "848 / 1264",
                   rotateX,
@@ -147,7 +148,8 @@ const AppDownload = () => {
                   height={1264}
                   loading="lazy"
                   decoding="async"
-                  className="h-full w-full object-contain drop-shadow-[0_28px_56px_hsl(150_30%_8%/0.5)]"
+                  className="absolute inset-0 h-full w-full object-contain object-center drop-shadow-[0_28px_56px_hsl(150_30%_8%/0.5)]"
+                  style={{ aspectRatio: "848 / 1264" }}
                 />
               </motion.div>
             </div>
