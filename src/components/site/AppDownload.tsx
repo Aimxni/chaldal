@@ -121,18 +121,22 @@ const AppDownload = () => {
               </div>
             </div>
 
-            {/* Phone — scroll-driven 3D tilt: starts upright, lays flat to reveal screen */}
-            <div className="relative md:col-span-4" style={{ perspective: "1200px" }}>
+            {/* Phone — scroll-driven 3D tilt: pops up and lays flat to reveal screen */}
+            <div
+              className="relative md:col-span-4 md:min-h-[420px] lg:min-h-[460px]"
+              style={{ perspective: "1200px" }}
+            >
               <motion.div
-                className="relative mx-auto h-[300px] w-full max-w-[240px] md:absolute md:right-4 md:top-1/2 md:h-[420px] md:max-w-[300px] md:-translate-y-1/2 lg:right-8 lg:h-[460px] lg:max-w-[330px]"
+                className="relative mx-auto h-[300px] w-full max-w-[240px] md:absolute md:inset-y-0 md:right-4 md:my-auto md:h-[420px] md:max-w-[300px] lg:right-8 lg:h-[460px] lg:max-w-[330px]"
                 style={{
                   rotateX,
                   rotateZ,
                   scale,
                   y: translateY,
+                  opacity,
                   transformStyle: "preserve-3d",
                   transformOrigin: "center center",
-                  willChange: "transform",
+                  willChange: "transform, opacity",
                 }}
               >
                 <img
@@ -146,6 +150,7 @@ const AppDownload = () => {
                 />
               </motion.div>
             </div>
+
 
           </div>
         </div>
