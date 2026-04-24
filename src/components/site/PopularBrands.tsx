@@ -1,4 +1,3 @@
-import Reveal from "@/components/Reveal";
 import brandPran from "@/assets/brand-pran.png";
 import brandReckitt from "@/assets/brand-reckitt.png";
 import brandNestle from "@/assets/brand-nestle.png";
@@ -43,7 +42,7 @@ const PopularBrands = () => {
           </h2>
         </div>
 
-        <Reveal as="ul" stagger className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <ul className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           {brands.map((b) => (
             <li
               key={b.name}
@@ -60,7 +59,7 @@ const PopularBrands = () => {
               />
             </li>
           ))}
-        </Reveal>
+        </ul>
       </div>
     </section>
   );
