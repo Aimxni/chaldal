@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Menu, X, ShoppingBag, MapPin } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import chaldalLogo from "@/assets/chaldal-logo.png";
 import chaldalLogoWhite from "@/assets/chaldal-logo-white.png";
+import { useCart, selectCartCount } from "@/stores/cart";
 
 const links = [
   { label: "Shop", to: "/rooms" },
@@ -14,6 +16,19 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
+  const cartCount = useCart(selectCartCount);
+  const [bump, setBump] = useState(false);
+  const prevCount = useRef(cartCount);
+
+  // Bump the badge any time the count goes up.
+  useEffect(() => {
+    if (cartCount > prevCount.current) {
+      setBump(true);
+      const t = window.setTimeout(() => setBump(false), 450);
+      return () => window.clearTimeout(t);
+    }
+    prevCount.current = cartCount;
+  }, [cartCount]);
 
   useEffect(() => {
     let ticking = false;
@@ -111,21 +126,40 @@ const Navbar = () => {
           </button>
           <Link
             to="/checkout"
+            aria-label={`Cart, ${cartCount} item${cartCount === 1 ? "" : "s"}`}
             className={`inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] transition-colors ${
               onHero
                 ? "bg-[hsl(38_45%_96%)] text-[hsl(8_72%_42%)] hover:bg-[hsl(38_90%_72%)] hover:text-[hsl(150_35%_18%)]"
                 : "bg-primary text-primary-foreground hover:bg-accent hover:text-accent-foreground"
             }`}
           >
-            <ShoppingBag className="h-3.5 w-3.5" />
+            <motion.span
+              animate={bump ? { rotate: [0, -12, 10, -6, 0] } : { rotate: 0 }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+              className="inline-flex"
+            >
+              <ShoppingBag className="h-3.5 w-3.5" />
+            </motion.span>
             <span className="hidden sm:inline">Cart</span>
-            <span
-              className={`grid h-5 min-w-5 place-items-center rounded-full px-1 text-[10px] ${
+            <motion.span
+              animate={bump ? { scale: [1, 1.35, 1] } : { scale: 1 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className={`grid h-5 min-w-5 place-items-center overflow-hidden rounded-full px-1 text-[10px] tabular-nums ${
                 onHero ? "bg-[hsl(8_72%_42%)] text-[hsl(38_45%_96%)]" : "bg-accent text-accent-foreground"
               }`}
             >
-              3
-            </span>
+              <AnimatePresence mode="popLayout" initial={false}>
+                <motion.span
+                  key={cartCount}
+                  initial={{ y: -10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 10, opacity: 0 }}
+                  transition={{ duration: 0.18, ease: "easeOut" }}
+                >
+                  {cartCount}
+                </motion.span>
+              </AnimatePresence>
+            </motion.span>
           </Link>
           <button
             aria-label="Open menu"
@@ -178,7 +212,7 @@ const Navbar = () => {
               onClick={() => setOpen(false)}
               className="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-accent px-5 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-accent-foreground"
             >
-              <ShoppingBag className="h-4 w-4" /> View cart (3)
+              <ShoppingBag className="h-4 w-4" /> View cart ({cartCount})
             </Link>
           </aside>
         </div>
