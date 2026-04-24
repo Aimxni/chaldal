@@ -2,7 +2,7 @@ import { ElementType, HTMLAttributes, CSSProperties } from "react";
 import { useReveal } from "@/hooks/useReveal";
 import { cn } from "@/lib/utils";
 
-type RevealVariant = "up" | "fade" | "scale";
+type RevealVariant = "up" | "up-soft" | "fade" | "scale" | "slide-left" | "slide-right";
 
 interface RevealProps extends HTMLAttributes<HTMLElement> {
   as?: ElementType;
@@ -30,8 +30,7 @@ const Reveal = ({
   const Tag = (as ?? "div") as ElementType;
   const ref = useReveal<HTMLElement>();
 
-  const variantClass =
-    variant === "fade" ? "reveal-fade" : variant === "scale" ? "reveal-scale" : "reveal-up";
+  const variantClass = `reveal-${variant}`;
 
   return (
     <Tag

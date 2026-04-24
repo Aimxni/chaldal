@@ -25,13 +25,15 @@ const Index = () => {
     <main className="min-h-screen bg-background">
       <Navbar />
       <Hero />
-      <Reveal><CategoryGrid /></Reveal>
-      <Reveal><PopularBrands /></Reveal>
-      <Reveal><ShopAndGetMore /></Reveal>
-      <Reveal><ValueProps /></Reveal>
-      <Reveal><Stats /></Reveal>
-      <Reveal><CommonQuestions /></Reveal>
-      <Reveal><JoinFamily /></Reveal>
+      {/* Editorial sequence — each section gets a deliberate motion shape.
+          Durations are unified via --reveal-duration; only the shape varies. */}
+      <Reveal variant="up"><CategoryGrid /></Reveal>
+      <Reveal variant="slide-right"><PopularBrands /></Reveal>
+      <Reveal variant="scale"><ShopAndGetMore /></Reveal>
+      <Reveal variant="up-soft"><ValueProps /></Reveal>
+      <Reveal variant="fade"><Stats /></Reveal>
+      <Reveal variant="slide-left"><CommonQuestions /></Reveal>
+      <Reveal variant="scale"><JoinFamily /></Reveal>
       <Reveal variant="fade"><Footer /></Reveal>
     </main>
   );
