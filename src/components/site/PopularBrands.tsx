@@ -9,14 +9,14 @@ import brandFresh from "@/assets/brand-fresh.webp";
 
 // "Popular on Chaldal" partner-brand strip with real logo artwork.
 const brands = [
-  { name: "Pran", img: brandPran },
-  { name: "Reckitt", img: brandReckitt },
-  { name: "Nestlé", img: brandNestle },
-  { name: "Unilever", img: brandUnilever },
-  { name: "Marico", img: brandMarico },
-  { name: "Godrej", img: brandGodrej },
-  { name: "Coca-Cola", img: brandCocaCola },
-  { name: "Fresh", img: brandFresh },
+  { name: "Pran", img: brandPran, w: 240, h: 158 },
+  { name: "Reckitt", img: brandReckitt, w: 240, h: 124 },
+  { name: "Nestlé", img: brandNestle, w: 232, h: 240 },
+  { name: "Unilever", img: brandUnilever, w: 216, h: 240 },
+  { name: "Marico", img: brandMarico, w: 240, h: 208 },
+  { name: "Godrej", img: brandGodrej, w: 240, h: 116 },
+  { name: "Coca-Cola", img: brandCocaCola, w: 240, h: 145 },
+  { name: "Fresh", img: brandFresh, w: 240, h: 128 },
 ];
 
 const PopularBrands = () => {
@@ -51,8 +51,8 @@ const PopularBrands = () => {
               <img
                 src={b.img}
                 alt={`${b.name} logo`}
-                width={256}
-                height={256}
+                width={b.w}
+                height={b.h}
                 loading="lazy"
                 decoding="async"
                 className="h-full max-h-24 w-full max-w-[88%] object-contain drop-shadow-[0_8px_18px_rgba(21,36,27,0.12)] transition-transform duration-300 group-hover:scale-105 md:max-h-28"
