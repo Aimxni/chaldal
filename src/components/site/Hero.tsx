@@ -62,7 +62,7 @@ const Hero = () => {
     >
       <div className="grid min-h-[100svh] grid-cols-1 lg:grid-cols-[minmax(0,520px)_1fr]">
         {/* LEFT — Tomato red sidebar */}
-        <div className="relative z-10 flex flex-col justify-between bg-[hsl(8_72%_42%)] px-6 pb-10 pt-24 text-[hsl(38_45%_96%)] sm:px-10 lg:min-h-[100svh] lg:px-14 lg:pt-32">
+        <div className="relative z-10 flex flex-col gap-8 bg-[hsl(8_72%_42%)] px-6 pb-10 pt-24 text-[hsl(38_45%_96%)] sm:px-10 lg:min-h-[100svh] lg:justify-center lg:gap-10 lg:px-14 lg:pt-28">
           {/* Top row: tiny meta info */}
           <motion.div
             initial="hidden"
@@ -76,9 +76,9 @@ const Hero = () => {
           </motion.div>
 
           {/* Headline block — pushed to vertical center */}
-          <div className="mt-14 lg:mt-0">
+          <div className="mt-4 lg:mt-0">
             {/* h1 — THE LCP element. Word-mask reveal preserves LCP. */}
-            <h1 className="font-body text-[clamp(3rem,11vw,7.5rem)] font-bold uppercase leading-[0.86] tracking-[-0.04em] text-[hsl(38_45%_96%)]">
+            <h1 className="font-body text-[clamp(2.25rem,5vw,3.75rem)] font-bold uppercase leading-[0.86] tracking-[-0.04em] text-[hsl(38_45%_96%)]">
               {reduce ? (
                 <>
                   <span className="block">{headline[0]}</span>
@@ -133,7 +133,7 @@ const Hero = () => {
             variants={FADE_UP}
             custom={2}
             onSubmit={(e) => e.preventDefault()}
-            className="mt-14"
+            className="mt-2"
           >
             <label className="mb-3 block text-[11px] uppercase tracking-[0.28em] text-[hsl(38_45%_96%)]/65">
               Where should we deliver?
