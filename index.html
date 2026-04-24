@@ -111,37 +111,24 @@
       <div style="position: fixed; left: 50%; transform: translateX(-50%); top: 1rem; width: calc(100% - 24px); max-width: 1600px; z-index: 40;">
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: 64px; padding: 0 1.5rem; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.15); background: rgba(26,26,26,0.25); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
           <img src="/images/chaldal-logo-white.png" alt="Chaldal" style="height: 2.25rem; width: auto;" />
-          <nav style="display: none; align-items: center; gap: 1.75rem;" id="app-shell-nav-links">
+          <nav style="align-items: center; gap: 1.75rem;" id="app-shell-nav-links">
             <a href="/rooms"       style="font-size: 0.875rem; font-weight: 600; color: rgba(250,244,231,0.9); text-decoration: none; font-family: Inter, system-ui, sans-serif;">Shop</a>
             <a href="/#categories" style="font-size: 0.875rem; font-weight: 600; color: rgba(250,244,231,0.9); text-decoration: none; font-family: Inter, system-ui, sans-serif;">Categories</a>
             <a href="/#deals"      style="font-size: 0.875rem; font-weight: 600; color: rgba(250,244,231,0.9); text-decoration: none; font-family: Inter, system-ui, sans-serif;">Deals</a>
           </nav>
           <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <div id="app-shell-location" style="display: none; align-items: center; gap: 0.5rem; border-radius: 9999px; border: 1px solid rgba(250,244,231,0.7); background: rgba(250,244,231,0.15); color: rgba(250,244,231,0.9); padding: 0.5rem 0.875rem; font-size: 0.75rem; font-weight: 500; font-family: Inter, system-ui, sans-serif;">
+            <div id="app-shell-location" style="align-items: center; gap: 0.5rem; border-radius: 9999px; border: 1px solid rgba(250,244,231,0.7); background: rgba(250,244,231,0.15); color: rgba(250,244,231,0.9); padding: 0.5rem 0.875rem; font-size: 0.75rem; font-weight: 500; font-family: Inter, system-ui, sans-serif;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
               Dhanmondi 32
             </div>
             <a href="/checkout" style="display: inline-flex; align-items: center; gap: 0.5rem; border-radius: 9999px; background: hsl(38,45%,96%); color: hsl(8,72%,42%); padding: 0.625rem 1rem; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; text-decoration: none; font-family: Inter, system-ui, sans-serif;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" x2="21" y1="6" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-              <span id="app-shell-cart-label" style="display: none;">Cart</span>
+              <span id="app-shell-cart-label">Cart</span>
               <span style="background: hsl(8,72%,42%); color: hsl(38,45%,96%); border-radius: 9999px; width: 1.25rem; height: 1.25rem; display: grid; place-items: center; font-size: 0.625rem; font-family: Inter, system-ui, sans-serif;">0</span>
             </a>
           </div>
         </div>
       </div>
-      <script>
-        // Show nav links + location button on md+ screens (≥768px)
-        (function() {
-          if (window.innerWidth >= 768) {
-            var nl = document.getElementById('app-shell-nav-links');
-            var loc = document.getElementById('app-shell-location');
-            var cl = document.getElementById('app-shell-cart-label');
-            if (nl)  nl.style.display  = 'flex';
-            if (loc) loc.style.display = 'flex';
-            if (cl)  cl.style.display  = 'inline';
-          }
-        })();
-      </script>
 
       <div id="app-shell-grid">
         <div id="app-shell-left">
