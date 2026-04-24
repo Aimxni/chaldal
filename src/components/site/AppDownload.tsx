@@ -4,6 +4,8 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import badgeAppStore from "@/assets/badge-appstore.png";
 import badgeGooglePlay from "@/assets/badge-googleplay.png";
 import phoneImg from "@/assets/app-phone.png";
+import phoneImg424 from "@/assets/app-phone-424.png";
+import phoneImg636 from "@/assets/app-phone-636.png";
 
 /**
  * Compact "Download the Chaldal app" promo. Deep leaf-green panel with
@@ -143,6 +145,8 @@ const AppDownload = () => {
               >
                 <img
                   src={phoneImg}
+                  srcSet={`${phoneImg424} 424w, ${phoneImg636} 636w, ${phoneImg} 848w`}
+                  sizes="(min-width: 1280px) 280px, (min-width: 1024px) 260px, (min-width: 768px) 220px, (min-width: 640px) 200px, 180px"
                   alt="Chaldal mobile app showing the home screen with grocery categories"
                   width={848}
                   height={1264}
