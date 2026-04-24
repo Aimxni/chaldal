@@ -114,10 +114,8 @@ const Navbar = () => {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className={`hidden items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-medium transition-colors md:inline-flex ${
-              onHero
-                ? "border-[hsl(38_45%_98%)]/70 bg-[hsl(38_45%_98%)]/15 text-[hsl(38_45%_98%)] hover:bg-[hsl(38_45%_98%)]/25"
-                : "border-border text-foreground/75 hover:bg-secondary"
+            className={`btn btn-sm hidden md:inline-flex ${
+              onHero ? "btn-glass" : "btn-secondary"
             }`}
           >
             <MapPin className="h-3.5 w-3.5" />
@@ -126,11 +124,7 @@ const Navbar = () => {
           <Link
             to="/checkout"
             aria-label={`Cart, ${cartCount} item${cartCount === 1 ? "" : "s"}`}
-            className={`inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] transition-colors ${
-              onHero
-                ? "bg-[hsl(38_45%_96%)] text-[hsl(8_72%_42%)] hover:bg-[hsl(38_90%_72%)] hover:text-[hsl(150_35%_18%)]"
-                : "bg-primary text-primary-foreground hover:bg-accent hover:text-accent-foreground"
-            }`}
+            className={`btn btn-md ${onHero ? "btn-ivory" : "btn-primary"}`}
           >
             <span key={`icon-${bump ? "b" : "r"}`} className={`inline-flex ${bump ? "cart-icon-bump" : ""}`}>
               <ShoppingBag className="h-3.5 w-3.5" />
@@ -138,7 +132,7 @@ const Navbar = () => {
             <span className="hidden sm:inline">Cart</span>
             <span
               key={`badge-${bump ? "b" : "r"}`}
-              className={`grid h-5 min-w-5 place-items-center overflow-hidden rounded-full px-1 text-[10px] tabular-nums ${
+              className={`grid h-5 min-w-5 place-items-center overflow-hidden rounded-full px-1 text-[10px] font-bold tabular-nums ${
                 bump ? "cart-badge-bump" : ""
               } ${
                 onHero ? "bg-[hsl(8_72%_42%)] text-[hsl(38_45%_96%)]" : "bg-accent text-accent-foreground"
@@ -196,7 +190,7 @@ const Navbar = () => {
             <Link
               to="/checkout"
               onClick={() => setOpen(false)}
-              className="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-accent px-5 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-accent-foreground"
+              className="btn btn-md btn-accent mt-auto w-full"
             >
               <ShoppingBag className="h-4 w-4" /> View cart ({cartCount})
             </Link>
