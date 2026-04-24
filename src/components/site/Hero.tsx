@@ -20,6 +20,34 @@ const HEADLINE_PARENT = {
   visible: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
 };
 
+// Per-letter pop-in used inside each masked word, before the shimmer sweep.
+const LETTER_VARIANTS = {
+  hidden: { opacity: 0, y: "40%" },
+  visible: {
+    opacity: 1,
+    y: "0%",
+    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const },
+  },
+};
+
+const LETTER_PARENT = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.035, delayChildren: 0.15 } },
+};
+
+// SVG underline draw — runs once after the headline finishes revealing.
+const UNDERLINE_DRAW = {
+  hidden: { pathLength: 0, opacity: 0 },
+  visible: {
+    pathLength: 1,
+    opacity: 1,
+    transition: {
+      pathLength: { duration: 1.1, ease: [0.65, 0, 0.35, 1] as const, delay: 1.4 },
+      opacity: { duration: 0.2, delay: 1.4 },
+    },
+  },
+};
+
 const FADE_UP = {
   hidden: { opacity: 0, y: 20 },
   visible: (i: number = 0) => ({
