@@ -54,7 +54,7 @@ const ShopAndGetMore = () => {
                 className={`group relative flex h-full flex-col justify-between gap-10 overflow-hidden rounded-3xl p-8 shadow-soft transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-card md:p-10 ${c.tone}`}
               >
                 <div>
-                  <p className="text-[11px] uppercase tracking-[0.32em] opacity-70">
+                  <p className="text-[11px] uppercase tracking-[0.32em]">
                     {c.eyebrow}
                   </p>
                   <h3 className="mt-4 font-display text-2xl font-medium leading-tight tracking-tight md:text-3xl">
