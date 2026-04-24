@@ -27,12 +27,14 @@ const AppDownload = () => {
     mass: 0.4,
   });
 
-  // Phone starts upright (-15deg tilt) and lays flat as it enters view,
-  // then gently tilts back as it exits.
-  const rotateX = useTransform(smoothProgress, [0, 0.45, 0.7, 1], [-12, 62, 62, 30]);
-  const rotateZ = useTransform(smoothProgress, [0, 0.45, 0.7, 1], [-8, 0, 0, 6]);
-  const scale = useTransform(smoothProgress, [0, 0.45, 0.7, 1], [0.92, 1.05, 1.05, 0.98]);
-  const translateY = useTransform(smoothProgress, [0, 0.5, 1], [40, -10, -30]);
+  // Pop-up motion: phone starts hidden below + tilted upright, springs up
+  // and lays flat (screen facing camera) as the section enters view, holds
+  // flat while centered, then gently recedes.
+  const rotateX = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [-25, 55, 55, 35]);
+  const rotateZ = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [-10, 0, 0, 4]);
+  const scale = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [0.7, 1.05, 1.05, 1]);
+  const translateY = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [120, 0, 0, -10]);
+  const opacity = useTransform(smoothProgress, [0, 0.15, 0.3], [0, 0.6, 1]);
 
   return (
     <section
