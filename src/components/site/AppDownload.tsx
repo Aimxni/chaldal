@@ -145,6 +145,8 @@ const AppDownload = () => {
               >
                 <img
                   src={phoneImg}
+                  srcSet={`${phoneImg424} 424w, ${phoneImg636} 636w, ${phoneImg} 848w`}
+                  sizes="(min-width: 1280px) 280px, (min-width: 1024px) 260px, (min-width: 768px) 220px, (min-width: 640px) 200px, 180px"
                   alt="Chaldal mobile app showing the home screen with grocery categories"
                   width={848}
                   height={1264}
