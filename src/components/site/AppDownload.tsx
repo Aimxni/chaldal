@@ -27,14 +27,13 @@ const AppDownload = () => {
     mass: 0.4,
   });
 
-  // Pop-up motion: phone starts hidden below + tilted upright, springs up
-  // and lays flat (screen facing camera) as the section enters view, holds
-  // flat while centered, then gently recedes.
-  const rotateX = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [-25, 55, 55, 35]);
-  const rotateZ = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [-10, 0, 0, 4]);
-  const scale = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [0.7, 1.05, 1.05, 1]);
-  const translateY = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [120, 0, 0, -10]);
-  const opacity = useTransform(smoothProgress, [0, 0.15, 0.3], [0, 0.6, 1]);
+  // Apple-style pop-up: phone rises from below and settles upright (screen
+  // facing camera, no tilt). Subtle parallax drift while in view.
+  const rotateX = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [8, 0, 0, -4]);
+  const rotateZ = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [-4, 0, 0, 2]);
+  const scale = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [0.85, 1, 1, 0.98]);
+  const translateY = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [80, 0, 0, -20]);
+  const opacity = useTransform(smoothProgress, [0, 0.15, 0.3], [0, 0.7, 1]);
 
   return (
     <section
