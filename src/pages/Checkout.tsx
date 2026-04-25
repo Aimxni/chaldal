@@ -18,7 +18,7 @@ import GuestDetailsForm, {
   guestDetailsSchema,
   type GuestDetails,
 } from "@/components/checkout/GuestDetailsForm";
-import { formatBDT } from "@/data/rooms";
+import { formatBDT } from "@/data/products";
 import { nightsBetween, useBooking } from "@/stores/booking";
 import { useBkashPayment, type PaymentStatus } from "@/hooks/useBkashPayment";
 

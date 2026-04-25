@@ -16,20 +16,23 @@ import catKitchen from "@/assets/cat-kitchen.webp";
 import catBaby from "@/assets/cat-baby.webp";
 import catPet from "@/assets/cat-pet.webp";
 
-// 12 market "stalls". Per-unit chips give a true grocery-shelf feel.
+// 12 market "stalls". Each links into the matching shop aisle so clicks
+// from the landing page take you straight to filtered products.
+// `to` uses encodeURIComponent so labels with "&" round-trip safely.
+const cat = (label: string) => `/shop?cat=${encodeURIComponent(label)}`;
 const categories = [
-  { name: "Fruits & Vegetables", img: catFruits, to: "/rooms?cat=fruits-vegetables", unit: "per kg" },
-  { name: "Meat & Fish",         img: catMeatFish, to: "/rooms?cat=meat-fish", unit: "per kg" },
-  { name: "Cooking",             img: catCooking, to: "/rooms?cat=cooking", unit: "pantry" },
-  { name: "Beverages",           img: catBeverages, to: "/rooms?cat=beverages", unit: "per bottle" },
-  { name: "Home & Cleaning",     img: catCleaning, to: "/rooms?cat=cleaning", unit: "household" },
-  { name: "Pest Control",        img: catPestControl, to: "/rooms?cat=pest-control", unit: "household" },
-  { name: "Stationery & Office", img: catStationery, to: "/rooms?cat=stationery-office", unit: "office" },
-  { name: "Beauty Products",     img: catBeauty, to: "/rooms?cat=personal-care", unit: "personal" },
-  { name: "Health Products",     img: catHealth, to: "/rooms?cat=hygiene", unit: "wellness" },
-  { name: "Pet Care",            img: catPet, to: "/rooms?cat=pet-care", unit: "for pets" },
-  { name: "Kitchen Appliances",  img: catKitchen, to: "/rooms?cat=kitchen-appliances", unit: "for home" },
-  { name: "Baby Care",           img: catBaby, to: "/rooms?cat=babycare", unit: "for baby" },
+  { name: "Fruits & Vegetables", img: catFruits,      to: cat("Fruits & Vegetables"), unit: "per kg" },
+  { name: "Meat & Fish",         img: catMeatFish,    to: cat("Meat & Fish"),         unit: "per kg" },
+  { name: "Dairy & Eggs",        img: catDairy,       to: cat("Dairy & Eggs"),        unit: "fresh today" },
+  { name: "Pantry",              img: catPantry,      to: cat("Pantry"),              unit: "rice · oil" },
+  { name: "Bakery",              img: catCooking,     to: cat("Bakery"),              unit: "warm" },
+  { name: "Beverages",           img: catBeverages,   to: cat("Beverages"),           unit: "per bottle" },
+  { name: "Snacks",              img: catBeauty,      to: cat("Snacks"),              unit: "biscuits" },
+  { name: "Household",           img: catCleaning,    to: cat("Household"),           unit: "essentials" },
+  { name: "Pest Control",        img: catPestControl, to: cat("Household"),           unit: "essentials" },
+  { name: "Stationery & Office", img: catStationery,  to: cat("Household"),           unit: "office" },
+  { name: "Health Products",     img: catHealth,      to: cat("Household"),           unit: "wellness" },
+  { name: "Baby Care",           img: catBaby,        to: cat("Household"),           unit: "for baby" },
 ];
 
 const CategoryGrid = () => {

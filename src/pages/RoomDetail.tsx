@@ -1,358 +1,423 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { motion } from "framer-motion";
+import { Link, useParams } from "react-router-dom";
 import {
   ArrowLeft,
-  ArrowRight,
-  CalendarDays,
   Check,
-  MapPin,
+  Minus,
+  Plus,
   ShieldCheck,
+  ShoppingBasket,
   Star,
-  Users,
+  Truck,
 } from "lucide-react";
 import Navbar from "@/components/site/Navbar";
 import Footer from "@/components/site/Footer";
 import SmartImage from "@/components/ui/smart-image";
-import RoomCard from "@/components/site/RoomCard";
-import LazyRoomCard from "@/components/site/LazyRoomCard";
-import { formatBDT, getRoomBySlug, rooms } from "@/data/rooms";
-import { nightsBetween, useBooking } from "@/stores/booking";
+import ProductCard from "@/components/site/ProductCard";
+import { Btn, BtnLink } from "@/components/ui/btn";
+import { formatBDT, getProductBySlug, products } from "@/data/products";
+import { useCart, selectCartCount } from "@/stores/cart";
 
-const RoomDetail = () => {
+const ProductDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const room = slug ? getRoomBySlug(slug) : undefined;
-  const navigate = useNavigate();
-  const draft = useBooking((s) => s.draft);
-  const setDates = useBooking((s) => s.setDates);
-  const setGuests = useBooking((s) => s.setGuests);
-  const selectRoom = useBooking((s) => s.selectRoom);
+  const product = slug ? getProductBySlug(slug) : undefined;
 
-  const today = new Date().toISOString().slice(0, 10);
-  const tmrw = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
-  const [checkIn, setCheckIn] = useState(draft.checkIn ?? today);
-  const [checkOut, setCheckOut] = useState(draft.checkOut ?? tmrw);
-  const [guests, setGuestCount] = useState(draft.guests || 2);
+  const [qty, setQty] = useState(1);
+  const [activeImg, setActiveImg] = useState(0);
+  const [popped, setPopped] = useState(false);
 
-  // Update title for SEO + scroll to top on slug change.
+  const add = useCart((s) => s.add);
+  const cartCount = useCart(selectCartCount);
+
+  // Title for SEO + scroll to top whenever the slug changes
   useEffect(() => {
-    if (room) {
-      document.title = `${room.title} · Travela`;
+    if (product) {
+      document.title = `${product.name} · Chaldal`;
       window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+      setQty(1);
+      setActiveImg(0);
     }
-  }, [room]);
+  }, [product]);
 
-  const nights = nightsBetween(checkIn, checkOut);
-  const subtotal = room ? room.price * Math.max(nights, 1) : 0;
-  const serviceFee = Math.round(subtotal * 0.08);
-  const total = subtotal + serviceFee;
+  // Build a small gallery — primary image plus three other items in the
+  // same category (gives the gallery rail visual variety until we have
+  // multi-image catalog data).
+  const gallery = useMemo(() => {
+    if (!product) return [] as string[];
+    const others = products
+      .filter((p) => p.id !== product.id && p.category === product.category)
+      .slice(0, 4)
+      .map((p) => p.image);
+    return [product.image, ...others].slice(0, 5);
+  }, [product]);
 
-  const similar = useMemo(
+  const related = useMemo(
     () =>
-      room
-        ? rooms
-            .filter((r) => r.id !== room.id && r.neighborhood === room.neighborhood)
-            .slice(0, 4)
+      product
+        ? products
+            .filter((p) => p.id !== product.id && p.category === product.category)
+            .slice(0, 5)
         : [],
-    [room],
+    [product],
   );
 
-  // Build a small gallery — duplicate listing image for variety until we have multi-image data.
-  const gallery = useMemo(() => {
-    if (!room) return [];
-    const others = rooms
-      .filter((r) => r.id !== room.id && r.neighborhood === room.neighborhood)
-      .slice(0, 4)
-      .map((r) => r.image);
-    return [room.image, ...others].slice(0, 5);
-  }, [room]);
-
-  if (!room) {
+  if (!product) {
     return (
-      <main>
+      <main className="bg-kraft">
         <Navbar />
-        <section className="container flex min-h-screen flex-col items-center justify-center gap-6 text-center">
-          <p className="text-[11px] uppercase tracking-[0.32em] text-muted-foreground">404 · Room</p>
-          <h1 className="font-display text-5xl">We couldn't find that room.</h1>
-          <Link
-            to="/rooms"
-            className="inline-flex items-center gap-3 border-b border-foreground/40 pb-1 text-xs uppercase tracking-[0.25em] text-foreground hover:border-accent hover:text-accent"
-          >
-            <ArrowLeft className="h-4 w-4" /> Back to all rooms
-          </Link>
+        <section className="container flex min-h-[80vh] flex-col items-center justify-center gap-6 text-center">
+          <p className="text-[11px] uppercase tracking-[0.32em] text-muted-foreground">
+            404 · Product
+          </p>
+          <h1 className="font-display text-5xl">We couldn't find that item.</h1>
+          <BtnLink to="/rooms" variant="primary" size="md">
+            <ArrowLeft className="h-4 w-4" /> Back to all aisles
+          </BtnLink>
         </section>
         <Footer />
       </main>
     );
   }
 
-  const handleReserve = () => {
-    setDates(checkIn, checkOut);
-    setGuests(guests);
-    selectRoom({ id: room.id, title: room.title, image: room.image, price: room.price });
-    navigate("/checkout");
+  const oos = product.stock <= 0;
+  const onSale =
+    product.badges.includes("On Sale") &&
+    typeof product.originalPrice === "number" &&
+    product.originalPrice > product.price;
+  const savings = onSale
+    ? Math.round(((product.originalPrice! - product.price) / product.originalPrice!) * 100)
+    : 0;
+  const subtotal = product.price * qty;
+
+  const handleAdd = () => {
+    if (oos) return;
+    add(
+      {
+        id: product.id,
+        name: product.name,
+        unit: product.unit,
+        price: product.price,
+        img: product.image,
+      },
+      qty,
+    );
+    setPopped(true);
+    window.setTimeout(() => setPopped(false), 600);
   };
 
   return (
-    <main>
+    <main className="bg-kraft">
       <Navbar />
 
-      {/* Top spacing for fixed nav */}
       <div className="container pt-28 md:pt-36">
-        <Link
-          to="/rooms"
-          className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-muted-foreground transition-colors hover:text-foreground"
+        {/* Breadcrumb */}
+        <nav
+          aria-label="Breadcrumb"
+          className="flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-muted-foreground"
         >
-          <ArrowLeft className="h-3.5 w-3.5" /> All rooms
-        </Link>
-
-        {/* Title block */}
-        <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-3xl">
-            <p className="mb-3 flex items-center gap-3 text-[11px] uppercase tracking-[0.32em] text-muted-foreground">
-              <span className="h-px w-10 bg-accent" />
-              {room.neighborhood}
-              {room.area ? ` · ${room.area}` : ""}
-            </p>
-            <h1 className="hero-fade-up font-display text-4xl leading-[1.05] tracking-tight md:text-6xl">
-              {room.title}
-            </h1>
-          </div>
-          <div className="flex items-center gap-5 text-sm">
-            <span className="flex items-center gap-1.5">
-              <Star className="h-4 w-4 fill-accent text-accent" />
-              <strong className="font-display text-base">{room.rating.toFixed(2)}</strong>
-              <span className="text-muted-foreground">· verified stays</span>
-            </span>
-            <span className="hidden items-center gap-1.5 text-muted-foreground sm:flex">
-              <MapPin className="h-3.5 w-3.5" /> Dhaka
-            </span>
-          </div>
-        </div>
-
-        {/* Gallery — fixed aspect ratios → zero CLS */}
-        <div className="mt-8 grid grid-cols-1 gap-2 md:mt-10 md:grid-cols-4 md:grid-rows-2">
-          <div className="relative aspect-[4/3] overflow-hidden bg-secondary md:col-span-2 md:row-span-2 md:aspect-auto">
-            <SmartImage
-              src={gallery[0]}
-              alt={`${room.title} — main view`}
-              width={1200}
-              height={1200}
-              loading="eager"
-              fetchPriority="high"
-            />
-          </div>
-          {gallery.slice(1, 5).map((src, i) => (
-            <div
-              key={i}
-              className="relative hidden aspect-[4/3] overflow-hidden bg-secondary md:block"
-            >
-              <SmartImage
-                src={src}
-                alt={`${room.title} — view ${i + 2}`}
-                width={640}
-                height={480}
-                loading="lazy"
-              />
-            </div>
-          ))}
-        </div>
+          <Link to="/rooms" className="transition-colors hover:text-foreground">
+            Shop
+          </Link>
+          <span>·</span>
+          <Link
+            to={`/rooms?cat=${encodeURIComponent(product.category)}`}
+            className="transition-colors hover:text-foreground"
+          >
+            {product.category}
+          </Link>
+          <span>·</span>
+          <span className="text-foreground">{product.name}</span>
+        </nav>
       </div>
 
-      {/* Main two-column area */}
-      <section className="container mt-12 grid grid-cols-1 gap-12 pb-20 md:mt-16 md:grid-cols-12 md:gap-16 md:pb-32">
-        {/* Left: details */}
-        <div className="md:col-span-7 lg:col-span-8">
-          {/* Stats row */}
-          <div className="flex flex-wrap items-center gap-x-8 gap-y-3 border-y border-border py-5 text-sm">
-            <span className="flex items-center gap-2">
-              <Users className="h-4 w-4 text-accent" />
-              {room.guests} guests
-            </span>
-            <span className="flex items-center gap-2">
-              <span className="font-display text-base">{room.bedrooms}</span>
-              {room.bedrooms === 1 ? "bedroom" : "bedrooms"}
-            </span>
-            {room.badges.includes("Self Check-in") && (
-              <span className="flex items-center gap-2">
-                <ShieldCheck className="h-4 w-4 text-accent" />
-                Self check-in
+      {/* ===== Two-column main area ===== */}
+      <section className="container mt-8 grid grid-cols-1 gap-10 pb-20 md:mt-12 md:grid-cols-12 md:gap-12 md:pb-24">
+        {/* ----- Gallery (left) ----- */}
+        <div className="md:col-span-7">
+          <div className="relative aspect-square overflow-hidden rounded-[1.5rem] bg-crate p-2 shadow-card">
+            <span aria-hidden className="absolute left-3 top-3 z-10 h-2 w-2 rounded-full bg-foreground/30 shadow-[inset_0_-1px_0_hsl(0_0%_0%/0.2)]" />
+            <span aria-hidden className="absolute right-3 top-3 z-10 h-2 w-2 rounded-full bg-foreground/30 shadow-[inset_0_-1px_0_hsl(0_0%_0%/0.2)]" />
+            <div className="relative h-full w-full overflow-hidden rounded-[1.1rem] bg-secondary">
+              <SmartImage
+                src={gallery[activeImg]}
+                alt={`${product.name} — view ${activeImg + 1}`}
+                width={1200}
+                height={1200}
+                loading="eager"
+                fetchPriority="high"
+              />
+
+              {/* Floating ৳ price tag — top-left of image */}
+              <span className="price-tag absolute left-5 top-5 text-base">
+                {formatBDT(product.price)}
+                {onSale && (
+                  <span className="ml-1.5 text-xs font-normal text-destructive line-through opacity-70">
+                    {formatBDT(product.originalPrice!)}
+                  </span>
+                )}
               </span>
-            )}
-            {room.badges.includes("Couple Friendly") && (
-              <span className="flex items-center gap-2 text-muted-foreground">
-                · Couple friendly
-              </span>
-            )}
+
+              {onSale && (
+                <span className="font-marker absolute right-5 top-5 rounded-full bg-destructive px-3 py-1 text-xs uppercase tracking-[0.18em] text-destructive-foreground shadow-md">
+                  Save {savings}%
+                </span>
+              )}
+            </div>
           </div>
 
-          {/* Story */}
-          <div className="mt-10">
-            <h2 className="font-display text-3xl tracking-tight md:text-4xl">
-              About this <span className="italic text-accent">stay</span>
-            </h2>
-            <p className="mt-5 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
-              {room.blurb}
-            </p>
-            <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
-              Hosted by a verified local who has welcomed Travela guests for years. Fresh linen,
-              spotless washroom, working AC, and a quiet Dhaka address you'll want to return to.
-            </p>
-          </div>
-
-          {/* Amenities */}
-          <div className="mt-12">
-            <h2 className="font-display text-3xl tracking-tight md:text-4xl">
-              What's <span className="italic text-accent">inside</span>
-            </h2>
-            <ul className="mt-6 grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
-              {room.amenities.map((a) => (
-                <li
-                  key={a}
-                  className="flex items-center gap-3 border-b border-border/70 py-3 text-sm text-foreground"
+          {/* Thumbnail rail */}
+          <ul className="mt-3 grid grid-cols-5 gap-2">
+            {gallery.map((src, i) => (
+              <li key={src + i}>
+                <button
+                  type="button"
+                  onClick={() => setActiveImg(i)}
+                  aria-label={`View image ${i + 1}`}
+                  aria-current={activeImg === i}
+                  className={[
+                    "relative aspect-square w-full overflow-hidden rounded-lg bg-secondary transition-all",
+                    activeImg === i
+                      ? "outline outline-2 outline-offset-2 outline-accent"
+                      : "opacity-70 hover:opacity-100",
+                  ].join(" ")}
                 >
-                  <Check className="h-4 w-4 text-accent" />
-                  {a}
+                  <SmartImage
+                    src={src}
+                    alt=""
+                    width={160}
+                    height={160}
+                    loading="lazy"
+                  />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* ----- Buy box (right, sticky on desktop) ----- */}
+        <aside className="md:col-span-5">
+          <div className="md:sticky md:top-28">
+            {/* Aisle + name */}
+            <p className="mb-3 flex items-center gap-3 text-[11px] uppercase tracking-[0.32em] text-leaf">
+              <span className="h-px w-10 bg-accent" />
+              {product.category} · {product.origin}
+            </p>
+            <h1 className="font-display text-4xl leading-[1.05] tracking-tight text-foreground md:text-5xl">
+              {product.name}
+            </h1>
+
+            {/* Rating + reviews */}
+            <div className="mt-4 flex items-center gap-3 text-sm text-muted-foreground">
+              <span className="flex items-center gap-1.5 font-medium text-foreground">
+                <Star className="h-4 w-4 fill-accent text-accent" />
+                {product.rating.toFixed(1)}
+              </span>
+              <span>·</span>
+              <span>{product.reviewCount.toLocaleString("en-IN")} reviews</span>
+              <span>·</span>
+              <span
+                className={
+                  oos
+                    ? "text-destructive"
+                    : product.stock < 30
+                    ? "text-foreground"
+                    : "text-leaf"
+                }
+              >
+                {oos
+                  ? "Out of stock"
+                  : product.stock < 30
+                  ? `Only ${product.stock} left`
+                  : "In stock"}
+              </span>
+            </div>
+
+            {/* Price block */}
+            <div className="mt-6 flex items-baseline gap-3 border-y border-border py-5">
+              <span className="font-display text-4xl text-foreground">
+                {formatBDT(product.price)}
+              </span>
+              {onSale && (
+                <>
+                  <span className="font-display text-xl text-muted-foreground line-through">
+                    {formatBDT(product.originalPrice!)}
+                  </span>
+                  <span className="font-marker rounded-md bg-destructive/10 px-2 py-0.5 text-xs uppercase tracking-[0.18em] text-destructive">
+                    Save {savings}%
+                  </span>
+                </>
+              )}
+              <span className="ml-auto text-sm text-muted-foreground">
+                {product.unit}
+              </span>
+            </div>
+
+            {/* Description */}
+            <p className="mt-5 text-pretty text-base leading-relaxed text-muted-foreground">
+              {product.description}
+            </p>
+
+            {/* Badges */}
+            {product.badges.length > 0 && (
+              <ul className="mt-5 flex flex-wrap gap-2">
+                {product.badges.map((b) => (
+                  <li
+                    key={b}
+                    className="font-marker rounded-full bg-secondary px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-secondary-foreground"
+                  >
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {/* Qty stepper + Add to basket */}
+            <div className="mt-7 flex flex-wrap items-stretch gap-3">
+              <div className="inline-flex items-stretch overflow-hidden rounded-full border border-foreground/15 bg-card">
+                <button
+                  type="button"
+                  onClick={() => setQty((q) => Math.max(1, q - 1))}
+                  disabled={qty <= 1 || oos}
+                  aria-label="Decrease quantity"
+                  className="grid h-12 w-12 place-items-center text-foreground transition-colors hover:bg-secondary disabled:opacity-40"
+                >
+                  <Minus className="h-4 w-4" />
+                </button>
+                <span
+                  className="font-display grid min-w-[3rem] place-items-center px-2 text-lg tabular-nums text-foreground"
+                  aria-live="polite"
+                >
+                  {qty}
+                </span>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setQty((q) => Math.min(product.stock || 99, q + 1))
+                  }
+                  disabled={oos || qty >= product.stock}
+                  aria-label="Increase quantity"
+                  className="grid h-12 w-12 place-items-center text-foreground transition-colors hover:bg-secondary disabled:opacity-40"
+                >
+                  <Plus className="h-4 w-4" />
+                </button>
+              </div>
+
+              <Btn
+                variant="accent"
+                size="lg"
+                onClick={handleAdd}
+                disabled={oos}
+                className="flex-1 min-w-[12rem]"
+              >
+                <ShoppingBasket className="h-4 w-4" />
+                {oos
+                  ? "Out of stock"
+                  : popped
+                  ? `Added × ${qty}`
+                  : `Add to basket · ${formatBDT(subtotal)}`}
+              </Btn>
+            </div>
+
+            {cartCount > 0 && (
+              <BtnLink
+                to="/checkout"
+                variant="secondary"
+                size="md"
+                className="mt-3 w-full"
+              >
+                View basket ({cartCount})
+              </BtnLink>
+            )}
+
+            {/* Trust strip */}
+            <ul className="mt-7 grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
+              <li className="flex items-center gap-2 text-muted-foreground">
+                <Truck className="h-4 w-4 text-leaf" />
+                Delivery within 1 hour
+              </li>
+              <li className="flex items-center gap-2 text-muted-foreground">
+                <ShieldCheck className="h-4 w-4 text-leaf" />
+                Free returns, no questions
+              </li>
+            </ul>
+          </div>
+        </aside>
+      </section>
+
+      {/* ===== Details + storage notes ===== */}
+      <section className="bg-chalkboard">
+        <div className="container grid grid-cols-1 gap-10 py-16 md:grid-cols-2 md:py-20">
+          <div>
+            <p className="font-chalk text-2xl text-[hsl(45_96%_60%)]">
+              what's in the crate —
+            </p>
+            <h2 className="font-display mt-2 text-3xl text-[hsl(38_45%_94%)] md:text-4xl">
+              Product details
+            </h2>
+            <ul className="mt-6 space-y-3">
+              {product.details.map((d) => (
+                <li
+                  key={d}
+                  className="flex items-start gap-3 border-b border-[hsl(38_45%_94%)]/15 pb-3 text-[hsl(38_45%_94%)]/85"
+                >
+                  <Check className="mt-0.5 h-4 w-4 flex-none text-[hsl(45_96%_60%)]" />
+                  <span>{d}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* House rules */}
-          <div className="mt-12 rounded-md bg-secondary/40 p-6 md:p-8">
-            <h3 className="font-display text-2xl">House notes</h3>
-            <ul className="mt-4 grid grid-cols-1 gap-3 text-sm text-muted-foreground sm:grid-cols-2">
-              <li>· Check-in: 2:00 PM — flexible</li>
-              <li>· Check-out: 12:00 PM</li>
-              <li>· Quiet hours after 10 PM</li>
-              <li>· No smoking inside the unit</li>
-              <li>· Government photo ID required</li>
-              <li>· Free cancellation up to 48h before</li>
+          <div>
+            <p className="font-chalk text-2xl text-[hsl(45_96%_60%)]">
+              from our growers —
+            </p>
+            <h2 className="font-display mt-2 text-3xl text-[hsl(38_45%_94%)] md:text-4xl">
+              Sourced from {product.origin}
+            </h2>
+            <p className="mt-6 text-pretty text-base leading-relaxed text-[hsl(38_45%_94%)]/80">
+              Every {product.name.toLowerCase()} you order is hand-selected by our
+              buyers at the source, transported in temperature-controlled trucks,
+              and quality-checked again at our Dhanmondi fulfilment centre before
+              it reaches your door. If anything isn't right, we'll refund you on
+              the spot — that's our promise.
+            </p>
+            <ul className="mt-6 grid grid-cols-2 gap-3 text-sm text-[hsl(38_45%_94%)]/75">
+              <li>· Cold chain maintained</li>
+              <li>· Verified suppliers only</li>
+              <li>· Quality-checked twice</li>
+              <li>· 100% return guarantee</li>
             </ul>
           </div>
         </div>
-
-        {/* Right: sticky booking widget */}
-        <aside className="md:col-span-5 lg:col-span-4">
-          <div className="md:sticky md:top-28">
-            <div className="border border-border bg-card p-6 shadow-elegant md:p-7">
-              <div className="flex items-baseline justify-between gap-3">
-                <div>
-                  <span className="font-display text-3xl text-foreground">
-                    {formatBDT(room.price)}
-                  </span>
-                  <span className="ml-1 text-sm text-muted-foreground">/ night</span>
-                </div>
-                <span className="flex items-center gap-1 text-sm">
-                  <Star className="h-3.5 w-3.5 fill-accent text-accent" />
-                  {room.rating.toFixed(2)}
-                </span>
-              </div>
-
-              <div className="mt-5 grid grid-cols-2 gap-px overflow-hidden border border-border bg-border">
-                <label className="flex flex-col gap-1 bg-card p-3 transition-colors focus-within:bg-background">
-                  <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-                    <CalendarDays className="h-3 w-3" /> Check-in
-                  </span>
-                  <input
-                    type="date"
-                    value={checkIn}
-                    min={today}
-                    onChange={(e) => setCheckIn(e.target.value)}
-                    className="w-full bg-transparent font-display text-base outline-none"
-                  />
-                </label>
-                <label className="flex flex-col gap-1 bg-card p-3 transition-colors focus-within:bg-background">
-                  <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-                    <CalendarDays className="h-3 w-3" /> Check-out
-                  </span>
-                  <input
-                    type="date"
-                    value={checkOut}
-                    min={checkIn}
-                    onChange={(e) => setCheckOut(e.target.value)}
-                    className="w-full bg-transparent font-display text-base outline-none"
-                  />
-                </label>
-                <label className="col-span-2 flex flex-col gap-1 bg-card p-3 transition-colors focus-within:bg-background">
-                  <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-                    <Users className="h-3 w-3" /> Guests
-                  </span>
-                  <input
-                    type="number"
-                    min={1}
-                    max={room.guests}
-                    value={guests}
-                    onChange={(e) => setGuestCount(Number(e.target.value) || 1)}
-                    className="w-full bg-transparent font-display text-base outline-none"
-                  />
-                </label>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleReserve}
-                className="btn btn-lg btn-accent group mt-5 w-full !rounded-md"
-              >
-                Reserve
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </button>
-
-              <p className="mt-3 text-center text-[11px] text-muted-foreground">
-                You won't be charged yet
-              </p>
-
-              {/* Price breakdown */}
-              <div className="mt-6 space-y-2.5 border-t border-border pt-5 text-sm">
-                <div className="flex items-center justify-between text-muted-foreground">
-                  <span>
-                    {formatBDT(room.price)} × {Math.max(nights, 1)}{" "}
-                    {Math.max(nights, 1) === 1 ? "night" : "nights"}
-                  </span>
-                  <span>{formatBDT(subtotal)}</span>
-                </div>
-                <div className="flex items-center justify-between text-muted-foreground">
-                  <span>Service fee</span>
-                  <span>{formatBDT(serviceFee)}</span>
-                </div>
-                <div className="mt-3 flex items-baseline justify-between border-t border-border pt-4">
-                  <span className="font-display text-base">Total</span>
-                  <span className="font-display text-xl">{formatBDT(total)}</span>
-                </div>
-              </div>
-            </div>
-
-            <p className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
-              <ShieldCheck className="h-3.5 w-3.5 text-accent" /> Verified host · 24/7 support
-            </p>
-          </div>
-        </aside>
       </section>
 
-      {/* Similar */}
-      {similar.length > 0 && (
-        <section className="container pb-24 md:pb-32">
+      {/* ===== Related ===== */}
+      {related.length > 0 && (
+        <section className="container py-20 md:py-24">
           <div className="mb-10 flex items-end justify-between">
             <div>
-              <p className="mb-3 flex items-center gap-3 text-[11px] uppercase tracking-[0.32em] text-muted-foreground">
-                <span className="h-px w-10 bg-accent" /> More in {room.neighborhood}
+              <p className="mb-3 flex items-center gap-3 text-[11px] uppercase tracking-[0.32em] text-leaf">
+                <span className="h-px w-10 bg-accent" />
+                More from {product.category}
               </p>
               <h2 className="font-display text-4xl tracking-tight md:text-5xl">
-                Other stays nearby
+                You might also like
               </h2>
             </div>
             <Link
               to="/rooms"
-              className="hidden items-center gap-3 border-b border-foreground/40 pb-1 text-xs uppercase tracking-[0.25em] text-foreground hover:border-accent hover:text-accent md:inline-flex"
+              className="hidden items-center gap-3 border-b border-foreground/40 pb-1 text-xs uppercase tracking-[0.25em] text-foreground transition-colors hover:border-accent hover:text-accent md:inline-flex"
             >
-              All rooms <ArrowRight className="h-4 w-4" />
+              All aisles
             </Link>
           </div>
-          <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-            {similar.map((r, i) => (
-              <LazyRoomCard key={r.id} room={r} index={i} />
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-5">
+            {related.map((p, i) => (
+              <li key={p.id}>
+                <ProductCard product={p} index={i} />
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       )}
 
@@ -361,4 +426,4 @@ const RoomDetail = () => {
   );
 };
 
-export default RoomDetail;
+export default ProductDetail;
