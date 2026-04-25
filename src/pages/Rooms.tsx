@@ -196,7 +196,7 @@ const Shop = () => {
 
       {/* ========== FILTER STRIP — quiet text-buttons, no pills ========== */}
       <section className="border-y border-[hsl(155_18%_14%)]/10 bg-[hsl(38_45%_96%)]">
-        <div className="container flex flex-wrap items-center gap-x-6 gap-y-3 py-5">
+        <div className="container flex flex-wrap items-center gap-x-6 gap-y-2 py-3">
           <nav className="font-untill-mono flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] uppercase tracking-[0.16em]">
             {aisleChips.map((a) => {
               const active = aisle === a.key;
@@ -265,7 +265,7 @@ const Shop = () => {
       </section>
 
       {/* ========== PRODUCT GRID — minimal team-card style ========== */}
-      <section className="container py-16 md:py-24">
+      <section className="container py-8 md:py-10">
         {filtered.length === 0 ? (
           <div className="py-24 text-center">
             <p className="font-untill-display text-3xl text-[hsl(155_18%_14%)]">
