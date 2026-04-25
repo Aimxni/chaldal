@@ -145,59 +145,58 @@ const Shop = () => {
       {/* ========== HERO — centered, atmospheric red sky ========== */}
       <section
         aria-label="Chaldal shop"
-        className="bg-untill-sky relative flex min-h-[88svh] w-full flex-col items-center overflow-hidden px-6 pb-10 pt-32 text-[hsl(38_45%_96%)] sm:pt-36 lg:pb-16 lg:pt-40"
+        className="bg-untill-sky relative flex min-h-[58svh] w-full flex-col items-center overflow-hidden px-6 pb-8 pt-24 text-[hsl(38_45%_96%)] sm:pt-28 lg:min-h-[62svh] lg:pb-10 lg:pt-28"
       >
         {/* Top: oversized title */}
         <h1
           className="lcp-fade font-untill-display text-center text-[hsl(38_45%_96%)]"
-          style={{ fontSize: "clamp(4.5rem, 18vw, 14rem)" }}
+          style={{ fontSize: "clamp(3.5rem, 13vw, 9.5rem)" }}
         >
           The Shop
         </h1>
 
-        {/* Centered: search pill */}
+        {/* Centered: search pill — premium frosted glass (compositor-only) */}
         <div
           className="hero-fade-up mx-auto flex w-full max-w-md flex-1 flex-col justify-center"
           style={{ animationDelay: "0.15s" }}
         >
-          <div className="flex items-stretch gap-2 rounded-full border border-[hsl(38_45%_96%)]/30 bg-[hsl(38_45%_96%)]/10 px-5 py-3 backdrop-blur-md transition-colors focus-within:border-[hsl(38_45%_96%)]/60 focus-within:bg-[hsl(38_45%_96%)]/15">
-            <Search className="h-4 w-4 self-center text-[hsl(38_45%_96%)]/70" strokeWidth={1.75} />
+          <div className="search-glass flex items-stretch gap-2 rounded-full px-5 py-3 transition-colors">
+            <Search className="h-4 w-4 self-center text-[hsl(38_45%_96%)]/80" strokeWidth={1.75} />
             <input
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search for ilish, mango, doi…"
               aria-label="Search products"
-              className="font-untill-mono min-w-0 flex-1 bg-transparent text-sm text-[hsl(38_45%_96%)] outline-none placeholder:text-[hsl(38_45%_96%)]/45"
+              className="font-untill-mono min-w-0 flex-1 bg-transparent text-sm text-[hsl(38_45%_96%)] outline-none placeholder:text-[hsl(38_45%_96%)]/50"
             />
           </div>
-          <p className="font-untill-mono mt-3 text-center text-[11px] tracking-wide text-[hsl(38_45%_96%)]/65">
+          <p className="font-untill-mono mt-2.5 text-center text-[11px] tracking-wide text-[hsl(38_45%_96%)]/70">
             {filtered.length} of {products.length} items in stock
           </p>
         </div>
       </section>
 
       {/* ========== INTRO — "We stock what we'd cook tonight." ========== */}
-      <section className="bg-[hsl(38_45%_96%)] px-6 py-24 sm:py-32 lg:py-40">
+      <section className="bg-[hsl(38_45%_96%)] px-6 py-12 sm:py-16">
         <div className="mx-auto max-w-2xl text-center text-[hsl(155_18%_14%)]">
           <p className="font-untill-mono text-[12px] uppercase tracking-[0.05em] text-[hsl(155_18%_14%)]/55">
             ( Our shelves )
           </p>
-          <h2 className="font-untill-display mt-6 text-[clamp(2.25rem,5vw,3.5rem)] text-[hsl(155_18%_14%)]">
+          <h2 className="font-untill-display mt-3 text-[clamp(1.75rem,4vw,2.5rem)] text-[hsl(155_18%_14%)]">
             We stock what we'd cook tonight.
           </h2>
-          <p className="mx-auto mt-8 max-w-xl text-base leading-relaxed text-[hsl(155_18%_14%)]/70 sm:text-lg">
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-[hsl(155_18%_14%)]/70 sm:text-base">
             Some of our supply comes from farms we've worked with for fifteen years.
             Others arrived last month after one good melon. What unites them is
-            proof of work: produce that earns its place on your counter. We restock
-            fast when something deserves it.
+            proof of work: produce that earns its place on your counter.
           </p>
         </div>
       </section>
 
       {/* ========== FILTER STRIP — quiet text-buttons, no pills ========== */}
       <section className="border-y border-[hsl(155_18%_14%)]/10 bg-[hsl(38_45%_96%)]">
-        <div className="container flex flex-wrap items-center gap-x-6 gap-y-3 py-5">
+        <div className="container flex flex-wrap items-center gap-x-6 gap-y-2 py-3">
           <nav className="font-untill-mono flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] uppercase tracking-[0.16em]">
             {aisleChips.map((a) => {
               const active = aisle === a.key;
@@ -266,7 +265,7 @@ const Shop = () => {
       </section>
 
       {/* ========== PRODUCT GRID — minimal team-card style ========== */}
-      <section className="container py-16 md:py-24">
+      <section className="container py-8 md:py-10">
         {filtered.length === 0 ? (
           <div className="py-24 text-center">
             <p className="font-untill-display text-3xl text-[hsl(155_18%_14%)]">
