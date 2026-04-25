@@ -225,8 +225,8 @@ const Shop = () => {
         </div>
       </section>
 
-      {/* ===== Aisle filter strip — sticky chalkboard ribbon ===== */}
-      <section className="bg-chalkboard sticky top-20 z-30 border-y border-[hsl(38_45%_94%)]/10 backdrop-blur">
+      {/* ===== Aisle filter strip — sticky tomato ribbon, matches hero ===== */}
+      <section className="sticky top-20 z-30 border-y border-[hsl(38_45%_96%)]/15 bg-[hsl(8_72%_42%)]">
         <div className="container flex flex-wrap items-center gap-2 py-4">
           {aisleChips.map((a) => {
             const active = aisle === a.key;
@@ -238,17 +238,17 @@ const Shop = () => {
                 className={[
                   "group/chip relative inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs uppercase tracking-[0.18em] transition-all",
                   active
-                    ? "border-[hsl(45_96%_60%)] bg-[hsl(45_96%_60%)] text-[hsl(150_35%_14%)] shadow-[0_4px_12px_-4px_hsl(45_96%_50%/0.6)]"
-                    : "border-[hsl(38_45%_94%)]/30 text-[hsl(38_45%_94%)]/85 hover:border-[hsl(45_96%_60%)] hover:text-[hsl(45_96%_60%)]",
+                    ? "border-[hsl(38_90%_72%)] bg-[hsl(38_90%_72%)] text-[hsl(8_72%_28%)] shadow-[0_4px_12px_-4px_hsl(0_0%_0%/0.35)]"
+                    : "border-[hsl(38_45%_96%)]/35 text-[hsl(38_45%_96%)]/90 hover:border-[hsl(38_90%_72%)] hover:text-[hsl(38_90%_72%)]",
                 ].join(" ")}
               >
                 <span className="font-medium">{a.label}</span>
                 <span
                   className={[
-                    "font-chalk text-sm leading-none normal-case tracking-normal",
+                    "text-[10px] normal-case tracking-[0.14em]",
                     active
-                      ? "text-[hsl(150_35%_14%)]/70"
-                      : "text-[hsl(45_96%_60%)]/70",
+                      ? "text-[hsl(8_72%_28%)]/75"
+                      : "text-[hsl(38_90%_72%)]/80",
                   ].join(" ")}
                 >
                   · {a.chalk}
@@ -258,10 +258,10 @@ const Shop = () => {
           })}
 
           {/* Right-aligned controls */}
-          <div className="ml-auto flex flex-wrap items-center gap-4 text-[hsl(38_45%_94%)]/85">
+          <div className="ml-auto flex flex-wrap items-center gap-4 text-[hsl(38_45%_96%)]/90">
             <label className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em]">
               <span>Max</span>
-              <span className="font-chalk text-base normal-case tracking-normal text-[hsl(45_96%_60%)]">
+              <span className="text-xs font-semibold normal-case tracking-normal text-[hsl(38_90%_72%)]">
                 {formatBDT(maxPrice)}
               </span>
               <input
@@ -271,7 +271,7 @@ const Shop = () => {
                 step={50}
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(Number(e.target.value))}
-                className="w-32 accent-[hsl(45_96%_60%)]"
+                className="w-32 accent-[hsl(38_90%_72%)]"
               />
             </label>
 
@@ -280,7 +280,7 @@ const Shop = () => {
                 type="checkbox"
                 checked={pickOnly}
                 onChange={(e) => setPickOnly(e.target.checked)}
-                className="h-4 w-4 accent-[hsl(45_96%_60%)]"
+                className="h-4 w-4 accent-[hsl(38_90%_72%)]"
               />
               Today's picks only
             </label>
@@ -288,13 +288,13 @@ const Shop = () => {
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortKey)}
-              className="cursor-pointer rounded-md border border-[hsl(38_45%_94%)]/30 bg-transparent px-3 py-1.5 text-xs uppercase tracking-[0.18em] text-[hsl(38_45%_94%)] outline-none transition-colors hover:border-[hsl(45_96%_60%)] focus:border-[hsl(45_96%_60%)]"
+              className="cursor-pointer rounded-md border border-[hsl(38_45%_96%)]/35 bg-transparent px-3 py-1.5 text-xs uppercase tracking-[0.18em] text-[hsl(38_45%_96%)] outline-none transition-colors hover:border-[hsl(38_90%_72%)] focus:border-[hsl(38_90%_72%)]"
             >
-              <option className="bg-[hsl(155_18%_14%)]" value="fresh">Freshest first</option>
-              <option className="bg-[hsl(155_18%_14%)]" value="popular">Most popular</option>
-              <option className="bg-[hsl(155_18%_14%)]" value="price-asc">Price · low → high</option>
-              <option className="bg-[hsl(155_18%_14%)]" value="price-desc">Price · high → low</option>
-              <option className="bg-[hsl(155_18%_14%)]" value="rating">Top rated</option>
+              <option className="bg-[hsl(8_72%_28%)]" value="fresh">Freshest first</option>
+              <option className="bg-[hsl(8_72%_28%)]" value="popular">Most popular</option>
+              <option className="bg-[hsl(8_72%_28%)]" value="price-asc">Price · low → high</option>
+              <option className="bg-[hsl(8_72%_28%)]" value="price-desc">Price · high → low</option>
+              <option className="bg-[hsl(8_72%_28%)]" value="rating">Top rated</option>
             </select>
           </div>
         </div>
