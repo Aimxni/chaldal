@@ -33,6 +33,12 @@ const Hero = () => {
           </div>
 
           <div className="mt-4 lg:mt-0">
+            <span
+              className="hero-fade-up font-chalk mb-3 inline-block text-[clamp(1.4rem,2.6vw,1.85rem)] leading-none text-[hsl(38_90%_72%)]"
+              style={{ animationDelay: "0.05s" }}
+            >
+              Fresh from the morning haat —
+            </span>
             {/* h1 — THE LCP element. Pure DOM, no JS animation. */}
             <h1 className="lcp-fade font-body text-[clamp(2.25rem,5vw,3.75rem)] font-bold uppercase leading-[0.86] tracking-[-0.04em] text-[hsl(38_45%_96%)]">
               <span className="block">{headline[0]}</span>
@@ -116,11 +122,37 @@ const Hero = () => {
             aria-hidden
             className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[hsl(8_72%_42%)]/85 to-transparent"
           />
-          <div className="pointer-events-none absolute bottom-6 right-6 hidden text-right text-[hsl(38_45%_96%)] mix-blend-difference lg:block">
-            <div className="font-body text-[10px] uppercase tracking-[0.32em] opacity-80"></div>
-            <div className="font-body text-3xl font-bold tracking-tight">
-              <span className="ml-1 text-xs font-medium uppercase tracking-[0.2em] opacity-80"></span>
+
+          {/* Fresh-today chalk stamp — top-right */}
+          <div
+            aria-hidden
+            className="hero-fade-up pointer-events-none absolute right-4 top-4 sm:right-6 sm:top-6 lg:right-10 lg:top-10"
+            style={{ animationDelay: "0.4s" }}
+          >
+            <div className="fresh-badge">
+              <span>
+                Fresh<br />Today<br />
+                <span className="text-[0.7rem] opacity-70">— 4:30 am</span>
+              </span>
             </div>
+          </div>
+
+          {/* Hand-written price tags floating over produce */}
+          <div
+            aria-hidden
+            className="hero-fade-up pointer-events-none absolute bottom-24 right-6 hidden sm:block lg:bottom-32 lg:right-12"
+            style={{ animationDelay: "0.5s" }}
+          >
+            <span className="price-tag">৳ 60 / kg · Tomato</span>
+          </div>
+          <div
+            aria-hidden
+            className="hero-fade-up pointer-events-none absolute bottom-8 left-8 hidden sm:block lg:bottom-12 lg:left-16"
+            style={{ animationDelay: "0.6s" }}
+          >
+            <span className="price-tag" style={{ transform: "rotate(4deg)" }}>
+              ৳ 35 / bunch · Lal Shak
+            </span>
           </div>
         </div>
       </div>
