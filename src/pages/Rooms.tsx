@@ -18,6 +18,7 @@ type AisleKey = "All" | ProductCategory;
 type SortKey = "fresh" | "price-asc" | "price-desc" | "rating" | "popular";
 
 const Shop = () => {
+  const [searchParams] = useSearchParams();
   const [aisle, setAisle] = useState<AisleKey>("All");
   const [sort, setSort] = useState<SortKey>("fresh");
   const [pickOnly, setPickOnly] = useState(false);
@@ -25,6 +26,18 @@ const Shop = () => {
   const [maxPrice, setMaxPrice] = useState(2500);
   const deferredMaxPrice = useDeferredValue(maxPrice);
   const deferredQuery = useDeferredValue(query.trim().toLowerCase());
+
+  // Pre-select aisle from ?cat=… so landing-page category clicks land on the
+  // matching shelf. We accept any case and only switch if it's a real category.
+  useEffect(() => {
+    const cat = searchParams.get("cat");
+    if (!cat) return;
+    const match = CATEGORIES.find(
+      (c) => c.key.toLowerCase() === cat.toLowerCase(),
+    );
+    if (match) setAisle(match.key);
+  }, [searchParams]);
+
 
   const cartCount = useCart(selectCartCount);
   const cartTotal = useCart((s) =>
