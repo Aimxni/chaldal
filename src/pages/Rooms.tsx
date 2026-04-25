@@ -174,8 +174,10 @@ const Shop = () => {
             </div>
           </div>
 
-          {/* RIGHT — Full-bleed produce image */}
-          <div className="relative min-h-[50svh] overflow-hidden bg-[hsl(8_72%_42%)] lg:min-h-[80svh]">
+          {/* RIGHT — Full-bleed produce image. object-contain so the entire
+              composition stays visible at every viewport; tomato red fills any
+              letterbox so it blends with the left panel. */}
+          <div className="relative min-h-[50svh] overflow-hidden bg-[hsl(8_72%_42%)] lg:min-h-0 lg:self-stretch">
             <img
               src="/images/shop-hero-480.webp"
               srcSet="/images/shop-hero-480.webp 480w, /images/shop-hero-960.webp 960w, /images/shop-hero.webp 1920w"
@@ -185,7 +187,7 @@ const Shop = () => {
               height={1280}
               fetchPriority="high"
               decoding="async"
-              className="absolute inset-0 h-full w-full object-cover"
+              className="absolute inset-0 h-full w-full object-contain object-center"
             />
             <div
               aria-hidden
