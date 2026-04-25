@@ -95,49 +95,132 @@ const Shop = () => {
     <main className="bg-kraft">
       <Navbar />
 
-      {/* ===== Chalkboard hero ===== */}
-      <section className="bg-chalkboard relative pb-16 pt-32 md:pb-24 md:pt-40">
-        <div className="container">
-          <p className="mb-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.32em] text-[hsl(45_96%_60%)]">
-            <span className="h-px w-10 bg-[hsl(45_96%_60%)]" />
-            Open · Daily 7 am – 11 pm
-          </p>
+      {/* ===== Split-panel hero — mirrors landing page Hero ===== */}
+      <section
+        aria-label="Chaldal shop — fresh groceries"
+        className="relative w-full overflow-hidden bg-[hsl(8_72%_42%)]"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,520px)_1fr]">
+          {/* LEFT — Tomato red sidebar */}
+          <div className="relative z-10 flex flex-col gap-8 bg-[hsl(8_72%_42%)] px-6 pb-12 pt-28 text-[hsl(38_45%_96%)] sm:px-10 lg:gap-10 lg:px-14 lg:pb-16 lg:pt-32">
+            <div className="hero-fade-up flex items-center justify-between text-[11px] uppercase tracking-[0.32em] text-[hsl(38_45%_96%)]/75">
+              <span>Open · Daily 7 am – 11 pm</span>
+              <span className="hidden sm:inline">No. 02 — The Shop</span>
+            </div>
 
-          <h1 className="hero-fade-up max-w-3xl font-display text-5xl leading-[1.02] tracking-tight text-[hsl(38_45%_94%)] md:text-7xl">
-            <span className="font-chalk block text-[0.55em] leading-none text-[hsl(45_96%_60%)]">
-              today at the market —
-            </span>
-            Fresh{" "}
-            <span className="italic text-[hsl(45_96%_60%)]">groceries,</span>{" "}
-            chalked daily.
-          </h1>
+            <div>
+              <span
+                className="hero-fade-up font-chalk mb-3 inline-block text-[clamp(1.4rem,2.6vw,1.85rem)] leading-none text-[hsl(38_90%_72%)]"
+                style={{ animationDelay: "0.05s" }}
+              >
+                today at the market —
+              </span>
+              <h1 className="lcp-fade font-body text-[clamp(2.25rem,5vw,3.75rem)] font-bold uppercase leading-[0.86] tracking-[-0.04em] text-[hsl(38_45%_96%)]">
+                <span className="block">Fresh</span>
+                <span className="block text-[hsl(38_90%_72%)]">groceries,</span>
+                <span className="block">chalked daily</span>
+              </h1>
 
-          <p className="mt-6 max-w-xl text-base text-[hsl(38_45%_94%)]/80">
-            <span className="font-chalk text-xl text-[hsl(45_96%_60%)]">
-              {filtered.length}
-            </span>{" "}
-            of {products.length} items in stock right now. Picked at dawn from
-            Karwan Bazar — on your counter within the hour.
-          </p>
+              <p
+                className="hero-fade-up mt-8 max-w-md text-base leading-relaxed text-[hsl(38_45%_96%)]/85 sm:text-lg"
+                style={{ animationDelay: "0.15s" }}
+              >
+                <span className="font-chalk text-xl text-[hsl(38_90%_72%)]">
+                  {filtered.length}
+                </span>{" "}
+                of {products.length} items in stock right now. Picked at dawn from Karwan Bazar — on your counter within the hour.
+              </p>
+            </div>
 
-          {/* Search bar */}
-          <div className="mt-8 flex max-w-xl items-stretch gap-2 rounded-full border border-[hsl(38_45%_94%)]/25 bg-[hsl(38_45%_94%)]/5 px-4 py-2.5 backdrop-blur transition-colors focus-within:border-[hsl(45_96%_60%)]">
-            <Search className="h-5 w-5 self-center text-[hsl(38_45%_94%)]/65" strokeWidth={1.75} />
-            <input
-              type="search"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search for ilish, mango, doi, paratha…"
-              aria-label="Search products"
-              className="min-w-0 flex-1 bg-transparent font-body text-base text-[hsl(38_45%_94%)] outline-none placeholder:text-[hsl(38_45%_94%)]/45"
-            />
+            {/* Search bar */}
+            <div
+              className="hero-fade-up mt-2"
+              style={{ animationDelay: "0.25s" }}
+            >
+              <label className="mb-3 block text-[11px] uppercase tracking-[0.28em] text-[hsl(38_45%_96%)]/65">
+                What are you looking for?
+              </label>
+              <div className="flex items-stretch gap-2 border-b-2 border-[hsl(38_45%_96%)]/35 pb-2 transition-colors focus-within:border-[hsl(38_45%_96%)]">
+                <span className="grid place-items-center pr-1 text-[hsl(38_45%_96%)]/70">
+                  <Search className="h-5 w-5" strokeWidth={1.75} />
+                </span>
+                <input
+                  type="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search for ilish, mango, doi, paratha…"
+                  aria-label="Search products"
+                  className="min-w-0 flex-1 bg-transparent py-2 font-body text-lg text-[hsl(38_45%_96%)] outline-none placeholder:text-[hsl(38_45%_96%)]/45"
+                />
+              </div>
+
+              <div
+                className="hero-fade-up mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-[hsl(38_45%_96%)]/70"
+                style={{ animationDelay: "0.35s" }}
+              >
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[hsl(38_90%_72%)]" />
+                  Free delivery over ৳999
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[hsl(38_90%_72%)]" />
+                  Cash · bKash · card
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[hsl(38_90%_72%)]" />
+                  Swap anything you don't love
+                </span>
+              </div>
+            </div>
           </div>
 
-          {/* Chalk arrows — pure decoration */}
-          <div className="font-chalk mt-6 flex flex-wrap gap-x-6 gap-y-2 text-lg text-[hsl(38_45%_94%)]/70">
-            <span>↳ free delivery over ৳999</span>
-            <span>↳ cash · bKash · card</span>
-            <span>↳ swap anything you don't love</span>
+          {/* RIGHT — Full-bleed produce image */}
+          <div className="relative min-h-[50svh] overflow-hidden bg-[hsl(8_72%_42%)] lg:min-h-[80svh]">
+            <img
+              src="/images/shop-hero.webp"
+              alt="A market basket of golden mangoes surrounded by limes, coriander, chilies, turmeric, rice and farm eggs"
+              width={1920}
+              height={1280}
+              fetchPriority="high"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[hsl(8_72%_42%)]/85 to-transparent"
+            />
+
+            {/* Fresh-today chalk stamp — top-right */}
+            <div
+              aria-hidden
+              className="hero-fade-up pointer-events-none absolute right-4 top-4 sm:right-6 sm:top-6 lg:right-10 lg:top-10"
+              style={{ animationDelay: "0.4s" }}
+            >
+              <div className="fresh-badge">
+                <span>
+                  Fresh<br />Today<br />
+                  <span className="text-[0.7rem] opacity-70">— 4:30 am</span>
+                </span>
+              </div>
+            </div>
+
+            {/* Hand-written price tags floating over produce */}
+            <div
+              aria-hidden
+              className="hero-fade-up pointer-events-none absolute bottom-24 right-6 hidden sm:block lg:bottom-32 lg:right-12"
+              style={{ animationDelay: "0.5s" }}
+            >
+              <span className="price-tag">৳ 90 / kg · Himsagar</span>
+            </div>
+            <div
+              aria-hidden
+              className="hero-fade-up pointer-events-none absolute bottom-8 left-8 hidden sm:block lg:bottom-12 lg:left-16"
+              style={{ animationDelay: "0.6s" }}
+            >
+              <span className="price-tag" style={{ transform: "rotate(4deg)" }}>
+                ৳ 30 / bunch · Dhonepata
+              </span>
+            </div>
           </div>
         </div>
       </section>
