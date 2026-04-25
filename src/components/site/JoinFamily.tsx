@@ -1,7 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-// Mirrors Chaldal's "Be part of the Chaldal Family!" — Corporate + Career.
 const tiles = [
   {
     eyebrow: "For businesses",
@@ -23,40 +22,39 @@ const JoinFamily = () => {
   return (
     <section
       id="family"
-      className="border-t border-border bg-background py-20 md:py-28"
+      className="border-t border-[hsl(155_18%_14%)]/10 bg-[hsl(38_45%_96%)] px-6 py-20 md:py-24"
     >
       <div className="container">
         <div className="mb-12 max-w-2xl">
-          <p className="mb-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.32em] text-leaf">
-            <span className="h-px w-10 bg-accent" />
-            Be part of the Chaldal Family
+          <p className="font-untill-mono text-[12px] uppercase tracking-[0.05em] text-[hsl(155_18%_14%)]/55">
+            ( Be part of the Chaldal family )
           </p>
-          <h2 className="font-display text-[clamp(2rem,5vw,3.5rem)] font-medium leading-[1.05] tracking-[-0.02em] text-foreground text-balance">
+          <h2 className="font-untill-display mt-3 text-[clamp(1.75rem,4vw,2.5rem)] text-[hsl(155_18%_14%)]">
             Two ways to grow with us.
           </h2>
         </div>
 
-        <ul className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
+        <ul className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl bg-[hsl(155_18%_14%)]/12 md:grid-cols-2">
           {tiles.map((t) => (
-            <li key={t.title}>
+            <li key={t.title} className="bg-[hsl(38_45%_96%)] transition-colors hover:bg-[hsl(38_45%_94%)]">
               <Link
                 to={t.to}
-                className="group flex h-full flex-col justify-between gap-10 rounded-3xl border border-border bg-card p-8 shadow-soft transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-card md:p-10"
+                className="group flex h-full flex-col justify-between gap-10 p-8 md:p-10"
               >
                 <div>
-                  <p className="text-[11px] uppercase tracking-[0.32em] text-leaf">
-                    {t.eyebrow}
+                  <p className="font-untill-mono text-[11px] uppercase tracking-[0.18em] text-[hsl(155_18%_14%)]/55">
+                    ( {t.eyebrow.toLowerCase()} )
                   </p>
-                  <h3 className="mt-4 font-display text-3xl font-medium leading-tight tracking-tight text-foreground md:text-4xl">
+                  <h3 className="font-untill-display mt-3 text-3xl text-[hsl(155_18%_14%)] md:text-4xl">
                     {t.title}
                   </h3>
-                  <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground md:text-base">
+                  <p className="mt-4 max-w-md text-sm leading-relaxed text-[hsl(155_18%_14%)]/65 md:text-base">
                     {t.body}
                   </p>
                 </div>
-                <span className="inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors group-hover:text-accent">
+                <span className="font-untill-mono inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-[hsl(155_18%_14%)]/75 transition-colors group-hover:text-[hsl(8_72%_42%)]">
                   {t.cta}
-                  <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </span>
               </Link>
             </li>
