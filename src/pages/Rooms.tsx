@@ -225,8 +225,8 @@ const Shop = () => {
         </div>
       </section>
 
-      {/* ===== Aisle filter strip — sticky tomato ribbon, matches hero ===== */}
-      <section className="sticky top-20 z-30 border-y border-[hsl(38_45%_96%)]/15 bg-[hsl(8_72%_42%)]">
+      {/* ===== Aisle filter strip — cream ribbon, scrolls with the page ===== */}
+      <section className="border-y border-[hsl(8_72%_42%)]/15 bg-[hsl(38_45%_94%)]">
         <div className="container flex flex-wrap items-center gap-2 py-4">
           {aisleChips.map((a) => {
             const active = aisle === a.key;
@@ -238,8 +238,8 @@ const Shop = () => {
                 className={[
                   "group/chip relative inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs uppercase tracking-[0.18em] transition-all",
                   active
-                    ? "border-[hsl(38_90%_72%)] bg-[hsl(38_90%_72%)] text-[hsl(8_72%_28%)] shadow-[0_4px_12px_-4px_hsl(0_0%_0%/0.35)]"
-                    : "border-[hsl(38_45%_96%)]/35 text-[hsl(38_45%_96%)]/90 hover:border-[hsl(38_90%_72%)] hover:text-[hsl(38_90%_72%)]",
+                    ? "border-[hsl(8_72%_42%)] bg-[hsl(8_72%_42%)] text-[hsl(38_45%_96%)] shadow-[0_4px_12px_-4px_hsl(8_72%_30%/0.45)]"
+                    : "border-[hsl(155_18%_14%)]/25 text-[hsl(155_18%_14%)]/85 hover:border-[hsl(8_72%_42%)] hover:text-[hsl(8_72%_42%)]",
                 ].join(" ")}
               >
                 <span className="font-medium">{a.label}</span>
@@ -247,8 +247,8 @@ const Shop = () => {
                   className={[
                     "text-[10px] normal-case tracking-[0.14em]",
                     active
-                      ? "text-[hsl(8_72%_28%)]/75"
-                      : "text-[hsl(38_90%_72%)]/80",
+                      ? "text-[hsl(38_45%_96%)]/80"
+                      : "text-[hsl(155_18%_14%)]/55",
                   ].join(" ")}
                 >
                   · {a.chalk}
@@ -258,10 +258,10 @@ const Shop = () => {
           })}
 
           {/* Right-aligned controls */}
-          <div className="ml-auto flex flex-wrap items-center gap-4 text-[hsl(38_45%_96%)]/90">
+          <div className="ml-auto flex flex-wrap items-center gap-4 text-[hsl(155_18%_14%)]/85">
             <label className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em]">
               <span>Max</span>
-              <span className="text-xs font-semibold normal-case tracking-normal text-[hsl(38_90%_72%)]">
+              <span className="text-xs font-semibold normal-case tracking-normal text-[hsl(8_72%_42%)]">
                 {formatBDT(maxPrice)}
               </span>
               <input
@@ -271,7 +271,7 @@ const Shop = () => {
                 step={50}
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(Number(e.target.value))}
-                className="w-32 accent-[hsl(38_90%_72%)]"
+                className="w-32 accent-[hsl(8_72%_42%)]"
               />
             </label>
 
@@ -280,7 +280,7 @@ const Shop = () => {
                 type="checkbox"
                 checked={pickOnly}
                 onChange={(e) => setPickOnly(e.target.checked)}
-                className="h-4 w-4 accent-[hsl(38_90%_72%)]"
+                className="h-4 w-4 accent-[hsl(8_72%_42%)]"
               />
               Today's picks only
             </label>
@@ -288,13 +288,13 @@ const Shop = () => {
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortKey)}
-              className="cursor-pointer rounded-md border border-[hsl(38_45%_96%)]/35 bg-transparent px-3 py-1.5 text-xs uppercase tracking-[0.18em] text-[hsl(38_45%_96%)] outline-none transition-colors hover:border-[hsl(38_90%_72%)] focus:border-[hsl(38_90%_72%)]"
+              className="cursor-pointer rounded-md border border-[hsl(155_18%_14%)]/25 bg-transparent px-3 py-1.5 text-xs uppercase tracking-[0.18em] text-[hsl(155_18%_14%)] outline-none transition-colors hover:border-[hsl(8_72%_42%)] focus:border-[hsl(8_72%_42%)]"
             >
-              <option className="bg-[hsl(8_72%_28%)]" value="fresh">Freshest first</option>
-              <option className="bg-[hsl(8_72%_28%)]" value="popular">Most popular</option>
-              <option className="bg-[hsl(8_72%_28%)]" value="price-asc">Price · low → high</option>
-              <option className="bg-[hsl(8_72%_28%)]" value="price-desc">Price · high → low</option>
-              <option className="bg-[hsl(8_72%_28%)]" value="rating">Top rated</option>
+              <option value="fresh">Freshest first</option>
+              <option value="popular">Most popular</option>
+              <option value="price-asc">Price · low → high</option>
+              <option value="price-desc">Price · high → low</option>
+              <option value="rating">Top rated</option>
             </select>
           </div>
         </div>
