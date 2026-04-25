@@ -1,33 +1,29 @@
 import { useDeferredValue, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import { ShoppingBasket } from "lucide-react";
+import { ShoppingBasket, Search } from "lucide-react";
 import Navbar from "@/components/site/Navbar";
 import Footer from "@/components/site/Footer";
 import ProductCard from "@/components/site/ProductCard";
 import AisleDivider from "@/components/site/AisleDivider";
-import { Btn, BtnLink } from "@/components/ui/btn";
-import { rooms, NEIGHBORHOODS, formatBDT } from "@/data/rooms";
+import { BtnLink } from "@/components/ui/btn";
+import {
+  products,
+  CATEGORIES,
+  formatBDT,
+  type ProductCategory,
+} from "@/data/products";
 import { useCart, selectCartCount } from "@/stores/cart";
 
-type SortKey = "fresh" | "price-asc" | "price-desc" | "rating";
-
-// Re-frame the existing neighborhoods as market "aisles" so the page reads
-// as a grocery shop without changing the underlying data model.
-const AISLES: { key: string; label: string; chalk: string }[] = [
-  { key: "All",                label: "All aisles",        chalk: "everything" },
-  { key: "Dhanmondi",          label: "Fruits & Veg",      chalk: "today's haat" },
-  { key: "West Dhanmondi",     label: "Meat & Fish",       chalk: "morning catch" },
-  { key: "Dhanmondi 15",       label: "Pantry",            chalk: "rice · dal · oil" },
-  { key: "Lalmatia",           label: "Dairy & Eggs",      chalk: "fresh today" },
-  { key: "Rayer Bazar",        label: "Bakery",            chalk: "warm from the oven" },
-];
+type AisleKey = "All" | ProductCategory;
+type SortKey = "fresh" | "price-asc" | "price-desc" | "rating" | "popular";
 
 const Shop = () => {
-  const [aisle, setAisle] = useState<string>("All");
+  const [aisle, setAisle] = useState<AisleKey>("All");
   const [sort, setSort] = useState<SortKey>("fresh");
   const [pickOnly, setPickOnly] = useState(false);
-  const [maxPrice, setMaxPrice] = useState(7000);
+  const [query, setQuery] = useState("");
+  const [maxPrice, setMaxPrice] = useState(2500);
   const deferredMaxPrice = useDeferredValue(maxPrice);
+  const deferredQuery = useDeferredValue(query.trim().toLowerCase());
 
   const cartCount = useCart(selectCartCount);
   const cartTotal = useCart((s) =>
@@ -35,12 +31,20 @@ const Shop = () => {
   );
 
   const filtered = useMemo(() => {
-    let list = rooms.filter((r) => r.price <= deferredMaxPrice);
+    let list = products.filter((p) => p.price <= deferredMaxPrice);
     if (aisle !== "All") {
-      list = list.filter((r) => r.neighborhood === aisle);
+      list = list.filter((p) => p.category === aisle);
     }
     if (pickOnly) {
-      list = list.filter((r) => r.badges.includes("Highly Recommended"));
+      list = list.filter((p) => p.badges.includes("Today's Pick"));
+    }
+    if (deferredQuery) {
+      list = list.filter(
+        (p) =>
+          p.name.toLowerCase().includes(deferredQuery) ||
+          p.origin.toLowerCase().includes(deferredQuery) ||
+          p.category.toLowerCase().includes(deferredQuery),
+      );
     }
     switch (sort) {
       case "price-asc":
@@ -52,15 +56,26 @@ const Shop = () => {
       case "rating":
         list = [...list].sort((a, b) => b.rating - a.rating);
         break;
+      case "popular":
+        list = [...list].sort((a, b) => b.reviewCount - a.reviewCount);
+        break;
       default:
+        // "fresh" — picks first, then by rating
         list = [...list].sort(
           (a, b) =>
-            Number(b.badges.includes("Highly Recommended")) -
-            Number(a.badges.includes("Highly Recommended")),
+            Number(b.badges.includes("Today's Pick")) -
+              Number(a.badges.includes("Today's Pick")) ||
+            b.rating - a.rating,
         );
     }
     return list;
-  }, [aisle, sort, pickOnly, deferredMaxPrice]);
+  }, [aisle, sort, pickOnly, deferredMaxPrice, deferredQuery]);
+
+  // Aisle chip list — "All" first, then real categories
+  const aisleChips: { key: AisleKey; label: string; chalk: string }[] = [
+    { key: "All", label: "All aisles", chalk: "everything" },
+    ...CATEGORIES.map((c) => ({ key: c.key, label: c.key, chalk: c.chalk })),
+  ];
 
   return (
     <main className="bg-kraft">
@@ -84,13 +99,28 @@ const Shop = () => {
           </h1>
 
           <p className="mt-6 max-w-xl text-base text-[hsl(38_45%_94%)]/80">
-            <span className="font-chalk text-xl text-[hsl(45_96%_60%)]">{filtered.length}</span>{" "}
-            of {rooms.length} stalls open right now. Picked at dawn from Karwan Bazar — on your
-            counter within the hour.
+            <span className="font-chalk text-xl text-[hsl(45_96%_60%)]">
+              {filtered.length}
+            </span>{" "}
+            of {products.length} items in stock right now. Picked at dawn from
+            Karwan Bazar — on your counter within the hour.
           </p>
 
+          {/* Search bar */}
+          <div className="mt-8 flex max-w-xl items-stretch gap-2 rounded-full border border-[hsl(38_45%_94%)]/25 bg-[hsl(38_45%_94%)]/5 px-4 py-2.5 backdrop-blur transition-colors focus-within:border-[hsl(45_96%_60%)]">
+            <Search className="h-5 w-5 self-center text-[hsl(38_45%_94%)]/65" strokeWidth={1.75} />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search for ilish, mango, doi, paratha…"
+              aria-label="Search products"
+              className="min-w-0 flex-1 bg-transparent font-body text-base text-[hsl(38_45%_94%)] outline-none placeholder:text-[hsl(38_45%_94%)]/45"
+            />
+          </div>
+
           {/* Chalk arrows — pure decoration */}
-          <div className="font-chalk mt-8 flex flex-wrap gap-x-6 gap-y-2 text-lg text-[hsl(38_45%_94%)]/70">
+          <div className="font-chalk mt-6 flex flex-wrap gap-x-6 gap-y-2 text-lg text-[hsl(38_45%_94%)]/70">
             <span>↳ free delivery over ৳999</span>
             <span>↳ cash · bKash · card</span>
             <span>↳ swap anything you don't love</span>
@@ -101,7 +131,7 @@ const Shop = () => {
       {/* ===== Aisle filter strip — sticky chalkboard ribbon ===== */}
       <section className="bg-chalkboard sticky top-20 z-30 border-y border-[hsl(38_45%_94%)]/10 backdrop-blur">
         <div className="container flex flex-wrap items-center gap-2 py-4">
-          {AISLES.map((a) => {
+          {aisleChips.map((a) => {
             const active = aisle === a.key;
             return (
               <button
@@ -119,7 +149,9 @@ const Shop = () => {
                 <span
                   className={[
                     "font-chalk text-sm leading-none normal-case tracking-normal",
-                    active ? "text-[hsl(150_35%_14%)]/70" : "text-[hsl(45_96%_60%)]/70",
+                    active
+                      ? "text-[hsl(150_35%_14%)]/70"
+                      : "text-[hsl(45_96%_60%)]/70",
                   ].join(" ")}
                 >
                   · {a.chalk}
@@ -137,9 +169,9 @@ const Shop = () => {
               </span>
               <input
                 type="range"
-                min={500}
-                max={7000}
-                step={100}
+                min={50}
+                max={2500}
+                step={50}
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(Number(e.target.value))}
                 className="w-32 accent-[hsl(45_96%_60%)]"
@@ -162,6 +194,7 @@ const Shop = () => {
               className="cursor-pointer rounded-md border border-[hsl(38_45%_94%)]/30 bg-transparent px-3 py-1.5 text-xs uppercase tracking-[0.18em] text-[hsl(38_45%_94%)] outline-none transition-colors hover:border-[hsl(45_96%_60%)] focus:border-[hsl(45_96%_60%)]"
             >
               <option className="bg-[hsl(155_18%_14%)]" value="fresh">Freshest first</option>
+              <option className="bg-[hsl(155_18%_14%)]" value="popular">Most popular</option>
               <option className="bg-[hsl(155_18%_14%)]" value="price-asc">Price · low → high</option>
               <option className="bg-[hsl(155_18%_14%)]" value="price-desc">Price · high → low</option>
               <option className="bg-[hsl(155_18%_14%)]" value="rating">Top rated</option>
@@ -170,20 +203,27 @@ const Shop = () => {
         </div>
       </section>
 
-      <AisleDivider number={`Aisle ${aisle === "All" ? "01" : "02"}`} label={AISLES.find((a) => a.key === aisle)?.label ?? "All aisles"} />
+      <AisleDivider
+        number={aisle === "All" ? "Aisle 01" : "Aisle 02"}
+        label={aisle === "All" ? "All aisles" : aisle}
+      />
 
       {/* ===== Product shelves ===== */}
       <section className="container pb-28 pt-4 md:pb-36">
         {filtered.length === 0 ? (
           <div className="rounded-2xl border-2 border-dashed border-foreground/20 bg-background/60 py-20 text-center">
-            <p className="font-chalk text-4xl text-leaf">Stall's empty — try another aisle.</p>
-            <p className="mt-3 text-sm text-muted-foreground">Widen the price or pick a different aisle above.</p>
+            <p className="font-chalk text-4xl text-leaf">
+              Stall's empty — try another aisle.
+            </p>
+            <p className="mt-3 text-sm text-muted-foreground">
+              Clear your search, widen the price, or pick a different aisle above.
+            </p>
           </div>
         ) : (
-          <ul className="grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {filtered.map((r, i) => (
-              <li key={r.id}>
-                <ProductCard room={r} index={i} priority={i < 4} />
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            {filtered.map((p, i) => (
+              <li key={p.id}>
+                <ProductCard product={p} index={i} priority={i < 5} />
               </li>
             ))}
           </ul>
@@ -192,7 +232,7 @@ const Shop = () => {
 
       {/* ===== Sticky basket bar (only when items in cart) ===== */}
       {cartCount > 0 && (
-        <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-4 pointer-events-none">
+        <div className="pointer-events-none fixed inset-x-0 bottom-4 z-40 flex justify-center px-4">
           <div className="bg-chalkboard pointer-events-auto flex items-center gap-4 rounded-full border border-[hsl(38_45%_94%)]/15 px-4 py-2.5 shadow-elegant">
             <span className="grid h-9 w-9 place-items-center rounded-full bg-[hsl(45_96%_60%)] text-[hsl(150_35%_14%)]">
               <ShoppingBasket className="h-4 w-4" />
