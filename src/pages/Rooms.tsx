@@ -177,7 +177,9 @@ const Shop = () => {
           {/* RIGHT — Full-bleed produce image */}
           <div className="relative min-h-[50svh] overflow-hidden bg-[hsl(8_72%_42%)] lg:min-h-[80svh]">
             <img
-              src="/images/shop-hero.webp"
+              src="/images/shop-hero-480.webp"
+              srcSet="/images/shop-hero-480.webp 480w, /images/shop-hero-960.webp 960w, /images/shop-hero.webp 1920w"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 60vw"
               alt="A market basket of golden mangoes surrounded by limes, coriander, chilies, turmeric, rice and farm eggs"
               width={1920}
               height={1280}
