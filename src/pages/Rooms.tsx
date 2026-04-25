@@ -145,19 +145,19 @@ const Shop = () => {
       {/* ========== HERO — centered, atmospheric red sky ========== */}
       <section
         aria-label="Chaldal shop"
-        className="bg-untill-sky relative flex min-h-[88svh] w-full flex-col items-center justify-between overflow-hidden px-6 pb-10 pt-32 text-[hsl(38_45%_96%)] sm:pt-36 lg:pb-16 lg:pt-40"
+        className="bg-untill-sky relative flex min-h-[88svh] w-full flex-col items-center overflow-hidden px-6 pb-10 pt-32 text-[hsl(38_45%_96%)] sm:pt-36 lg:pb-16 lg:pt-40"
       >
-        {/* Top: parenthetical tagline */}
-        <div
-          className="hero-fade-up font-untill-mono text-center text-[13px] tracking-[0.05em] text-[hsl(38_45%_96%)]/85 sm:text-sm"
-          style={{ animationDelay: "0.05s" }}
+        {/* Top: oversized title */}
+        <h1
+          className="lcp-fade font-untill-display text-center text-[hsl(38_45%_96%)]"
+          style={{ fontSize: "clamp(4.5rem, 18vw, 14rem)" }}
         >
-          ( fresh from karwan bazar, hourly. )
-        </div>
+          The Shop
+        </h1>
 
-        {/* Middle: search pill */}
+        {/* Centered: search pill */}
         <div
-          className="hero-fade-up mx-auto mt-12 w-full max-w-md sm:mt-0"
+          className="hero-fade-up mx-auto flex w-full max-w-md flex-1 flex-col justify-center"
           style={{ animationDelay: "0.15s" }}
         >
           <div className="flex items-stretch gap-2 rounded-full border border-[hsl(38_45%_96%)]/30 bg-[hsl(38_45%_96%)]/10 px-5 py-3 backdrop-blur-md transition-colors focus-within:border-[hsl(38_45%_96%)]/60 focus-within:bg-[hsl(38_45%_96%)]/15">
@@ -175,14 +175,6 @@ const Shop = () => {
             {filtered.length} of {products.length} items in stock
           </p>
         </div>
-
-        {/* Bottom: oversized title */}
-        <h1
-          className="lcp-fade font-untill-display mt-10 text-center text-[hsl(38_45%_96%)]"
-          style={{ fontSize: "clamp(4.5rem, 18vw, 14rem)" }}
-        >
-          The Shop
-        </h1>
       </section>
 
       {/* ========== INTRO — "We stock what we'd cook tonight." ========== */}
