@@ -47,9 +47,22 @@
     />
 
     
-    
-    
-    
+    <!-- Route-conditional LCP image preload (shop page) -->
+    <script>
+      (function() {
+        var p = location.pathname;
+        if (p === '/rooms' || p === '/shop' || p.indexOf('/rooms/') === 0 || p.indexOf('/shop/') === 0) {
+          var w = window.innerWidth || 1024;
+          var href = w <= 640 ? '/images/shop-hero-480.webp'
+                  : w <= 1024 ? '/images/shop-hero-960.webp'
+                              : '/images/shop-hero.webp';
+          var l = document.createElement('link');
+          l.rel = 'preload'; l.as = 'image'; l.href = href;
+          l.setAttribute('fetchpriority', 'high');
+          document.head.appendChild(l);
+        }
+      })();
+    </script>
     <meta property="og:title" content="Chaldal — Fresh Groceries Delivered in Dhaka">
   <meta name="twitter:title" content="Chaldal — Fresh Groceries Delivered in Dhaka">
   <meta property="og:description" content="Hand-picked fruits, vegetables, dairy, and pantry essentials delivered to your door in 1 hour. Real prices. Real freshness. Loved by Dhaka since day one.">
