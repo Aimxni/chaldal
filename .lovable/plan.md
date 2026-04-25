@@ -1,73 +1,145 @@
-# Premium buttons — three directions
+## Goal
 
-Right now buttons across the site use one-off Tailwind classes (Hero "Start", Footer "Get app", FeaturedDeals "+", JoinFamily card CTAs, Navbar location chip, etc.). They work but feel utility-grade — flat fills, abrupt color swaps on hover, no depth, no signature press feedback.
+Port the **visual language and layout structure** of `untillabs.com/our-team` onto the shop page (`/rooms`), while keeping:
+- All shop functionality (search, filters, cart, product grid, pagination)
+- Your existing tomato-red + cream brand palette
 
-Below are three cohesive design directions. Pick one (or mix) and I'll roll it out as a reusable system.
-
----
-
-## Option A — Editorial Sun (warm, brand-forward)
-
-Leans into Chaldal's sun-yellow + tomato. Feels confident and editorial, like a high-end grocer's printed campaign.
-
-- Primary CTA: solid `--accent` (sun yellow) with a subtle warm gradient (`gradient-sun`), deep ink text, 1px inner highlight on top edge, soft drop shadow that lifts ~2px on hover.
-- Secondary: cream/ivory fill with a hairline tomato border, ink text.
-- Ghost: transparent with leaf-green underline that grows on hover.
-- Icon button (e.g. FeaturedDeals "+"): circular, gradient-sun fill, soft glow shadow, gentle scale on press.
-- Micro-interaction: 220ms ease-out on transform + shadow. No color "flip" — hover deepens the existing tone.
-
-Best if: you want buttons that feel uniquely Chaldal and grab attention.
-
-## Option B — Quiet Luxury (refined, restrained)
-
-Inspired by Aesop / Apple — almost no color, all in the typography and spacing.
-
-- Primary CTA: deep leaf-green (`--primary`) flat fill, generous horizontal padding, slightly tighter letter-spacing (`tracking-wide`), 12px uppercase label, no shadow at rest, tiny shadow + 1px lift on hover.
-- Secondary: 1px ink border, transparent fill, ink text. Hover fills with ink, text inverts to cream — but transitioned smoothly (300ms).
-- Ghost / link: text + animated underline (left-to-right reveal).
-- Icon button: square-ish 12px radius (instead of full pill), neutral surface, accent ring on focus.
-- Type: switch CTA labels to `font-display` (Fraunces) at small sizes for a couture feel — *or* keep Inter but tighten tracking.
-
-Best if: you want to read as premium / mature without shouting.
-
-## Option C — Soft Neumorphic Glass (tactile, modern)
-
-Buttons feel like physical objects with light passing through them. Subtle, not 2010-skeuomorphic.
-
-- Primary CTA: leaf-green base with a soft top-to-bottom inner gradient, layered shadows (one tight + one wide diffuse), 1px highlight on top edge, 1px shadow on bottom edge. On press, shadows collapse inward (active state actually feels clicked).
-- Secondary: frosted-glass effect — `bg-white/60 backdrop-blur` with hairline border, works beautifully on the green AppDownload panel and image-heavy areas.
-- Icon button: 3D pill with the same inner-gradient + double-shadow recipe.
-- Hover: shadow expands and the button lifts 1–2px (`translate-y`). Press: shadow contracts, button drops back.
-- Optional: shimmer sweep on primary CTA hover (re-uses the existing `hero-shimmer` keyframe).
-
-Best if: you want depth and tactile feedback without losing the editorial feel.
+This is a **visual restyle only**, not a true 1-to-1 clone — Untillabs is a team directory, your page is e-commerce, so a literal copy isn't possible.
 
 ---
 
-## What gets touched (any option)
+## What changes (section by section)
 
-I'll create a single source of truth so we don't keep re-implementing button styles inline:
+### 1. Hero — ditch the split-panel, go centered & atmospheric
 
-1. **New `src/components/ui/btn.tsx`** — a tiny variant-driven component (`variant: primary | secondary | ghost | icon`, `size: sm | md | lg`). No new dependency — just `cva`-style class composition (already in `lib/utils.ts` via `cn`).
-2. **Add 2–3 utility classes in `src/index.css`** under `@layer components` for the chosen recipe (e.g. `.btn-primary`, `.btn-icon`, `.btn-press`) so the look is consistent and easy to tweak globally.
-3. **Refactor existing call sites** to use the new component / classes:
-   - `Hero.tsx` — "Start" submit button
-   - `Footer.tsx` — "Get app", language toggle, help bubble
-   - `FeaturedDeals.tsx` — circular "+" add-to-cart
-   - `JoinFamily.tsx` — card CTA arrows (keep as text + arrow, just refine)
-   - `Navbar.tsx` — location chip, login button, mobile menu trigger
-   - `AppDownload.tsx` — store badge area (keep image badges, but unify any text CTAs)
-   - `Checkout.tsx` & `RoomDetail.tsx` — primary action buttons
-4. **Focus states** — every variant gets a visible accent-color focus ring (accessibility).
-5. **Reduced motion** — all hover/press transforms disabled under `prefers-reduced-motion`.
+Replace the current red/image split hero with Untillabs' centered, full-bleed style:
 
-## Technical notes
+- **Full-width hero** (~90vh) with a soft, cloudy **tomato-red gradient background** (radial blurs from `hsl(8 72% 42%)` to a warmer `hsl(8 72% 55%)`) — same dreamy "sky" vibe but in your brand red instead of blue.
+- **Centered monospace tagline** in parentheses near the top: `( fresh from karwan bazar, hourly. )` — small, ivory, letter-spaced, monospace font (use a Google mono like `JetBrains Mono` or reuse `Space Grotesk` at small caps).
+- **Oversized hero title** centered at the bottom of the hero — a single huge word/phrase like `The Shop` (or `Fresh Today`) in a large display sans (Fraunces is already loaded, or use Inter Black). Cream-colored, ~clamp(5rem, 14vw, 13rem).
+- **Search bar** sits as a centered pill below the tagline (frosted glass on the red), much smaller and quieter than the current giant search.
+- **Hero hero-image is removed** from this layout — the empty atmospheric red is the point. (We keep the optimized webp assets in case you want them back.)
 
-- No new dependencies. Pure Tailwind + a few CSS custom properties already defined (`--shadow-soft`, `--shadow-glow`, `--ease-out-expo`).
-- Bundle impact: ~negligible (one small component file, a handful of utility classes). Removes inline class duplication on net.
-- Keeps the 8-component `ui/` directory we just slimmed down — `btn.tsx` is a small, intentional addition, not a re-introduction of shadcn `button.tsx`.
-- Performance: no `framer-motion`, no JS animation, no layout thrash. All transitions are `transform` + `box-shadow` + `background` (compositor-friendly).
+### 2. Intro paragraph block (new — mirrors Untillabs' "We value signal over status")
+
+Directly under the hero, a centered narrow column on cream background:
+
+- Small uppercase eyebrow: `( Our shelves )`
+- Big editorial sub-headline: `We stock what we'd cook tonight.`
+- One paragraph of body copy explaining the philosophy (sourcing, freshness, no upsells), max-width ~640px, centered.
+
+### 3. Filter strip — keep, but quieter
+
+The cream filter ribbon stays where it is. Adjustments:
+
+- Drop the heavy borders, switch chips to flat text-buttons separated by hairlines (Untillabs nav style).
+- Active chip = underline + tomato color, not a filled pill.
+- Right-side controls (price slider, picks toggle, sort) become smaller and lighter-weight.
+
+### 4. Product grid — restyled to look like Untillabs' team cards
+
+This is the biggest visual shift. Cards become minimal "portrait" tiles:
+
+- Remove the wood-crate background, nail-heads, dark gradient overlay, chalk badges, and all decorative tilt.
+- Card = **image only** in a clean rounded rectangle (`rounded-2xl`), no border, no shadow, hover = subtle lift.
+- Below image (outside the frame, like Untillabs): **product name** as a medium-weight serif/sans heading, then **a single muted line** for "role" — in your case, `category · price` (e.g. `Fish · ৳480/kg`).
+- One small **"Basket" link/button** per card, styled like their `CONNECT` link — ivory-on-red pill on hover, plain underlined text by default, bottom-right of the card.
+- Grid: `2 → 3 → 4` columns (matches their `2 → 4` density on desktop).
+- Remove the AisleDivider component from this page entirely (their site has no equivalent).
+
+### 5. Values strip — new section before the footer
+
+Mirrors their "What We Care About" block:
+
+- Section heading: `What we care about`
+- 6 small cells in a `3 × 2` grid (matches them exactly), each with a short bold label + one-line description. Examples tailored to a grocer:
+  - `Picked at dawn` — Every minute on the shelf matters.
+  - `Real prices` — No surge, no fake discounts.
+  - `Honest weights` — What the tag says is what you get.
+  - `Swap freely` — Don't love it? Swap or refund.
+  - `Family of farms` — We know every supplier by name.
+  - `One-hour promise` — Counter to door, every order.
+- Cream background, hairline dividers between cells, monospace small caps for labels.
+
+### 6. Sticky basket bar — keep as is (works well)
 
 ---
 
-**Tell me which direction (A, B, or C)** — or call out specific bits to mix (e.g. "B for primary, but C's icon button"). Once you pick, I'll implement the full system and refactor every site button in one pass.
+## Layout sketch
+
+```text
+┌─────────────────────────────────────────────────────┐
+│  [glass navbar pill]                                │  ← unchanged
+│                                                      │
+│           ( fresh from karwan bazar, hourly. )       │
+│                                                      │
+│                                                      │  ← red gradient hero
+│              [ search this market ]                  │
+│                                                      │
+│                  T h e   S h o p                     │
+└─────────────────────────────────────────────────────┘
+                ( Our shelves )
+        We stock what we'd cook tonight.
+   Short paragraph of philosophy copy here…
+
+  All · Fish · Vegetables · …          [filters · sort]   ← cream strip
+
+  ┌────┐  ┌────┐  ┌────┐  ┌────┐
+  │img │  │img │  │img │  │img │
+  └────┘  └────┘  └────┘  └────┘
+  Mango   Ilish   Tomato  Doi
+  Fruit   Fish    Veg     Dairy
+  ৳90/kg  ৳480/k  ৳40/kg  ৳180
+                                        … infinite scroll
+
+                What we care about
+  ┌──────────┬──────────┬──────────┐
+  │ Picked   │ Real     │ Honest   │
+  │ at dawn  │ prices   │ weights  │
+  ├──────────┼──────────┼──────────┤
+  │ Swap     │ Family   │ One-hour │
+  │ freely   │ of farms │ promise  │
+  └──────────┴──────────┴──────────┘
+
+  [footer]
+```
+
+---
+
+## Technical details
+
+**Files to edit**
+- `src/pages/Rooms.tsx` — full rewrite of hero, filter strip styling, intro block, values block. Remove `AisleDivider` import and split-panel hero markup.
+- `src/components/site/ProductCard.tsx` — strip wood-crate styling, dark overlay, badges, nail-heads, chalk text. Move name/meta below image. Replace heavy "Basket" button with text-link CTA.
+- `src/index.css` — add a `.untill-mono` utility (monospace tracking-widest small-caps) and a `.untill-display` utility for the oversized hero title. Add a `@keyframes` for a slow gradient drift on the hero background (optional, very subtle).
+- `index.html` — add `JetBrains Mono` (or `IBM Plex Mono`) to the existing Google Fonts `<link>` so the parenthetical taglines have a real monospace. Update the route-conditional preload to skip the shop hero image (we no longer use it).
+- `public/app-shell` styles in `index.html` — update the `/rooms` app-shell to a centered-on-red layout instead of split, so first paint matches the new hero (no CLS).
+
+**What stays the same**
+- All filtering/search/sort/pagination logic in `Rooms.tsx` (the `useMemo`, `useDeferredValue`, IntersectionObserver — all untouched).
+- Cart store, sticky basket bar, navbar, footer, routing.
+- Brand color tokens in `index.css` (we just use them in new ways).
+
+**What gets removed**
+- The split-panel hero (left red sidebar + right produce image)
+- The `AisleDivider` between filters and grid (still exists for other pages if needed)
+- `font-chalk` / `Permanent Marker` / `Caveat` usage on this page — replaced by mono + display sans
+- "Today at the market" chalk eyebrow, "Fresh Today" stamp, floating price tags
+- Wood-crate `bg-crate`, nail-heads, dark gradient overlay on product cards
+
+**Performance**
+- Hero is now CSS-only (no LCP image) → LCP becomes the hero `<h1>` text, which is faster than any image. The route-preload script in `index.html` becomes a no-op for `/rooms`.
+- Product card simplification removes ~6 absolutely-positioned children per card — lighter DOM, faster paint on long scrolls.
+
+**Responsive**
+- Hero title scales `clamp(3.5rem, 14vw, 13rem)` so the giant word fits at 320px through 1920px without overflow.
+- Product grid: `grid-cols-2 sm:grid-cols-3 lg:grid-cols-4`.
+- Values grid: `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`.
+
+---
+
+## Out of scope (flag for follow-up if you want them)
+
+- Untillabs' navbar pill style (you already have a glass pill — keeping yours).
+- Their footer / "Join Us" CTA banner — your footer is a different beast.
+- Replicating their actual cloudy sky photo — we're using a red gradient instead per your palette choice.
