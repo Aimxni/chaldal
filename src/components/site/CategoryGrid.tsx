@@ -16,9 +16,8 @@ import catKitchen from "@/assets/cat-kitchen.webp";
 import catBaby from "@/assets/cat-baby.webp";
 import catPet from "@/assets/cat-pet.webp";
 
-// 12 market "stalls". Each links into the matching shop aisle so clicks
-// from the landing page take you straight to filtered products.
-// `to` uses encodeURIComponent so labels with "&" round-trip safely.
+// Each links into the matching shop aisle so clicks from the landing page
+// take you straight to filtered products.
 const cat = (label: string) => `/shop?cat=${encodeURIComponent(label)}`;
 const categories = [
   { name: "Fruits & Vegetables", img: catFruits,      to: cat("Fruits & Vegetables"), unit: "per kg" },
@@ -35,47 +34,45 @@ const categories = [
   { name: "Baby Care",           img: catBaby,        to: cat("Household"),           unit: "for baby" },
 ];
 
+/**
+ * CategoryGrid — minimal "team-card" tiles, mirroring the /shop product grid.
+ * Image on top, name + meta below the frame, hairline hover.
+ */
 const CategoryGrid = () => {
   return (
     <section
       id="categories"
-      className="relative bg-kraft py-20 md:py-28"
+      className="relative bg-[hsl(38_45%_96%)] px-6 py-20 md:py-24"
     >
       <div className="container">
         <div className="mb-12 grid grid-cols-1 items-end gap-6 md:grid-cols-12 md:gap-8">
-          <div className="md:col-span-8">
-            <p className="mb-3 flex items-center gap-3 text-[11px] uppercase tracking-[0.32em] text-leaf">
-              <span className="h-px w-10 bg-accent" />
-              Aisle 02 — Today's Stalls
+          <div className="md:col-span-9">
+            <p className="font-untill-mono text-[12px] uppercase tracking-[0.05em] text-[hsl(155_18%_14%)]/55">
+              ( Today's stalls )
             </p>
-            <h2 className="font-display text-[clamp(2rem,5vw,3.75rem)] font-medium leading-[1.02] tracking-[-0.02em] text-foreground text-balance">
-              Walk our market —{" "}
-              <span className="font-chalk text-[1.15em] text-leaf">without leaving the kitchen.</span>
+            <h2 className="font-untill-display mt-3 text-[clamp(1.75rem,4vw,2.75rem)] text-[hsl(155_18%_14%)]">
+              Walk our market — without leaving the kitchen.
             </h2>
           </div>
-          <div className="md:col-span-4 md:text-right">
+          <div className="md:col-span-3 md:text-right">
             <Link
               to="/rooms"
-              className="inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
+              className="font-untill-mono inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.22em] text-[hsl(155_18%_14%)]/75 transition-colors hover:text-[hsl(8_72%_42%)]"
             >
               View all stalls
-              <ArrowUpRight className="h-4 w-4" />
+              <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
           </div>
         </div>
 
-        <ul className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 md:gap-6 lg:grid-cols-6">
-          {categories.map((c, i) => (
+        <ul className="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+          {categories.map((c) => (
             <li key={c.name}>
               <Link
                 to={c.to}
-                className="group relative block h-full overflow-hidden rounded-[1.25rem] bg-crate p-1.5 shadow-soft transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-card"
+                className="group flex h-full flex-col focus-visible:outline-none"
               >
-                {/* Two "nail heads" on the wood crate */}
-                <span aria-hidden className="absolute left-2 top-2 h-1.5 w-1.5 rounded-full bg-foreground/30 shadow-[inset_0_-1px_0_hsl(0_0%_0%/0.2)]" />
-                <span aria-hidden className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-foreground/30 shadow-[inset_0_-1px_0_hsl(0_0%_0%/0.2)]" />
-
-                <div className="relative aspect-square w-full overflow-hidden rounded-[0.95rem]">
+                <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-[hsl(38_45%_94%)]">
                   <img
                     src={c.img}
                     alt={c.name}
@@ -83,25 +80,15 @@ const CategoryGrid = () => {
                     height={320}
                     loading="lazy"
                     decoding="async"
-                    className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
+                    className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/55 via-foreground/10 to-transparent" />
-
-                  {/* Handwritten unit chip — top-right */}
-                  <span
-                    className="font-chalk absolute right-2 top-2 rounded-md bg-background/85 px-2 py-0.5 text-xs leading-none text-foreground shadow-sm backdrop-blur-sm"
-                    style={{ transform: `rotate(${(i % 2 === 0 ? -2 : 3)}deg)` }}
-                  >
-                    {c.unit}
-                  </span>
                 </div>
-
-                {/* Price-tag-style name strip below */}
-                <div className="px-2 pb-2 pt-2.5 text-center">
-                  <h3 className="font-marker text-[0.95rem] leading-tight text-background drop-shadow-[0_1px_2px_hsl(0_0%_0%/0.4)] md:text-base">
-                    {c.name}
-                  </h3>
-                </div>
+                <h3 className="font-untill-display mt-3 text-[0.95rem] leading-tight text-[hsl(155_18%_14%)] transition-colors group-hover:text-[hsl(8_72%_42%)]">
+                  {c.name}
+                </h3>
+                <p className="font-untill-mono mt-1 text-[10px] uppercase tracking-[0.18em] text-[hsl(155_18%_14%)]/50">
+                  {c.unit}
+                </p>
               </Link>
             </li>
           ))}
