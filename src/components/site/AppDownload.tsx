@@ -1,4 +1,3 @@
-import { Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import badgeAppStore from "@/assets/badge-appstore.png";
 import badgeGooglePlay from "@/assets/badge-googleplay.png";
@@ -7,17 +6,13 @@ import phoneImg424 from "@/assets/app-phone-424.webp";
 import phoneImg636 from "@/assets/app-phone-636.webp";
 
 /**
- * Compact "Download the Chaldal app" promo. Deep leaf-green panel with
- * sun-yellow discount accent, store badges centered on the left, and a
- * phone illustration anchored to the right.
+ * AppDownload — Untill-style: red gradient panel (matches hero), quiet
+ * monospace eyebrow, big display headline, phone anchored right.
  */
 const AppDownload = () => {
-  const sectionRef = useRef<HTMLElement>(null);
   const phoneRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
-  // Trigger the phone pop-in once when the section enters the viewport.
-  // Pure IntersectionObserver + CSS keyframes — no framer-motion on critical path.
   useEffect(() => {
     const el = phoneRef.current;
     if (!el) return;
@@ -38,55 +33,33 @@ const AppDownload = () => {
 
   return (
     <section
-      ref={sectionRef}
       id="download-app"
-      className="relative border-t border-border bg-background py-16 md:py-20"
+      className="border-t border-[hsl(155_18%_14%)]/10 bg-[hsl(38_45%_96%)] px-6 py-16 md:py-20"
     >
       <div className="container">
-
-        <div className="relative overflow-hidden rounded-[1.75rem] border border-border bg-[hsl(150_35%_18%)] shadow-elegant md:rounded-[2rem]">
-          {/* Background flourishes */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0"
-            style={{ background: "var(--gradient-leaf)" }}
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -left-20 -top-20 h-56 w-56 rounded-full bg-accent/25 blur-3xl"
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -bottom-24 right-0 h-64 w-64 rounded-full bg-[hsl(8_72%_42%)]/30 blur-3xl"
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 opacity-[0.05]"
-            style={{
-              backgroundImage:
-                "radial-gradient(hsl(38 45% 96% / 0.8) 1px, transparent 1px)",
-              backgroundSize: "3px 3px",
-            }}
-          />
-
+        <div
+          className="relative overflow-hidden rounded-3xl text-[hsl(38_45%_96%)] shadow-elegant"
+          style={{
+            backgroundImage:
+              "linear-gradient(135deg, hsl(8 72% 38%) 0%, hsl(8 72% 46%) 55%, hsl(15 78% 54%) 100%)",
+          }}
+        >
           <div className="relative grid grid-cols-1 items-center gap-8 p-9 md:grid-cols-12 md:gap-10 md:p-14">
-            {/* Copy + badges (centered as a block) */}
+            {/* Copy + badges */}
             <div className="md:col-span-8">
-              <p className="mb-3 inline-flex items-center gap-2 rounded-full bg-[hsl(38_45%_96%)]/10 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-[hsl(38_90%_72%)]">
-                <Sparkles className="h-3 w-3" />
-                Mobile exclusive
+              <p className="font-untill-mono text-[12px] uppercase tracking-[0.05em] text-[hsl(38_45%_96%)]/75">
+                ( Mobile exclusive )
               </p>
-              <h2 className="font-display text-[clamp(1.5rem,3.4vw,2.25rem)] font-medium leading-[1.1] tracking-[-0.02em] text-[hsl(38_45%_98%)] text-balance">
-                Download the Chaldal app and
-                <span className="text-[hsl(45_96%_56%)]"> save 5%</span> on
-                your first order.
+              <h2 className="font-untill-display mt-3 text-[clamp(1.75rem,3.6vw,2.5rem)] text-[hsl(38_45%_96%)]">
+                Download the Chaldal app and{" "}
+                <span className="text-[hsl(38_90%_78%)]">save 5%</span> on your
+                first order.
               </h2>
-              <p className="mt-3 max-w-md text-sm leading-relaxed text-[hsl(38_45%_96%)]/70">
+              <p className="mt-4 max-w-md text-sm leading-relaxed text-[hsl(38_45%_96%)]/75">
                 Faster checkout, real-time tracking, and in-app deals — all in
                 your pocket.
               </p>
 
-              {/* Badges centered horizontally within the copy column */}
               <div className="mt-6 flex flex-wrap items-center gap-3">
                 <a
                   href="#"
@@ -121,9 +94,7 @@ const AppDownload = () => {
               </div>
             </div>
 
-            {/* Phone — scroll-driven pop-up. Wrapper width is the single source of
-                truth; height is derived from the 848:1264 aspect ratio so the device
-                never stretches at any breakpoint. */}
+            {/* Phone */}
             <div
               className="relative flex items-center justify-center md:col-span-4 md:min-h-[420px] lg:min-h-[480px]"
               style={{ perspective: "1200px" }}
@@ -146,14 +117,11 @@ const AppDownload = () => {
                   height={1264}
                   loading="lazy"
                   decoding="async"
-                  className="absolute inset-0 h-full w-full object-contain object-center drop-shadow-[0_28px_56px_hsl(150_30%_8%/0.5)]"
+                  className="absolute inset-0 h-full w-full object-contain object-center drop-shadow-[0_28px_56px_hsl(0_0%_0%/0.4)]"
                   style={{ aspectRatio: "848 / 1264" }}
                 />
               </div>
             </div>
-
-
-
           </div>
         </div>
       </div>

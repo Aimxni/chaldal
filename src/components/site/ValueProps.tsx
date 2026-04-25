@@ -23,34 +23,40 @@ const props = [
   },
 ];
 
+/**
+ * ValueProps — hairline-divided 4-up grid (Untill values aesthetic).
+ */
 const ValueProps = () => {
   return (
-    <section id="why" className="border-t border-border bg-background py-20 md:py-28">
+    <section
+      id="why"
+      className="border-t border-[hsl(155_18%_14%)]/10 bg-[hsl(38_45%_96%)] px-6 py-20 md:py-24"
+    >
       <div className="container">
         <div className="mb-12 max-w-2xl">
-          <p className="mb-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.32em] text-leaf">
-            <span className="h-px w-10 bg-accent" />
-            Why Chaldal
+          <p className="font-untill-mono text-[12px] uppercase tracking-[0.05em] text-[hsl(155_18%_14%)]/55">
+            ( Why Chaldal )
           </p>
-          <h2 className="font-display text-[clamp(2rem,5vw,3.5rem)] font-medium leading-[1.05] tracking-[-0.02em] text-foreground text-balance">
+          <h2 className="font-untill-display mt-3 text-[clamp(1.75rem,4vw,2.5rem)] text-[hsl(155_18%_14%)]">
             Not just groceries — a market you can trust on busy days.
           </h2>
         </div>
 
-        <ul className="grid grid-cols-1 gap-px overflow-hidden rounded-3xl border border-border bg-border md:grid-cols-2 lg:grid-cols-4">
+        <ul className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl bg-[hsl(155_18%_14%)]/12 md:grid-cols-2 lg:grid-cols-4">
           {props.map((p) => (
             <li
               key={p.title}
-              className="group flex flex-col gap-4 bg-card p-7 transition-colors duration-300 hover:bg-secondary md:p-8"
+              className="flex flex-col gap-5 bg-[hsl(38_45%_96%)] p-7 transition-colors hover:bg-[hsl(38_45%_94%)] md:p-8"
             >
-              <span className="grid h-12 w-12 place-items-center rounded-full bg-leaf/10 text-leaf transition-colors duration-300 group-hover:bg-accent group-hover:text-accent-foreground">
-                <p.icon className="h-5 w-5" strokeWidth={1.75} />
-              </span>
+              <p.icon
+                className="h-5 w-5 text-[hsl(8_72%_42%)]"
+                strokeWidth={1.5}
+              />
               <div>
-                <h3 className="font-display text-xl font-medium tracking-tight text-foreground">
+                <h3 className="font-untill-display text-lg text-[hsl(155_18%_14%)]">
                   {p.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                <p className="mt-2 text-sm leading-relaxed text-[hsl(155_18%_14%)]/65">
                   {p.body}
                 </p>
               </div>
