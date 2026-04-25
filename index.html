@@ -29,13 +29,13 @@
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Caveat:wght@500;600;700&family=Permanent+Marker&display=optional"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,800;0,9..144,900;1,9..144,400&family=Inter:wght@400;500;600;700;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Caveat:wght@500;600;700&family=Permanent+Marker&display=optional"
     />
     <link
       rel="stylesheet"
       media="print"
       onload="this.media='all'"
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Caveat:wght@500;600;700&family=Permanent+Marker&display=optional"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,800;0,9..144,900;1,9..144,400&family=Inter:wght@400;500;600;700;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Caveat:wght@500;600;700&family=Permanent+Marker&display=optional"
     />
 
     <!-- Bangla fonts — async, not LCP-critical -->
@@ -47,22 +47,8 @@
     />
 
     
-    <!-- Route-conditional LCP image preload (shop page) -->
-    <script>
-      (function() {
-        var p = location.pathname;
-        if (p === '/rooms' || p === '/shop' || p.indexOf('/rooms/') === 0 || p.indexOf('/shop/') === 0) {
-          var w = window.innerWidth || 1024;
-          var href = w <= 640 ? '/images/shop-hero-480.webp'
-                  : w <= 1024 ? '/images/shop-hero-960.webp'
-                              : '/images/shop-hero.webp';
-          var l = document.createElement('link');
-          l.rel = 'preload'; l.as = 'image'; l.href = href;
-          l.setAttribute('fetchpriority', 'high');
-          document.head.appendChild(l);
-        }
-      })();
-    </script>
+    <!-- Shop page hero is now CSS-only (no image) — no route-conditional preload needed. -->
+
     <meta property="og:title" content="Chaldal — Fresh Groceries Delivered in Dhaka">
   <meta name="twitter:title" content="Chaldal — Fresh Groceries Delivered in Dhaka">
   <meta property="og:description" content="Hand-picked fruits, vegetables, dairy, and pantry essentials delivered to your door in 1 hour. Real prices. Real freshness. Loved by Dhaka since day one.">
