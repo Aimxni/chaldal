@@ -33,6 +33,12 @@ const Hero = () => {
           </div>
 
           <div className="mt-4 lg:mt-0">
+            <span
+              className="hero-fade-up font-chalk mb-3 inline-block text-[clamp(1.4rem,2.6vw,1.85rem)] leading-none text-[hsl(38_90%_72%)]"
+              style={{ animationDelay: "0.05s" }}
+            >
+              Fresh from the morning haat —
+            </span>
             {/* h1 — THE LCP element. Pure DOM, no JS animation. */}
             <h1 className="lcp-fade font-body text-[clamp(2.25rem,5vw,3.75rem)] font-bold uppercase leading-[0.86] tracking-[-0.04em] text-[hsl(38_45%_96%)]">
               <span className="block">{headline[0]}</span>
