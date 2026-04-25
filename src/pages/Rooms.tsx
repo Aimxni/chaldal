@@ -227,7 +227,7 @@ const Shop = () => {
 
       {/* ===== Aisle filter strip — cream ribbon, scrolls with the page ===== */}
       <section className="border-y border-[hsl(8_72%_42%)]/15 bg-[hsl(38_45%_94%)]">
-        <div className="container flex flex-wrap items-center gap-2 py-4">
+        <div className="container flex flex-wrap items-center gap-2 py-4" style={{ fontFamily: "'Space Grotesk', system-ui, sans-serif" }}>
           {aisleChips.map((a) => {
             const active = aisle === a.key;
             return (
@@ -236,32 +236,22 @@ const Shop = () => {
                 type="button"
                 onClick={() => setAisle(a.key)}
                 className={[
-                  "group/chip relative inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs uppercase tracking-[0.18em] transition-all",
+                  "group/chip relative inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-medium tracking-tight transition-all",
                   active
                     ? "border-[hsl(8_72%_42%)] bg-[hsl(8_72%_42%)] text-[hsl(38_45%_96%)] shadow-[0_4px_12px_-4px_hsl(8_72%_30%/0.45)]"
-                    : "border-[hsl(155_18%_14%)]/25 text-[hsl(155_18%_14%)]/85 hover:border-[hsl(8_72%_42%)] hover:text-[hsl(8_72%_42%)]",
+                    : "border-[hsl(155_18%_14%)]/20 text-[hsl(155_18%_14%)]/85 hover:border-[hsl(8_72%_42%)] hover:text-[hsl(8_72%_42%)]",
                 ].join(" ")}
               >
-                <span className="font-medium">{a.label}</span>
-                <span
-                  className={[
-                    "text-[10px] normal-case tracking-[0.14em]",
-                    active
-                      ? "text-[hsl(38_45%_96%)]/80"
-                      : "text-[hsl(155_18%_14%)]/55",
-                  ].join(" ")}
-                >
-                  · {a.chalk}
-                </span>
+                {a.label}
               </button>
             );
           })}
 
           {/* Right-aligned controls */}
-          <div className="ml-auto flex flex-wrap items-center gap-4 text-[hsl(155_18%_14%)]/85">
-            <label className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em]">
-              <span>Max</span>
-              <span className="text-xs font-semibold normal-case tracking-normal text-[hsl(8_72%_42%)]">
+          <div className="ml-auto flex flex-wrap items-center gap-4 text-sm text-[hsl(155_18%_14%)]/80">
+            <label className="flex items-center gap-2">
+              <span className="text-xs uppercase tracking-[0.18em] text-[hsl(155_18%_14%)]/60">Max</span>
+              <span className="text-sm font-semibold text-[hsl(8_72%_42%)]">
                 {formatBDT(maxPrice)}
               </span>
               <input
@@ -275,20 +265,20 @@ const Shop = () => {
               />
             </label>
 
-            <label className="flex cursor-pointer items-center gap-2 text-[10px] uppercase tracking-[0.22em]">
+            <label className="flex cursor-pointer items-center gap-2">
               <input
                 type="checkbox"
                 checked={pickOnly}
                 onChange={(e) => setPickOnly(e.target.checked)}
                 className="h-4 w-4 accent-[hsl(8_72%_42%)]"
               />
-              Today's picks only
+              <span className="text-sm">Today's picks only</span>
             </label>
 
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortKey)}
-              className="cursor-pointer rounded-md border border-[hsl(155_18%_14%)]/25 bg-transparent px-3 py-1.5 text-xs uppercase tracking-[0.18em] text-[hsl(155_18%_14%)] outline-none transition-colors hover:border-[hsl(8_72%_42%)] focus:border-[hsl(8_72%_42%)]"
+              className="cursor-pointer rounded-md border border-[hsl(155_18%_14%)]/20 bg-transparent px-3 py-1.5 text-sm text-[hsl(155_18%_14%)] outline-none transition-colors hover:border-[hsl(8_72%_42%)] focus:border-[hsl(8_72%_42%)]"
             >
               <option value="fresh">Freshest first</option>
               <option value="popular">Most popular</option>
