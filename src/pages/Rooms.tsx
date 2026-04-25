@@ -4,7 +4,6 @@ import { ShoppingBasket, Search } from "lucide-react";
 import Navbar from "@/components/site/Navbar";
 import Footer from "@/components/site/Footer";
 import ProductCard from "@/components/site/ProductCard";
-import AisleDivider from "@/components/site/AisleDivider";
 import { BtnLink } from "@/components/ui/btn";
 import {
   products,
@@ -17,6 +16,16 @@ import { useCart, selectCartCount } from "@/stores/cart";
 type AisleKey = "All" | ProductCategory;
 type SortKey = "fresh" | "price-asc" | "price-desc" | "rating" | "popular";
 
+/**
+ * Shop (/rooms) — visual language ported from untillabs.com/our-team:
+ *  • Centered atmospheric hero (red "sky" gradient instead of blue)
+ *  • Monospace tagline in ( parentheses ) above an oversized display title
+ *  • Quiet text-link filter strip (no pills)
+ *  • Minimal team-card style product grid
+ *  • "What we care about" values strip before the footer
+ *
+ * Functionality (search, filters, cart, pagination) is unchanged.
+ */
 const Shop = () => {
   const [searchParams] = useSearchParams();
   const [aisle, setAisle] = useState<AisleKey>("All");
@@ -38,15 +47,13 @@ const Shop = () => {
     if (match) setAisle(match.key);
   }, [searchParams]);
 
-
   const cartCount = useCart(selectCartCount);
   const cartTotal = useCart((s) =>
     s.items.reduce((sum, i) => sum + i.qty * i.price, 0),
   );
 
   // Progressive disclosure — render the first PAGE_SIZE products immediately
-  // and load more as the user nears the bottom. Avoids requesting all 41+
-  // product images on initial paint, which crushes mobile LCP/TBT.
+  // and load more as the user nears the bottom.
   const PAGE_SIZE = 12;
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -81,7 +88,6 @@ const Shop = () => {
         list = [...list].sort((a, b) => b.reviewCount - a.reviewCount);
         break;
       default:
-        // "fresh" — picks first, then by rating
         list = [...list].sort(
           (a, b) =>
             Number(b.badges.includes("Today's Pick")) -
@@ -92,12 +98,10 @@ const Shop = () => {
     return list;
   }, [aisle, sort, pickOnly, deferredMaxPrice, deferredQuery]);
 
-  // Reset pagination whenever filters change (different list → start fresh).
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
   }, [aisle, sort, pickOnly, deferredMaxPrice, deferredQuery]);
 
-  // Auto-load more when sentinel scrolls into view.
   useEffect(() => {
     const el = sentinelRef.current;
     if (!el) return;
@@ -118,179 +122,119 @@ const Shop = () => {
   const visibleProducts = filtered.slice(0, visibleCount);
   const hasMore = visibleCount < filtered.length;
 
-  // Aisle chip list — "All" first, then real categories
-  const aisleChips: { key: AisleKey; label: string; chalk: string }[] = [
-    { key: "All", label: "All aisles", chalk: "everything" },
-    ...CATEGORIES.map((c) => ({ key: c.key, label: c.key, chalk: c.chalk })),
+  // Aisle list — "All" first, then real categories
+  const aisleChips: { key: AisleKey; label: string }[] = [
+    { key: "All", label: "All" },
+    ...CATEGORIES.map((c) => ({ key: c.key, label: c.key })),
+  ];
+
+  // Values strip — mirrors Untill's "What We Care About" 3×2 grid.
+  const values: { label: string; copy: string }[] = [
+    { label: "Picked at dawn", copy: "Every minute on the shelf matters." },
+    { label: "Real prices", copy: "No surge, no fake discounts." },
+    { label: "Honest weights", copy: "What the tag says is what you get." },
+    { label: "Swap freely", copy: "Don't love it? Swap or refund." },
+    { label: "Family of farms", copy: "We know every supplier by name." },
+    { label: "One-hour promise", copy: "Counter to door, every order." },
   ];
 
   return (
-    <main className="bg-kraft">
+    <main className="bg-[hsl(38_45%_96%)]">
       <Navbar />
 
-      {/* ===== Split-panel hero — mirrors landing page Hero ===== */}
+      {/* ========== HERO — centered, atmospheric red sky ========== */}
       <section
-        aria-label="Chaldal shop — fresh groceries"
-        className="relative w-full overflow-hidden bg-[hsl(8_72%_42%)]"
+        aria-label="Chaldal shop"
+        className="bg-untill-sky relative flex min-h-[88svh] w-full flex-col items-center justify-between overflow-hidden px-6 pb-10 pt-32 text-[hsl(38_45%_96%)] sm:pt-36 lg:pb-16 lg:pt-40"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,520px)_1fr]">
-          {/* LEFT — Tomato red sidebar */}
-          <div className="relative z-10 flex flex-col gap-8 bg-[hsl(8_72%_42%)] px-6 pb-12 pt-28 text-[hsl(38_45%_96%)] sm:px-10 lg:gap-10 lg:px-14 lg:pb-16 lg:pt-32">
-            <div className="hero-fade-up flex items-center justify-between text-[11px] uppercase tracking-[0.32em] text-[hsl(38_45%_96%)]/75">
-              <span>Open · Daily 7 am – 11 pm</span>
-              <span className="hidden sm:inline">No. 02 — The Shop</span>
-            </div>
+        {/* Top: parenthetical tagline */}
+        <div
+          className="hero-fade-up font-untill-mono text-center text-[13px] tracking-[0.05em] text-[hsl(38_45%_96%)]/85 sm:text-sm"
+          style={{ animationDelay: "0.05s" }}
+        >
+          ( fresh from karwan bazar, hourly. )
+        </div>
 
-            <div>
-              <span
-                className="hero-fade-up font-chalk mb-3 inline-block text-[clamp(1.4rem,2.6vw,1.85rem)] leading-none text-[hsl(38_90%_72%)]"
-                style={{ animationDelay: "0.05s" }}
-              >
-                today at the market —
-              </span>
-              <h1 className="lcp-fade font-body text-[clamp(2.25rem,5vw,3.75rem)] font-bold uppercase leading-[0.86] tracking-[-0.04em] text-[hsl(38_45%_96%)]">
-                <span className="block">Fresh</span>
-                <span className="block text-[hsl(38_90%_72%)]">groceries,</span>
-                <span className="block">chalked daily</span>
-              </h1>
-
-              <p
-                className="hero-fade-up mt-8 max-w-md text-base leading-relaxed text-[hsl(38_45%_96%)]/85 sm:text-lg"
-                style={{ animationDelay: "0.15s" }}
-              >
-                <span className="font-chalk text-xl text-[hsl(38_90%_72%)]">
-                  {filtered.length}
-                </span>{" "}
-                of {products.length} items in stock right now. Picked at dawn from Karwan Bazar — on your counter within the hour.
-              </p>
-            </div>
-
-            {/* Search bar */}
-            <div
-              className="hero-fade-up mt-2"
-              style={{ animationDelay: "0.25s" }}
-            >
-              <label className="mb-3 block text-[11px] uppercase tracking-[0.28em] text-[hsl(38_45%_96%)]/65">
-                What are you looking for?
-              </label>
-              <div className="flex items-stretch gap-2 border-b-2 border-[hsl(38_45%_96%)]/35 pb-2 transition-colors focus-within:border-[hsl(38_45%_96%)]">
-                <span className="grid place-items-center pr-1 text-[hsl(38_45%_96%)]/70">
-                  <Search className="h-5 w-5" strokeWidth={1.75} />
-                </span>
-                <input
-                  type="search"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search for ilish, mango, doi, paratha…"
-                  aria-label="Search products"
-                  className="min-w-0 flex-1 bg-transparent py-2 font-body text-lg text-[hsl(38_45%_96%)] outline-none placeholder:text-[hsl(38_45%_96%)]/45"
-                />
-              </div>
-
-              <div
-                className="hero-fade-up mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-[hsl(38_45%_96%)]/70"
-                style={{ animationDelay: "0.35s" }}
-              >
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[hsl(38_90%_72%)]" />
-                  Free delivery over ৳999
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[hsl(38_90%_72%)]" />
-                  Cash · bKash · card
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[hsl(38_90%_72%)]" />
-                  Swap anything you don't love
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* RIGHT — Full-bleed produce image. object-contain so the entire
-              composition stays visible at every viewport; tomato red fills any
-              letterbox so it blends with the left panel. */}
-          <div className="relative min-h-[50svh] overflow-hidden bg-[hsl(8_72%_42%)] lg:min-h-0 lg:self-stretch">
-            <img
-              src="/images/shop-hero-480.webp"
-              srcSet="/images/shop-hero-480.webp 480w, /images/shop-hero-960.webp 960w, /images/shop-hero.webp 1920w"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 60vw"
-              alt="A market basket of golden mangoes surrounded by limes, coriander, chilies, turmeric, rice and farm eggs"
-              width={1920}
-              height={1280}
-              fetchPriority="high"
-              decoding="async"
-              className="absolute inset-0 h-full w-full object-contain object-center"
+        {/* Middle: search pill */}
+        <div
+          className="hero-fade-up mx-auto mt-12 w-full max-w-md sm:mt-0"
+          style={{ animationDelay: "0.15s" }}
+        >
+          <div className="flex items-stretch gap-2 rounded-full border border-[hsl(38_45%_96%)]/30 bg-[hsl(38_45%_96%)]/10 px-5 py-3 backdrop-blur-md transition-colors focus-within:border-[hsl(38_45%_96%)]/60 focus-within:bg-[hsl(38_45%_96%)]/15">
+            <Search className="h-4 w-4 self-center text-[hsl(38_45%_96%)]/70" strokeWidth={1.75} />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search for ilish, mango, doi…"
+              aria-label="Search products"
+              className="font-untill-mono min-w-0 flex-1 bg-transparent text-sm text-[hsl(38_45%_96%)] outline-none placeholder:text-[hsl(38_45%_96%)]/45"
             />
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[hsl(8_72%_42%)]/85 to-transparent"
-            />
-
-            {/* Fresh-today chalk stamp — top-right */}
-            <div
-              aria-hidden
-              className="hero-fade-up pointer-events-none absolute right-4 top-4 sm:right-6 sm:top-6 lg:right-10 lg:top-10"
-              style={{ animationDelay: "0.4s" }}
-            >
-              <div className="fresh-badge">
-                <span>
-                  Fresh<br />Today<br />
-                  <span className="text-[0.7rem] opacity-70">— 4:30 am</span>
-                </span>
-              </div>
-            </div>
-
-            {/* Hand-written price tags floating over produce */}
-            <div
-              aria-hidden
-              className="hero-fade-up pointer-events-none absolute bottom-24 right-6 hidden sm:block lg:bottom-32 lg:right-12"
-              style={{ animationDelay: "0.5s" }}
-            >
-              <span className="price-tag">৳ 90 / kg · Himsagar</span>
-            </div>
-            <div
-              aria-hidden
-              className="hero-fade-up pointer-events-none absolute bottom-8 left-8 hidden sm:block lg:bottom-12 lg:left-16"
-              style={{ animationDelay: "0.6s" }}
-            >
-              <span className="price-tag" style={{ transform: "rotate(4deg)" }}>
-                ৳ 30 / bunch · Dhonepata
-              </span>
-            </div>
           </div>
+          <p className="font-untill-mono mt-3 text-center text-[11px] tracking-wide text-[hsl(38_45%_96%)]/65">
+            {filtered.length} of {products.length} items in stock
+          </p>
+        </div>
+
+        {/* Bottom: oversized title */}
+        <h1
+          className="lcp-fade font-untill-display mt-10 text-center text-[hsl(38_45%_96%)]"
+          style={{ fontSize: "clamp(4.5rem, 18vw, 14rem)" }}
+        >
+          The Shop
+        </h1>
+      </section>
+
+      {/* ========== INTRO — "We stock what we'd cook tonight." ========== */}
+      <section className="bg-[hsl(38_45%_96%)] px-6 py-24 sm:py-32 lg:py-40">
+        <div className="mx-auto max-w-2xl text-center text-[hsl(155_18%_14%)]">
+          <p className="font-untill-mono text-[12px] uppercase tracking-[0.05em] text-[hsl(155_18%_14%)]/55">
+            ( Our shelves )
+          </p>
+          <h2 className="font-untill-display mt-6 text-[clamp(2.25rem,5vw,3.5rem)] text-[hsl(155_18%_14%)]">
+            We stock what we'd cook tonight.
+          </h2>
+          <p className="mx-auto mt-8 max-w-xl text-base leading-relaxed text-[hsl(155_18%_14%)]/70 sm:text-lg">
+            Some of our supply comes from farms we've worked with for fifteen years.
+            Others arrived last month after one good melon. What unites them is
+            proof of work: produce that earns its place on your counter. We restock
+            fast when something deserves it.
+          </p>
         </div>
       </section>
 
-      {/* ===== Aisle filter strip — cream ribbon, scrolls with the page ===== */}
-      <section className="border-y border-[hsl(8_72%_42%)]/15 bg-[hsl(38_45%_94%)]">
-        <div className="container flex flex-wrap items-center gap-2 py-4" style={{ fontFamily: "'Space Grotesk', system-ui, sans-serif" }}>
-          {aisleChips.map((a) => {
-            const active = aisle === a.key;
-            return (
-              <button
-                key={a.key}
-                type="button"
-                onClick={() => setAisle(a.key)}
-                className={[
-                  "group/chip relative inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-medium tracking-tight transition-all",
-                  active
-                    ? "border-[hsl(8_72%_42%)] bg-[hsl(8_72%_42%)] text-[hsl(38_45%_96%)] shadow-[0_4px_12px_-4px_hsl(8_72%_30%/0.45)]"
-                    : "border-[hsl(155_18%_14%)]/20 text-[hsl(155_18%_14%)]/85 hover:border-[hsl(8_72%_42%)] hover:text-[hsl(8_72%_42%)]",
-                ].join(" ")}
-              >
-                {a.label}
-              </button>
-            );
-          })}
+      {/* ========== FILTER STRIP — quiet text-buttons, no pills ========== */}
+      <section className="border-y border-[hsl(155_18%_14%)]/10 bg-[hsl(38_45%_96%)]">
+        <div className="container flex flex-wrap items-center gap-x-6 gap-y-3 py-5">
+          <nav className="font-untill-mono flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] uppercase tracking-[0.16em]">
+            {aisleChips.map((a) => {
+              const active = aisle === a.key;
+              return (
+                <button
+                  key={a.key}
+                  type="button"
+                  onClick={() => setAisle(a.key)}
+                  className={[
+                    "relative pb-1 transition-colors",
+                    active
+                      ? "text-[hsl(8_72%_42%)]"
+                      : "text-[hsl(155_18%_14%)]/55 hover:text-[hsl(155_18%_14%)]",
+                    active
+                      ? "after:absolute after:inset-x-0 after:-bottom-px after:h-px after:bg-[hsl(8_72%_42%)]"
+                      : "",
+                  ].join(" ")}
+                >
+                  {a.label}
+                </button>
+              );
+            })}
+          </nav>
 
-          {/* Right-aligned controls */}
-          <div className="ml-auto flex flex-wrap items-center gap-4 text-sm text-[hsl(155_18%_14%)]/80">
+          {/* Right-side controls */}
+          <div className="font-untill-mono ml-auto flex flex-wrap items-center gap-5 text-[12px] uppercase tracking-[0.14em] text-[hsl(155_18%_14%)]/65">
             <label className="flex items-center gap-2">
-              <span className="text-xs uppercase tracking-[0.18em] text-[hsl(155_18%_14%)]/60">Max</span>
-              <span className="text-sm font-semibold text-[hsl(8_72%_42%)]">
-                {formatBDT(maxPrice)}
-              </span>
+              <span>Max</span>
+              <span className="text-[hsl(8_72%_42%)]">{formatBDT(maxPrice)}</span>
               <input
                 type="range"
                 min={50}
@@ -298,7 +242,8 @@ const Shop = () => {
                 step={50}
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(Number(e.target.value))}
-                className="w-32 accent-[hsl(8_72%_42%)]"
+                className="w-24 accent-[hsl(8_72%_42%)]"
+                aria-label="Maximum price"
               />
             </label>
 
@@ -307,56 +252,51 @@ const Shop = () => {
                 type="checkbox"
                 checked={pickOnly}
                 onChange={(e) => setPickOnly(e.target.checked)}
-                className="h-4 w-4 accent-[hsl(8_72%_42%)]"
+                className="h-3.5 w-3.5 accent-[hsl(8_72%_42%)]"
               />
-              <span className="text-sm">Today's picks only</span>
+              <span>Picks</span>
             </label>
 
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortKey)}
-              className="cursor-pointer rounded-md border border-[hsl(155_18%_14%)]/20 bg-transparent px-3 py-1.5 text-sm text-[hsl(155_18%_14%)] outline-none transition-colors hover:border-[hsl(8_72%_42%)] focus:border-[hsl(8_72%_42%)]"
+              className="font-untill-mono cursor-pointer border-0 border-b border-transparent bg-transparent pb-0.5 text-[12px] uppercase tracking-[0.14em] text-[hsl(155_18%_14%)] outline-none transition-colors hover:border-[hsl(8_72%_42%)] focus:border-[hsl(8_72%_42%)]"
+              aria-label="Sort"
             >
-              <option value="fresh">Freshest first</option>
-              <option value="popular">Most popular</option>
-              <option value="price-asc">Price · low → high</option>
-              <option value="price-desc">Price · high → low</option>
+              <option value="fresh">Freshest</option>
+              <option value="popular">Popular</option>
+              <option value="price-asc">Price ↑</option>
+              <option value="price-desc">Price ↓</option>
               <option value="rating">Top rated</option>
             </select>
           </div>
         </div>
       </section>
 
-      <AisleDivider
-        number={aisle === "All" ? "Aisle 01" : "Aisle 02"}
-        label={aisle === "All" ? "All aisles" : aisle}
-      />
-
-      {/* ===== Product shelves ===== */}
-      <section className="container pb-28 pt-4 md:pb-36">
+      {/* ========== PRODUCT GRID — minimal team-card style ========== */}
+      <section className="container py-16 md:py-24">
         {filtered.length === 0 ? (
-          <div className="rounded-2xl border-2 border-dashed border-foreground/20 bg-background/60 py-20 text-center">
-            <p className="font-chalk text-4xl text-leaf">
-              Stall's empty — try another aisle.
+          <div className="py-24 text-center">
+            <p className="font-untill-display text-3xl text-[hsl(155_18%_14%)]">
+              Nothing on the shelf.
             </p>
-            <p className="mt-3 text-sm text-muted-foreground">
-              Clear your search, widen the price, or pick a different aisle above.
+            <p className="font-untill-mono mt-3 text-xs uppercase tracking-[0.2em] text-[hsl(155_18%_14%)]/55">
+              Clear your search or widen the price.
             </p>
           </div>
         ) : (
           <>
-            <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            <ul className="grid grid-cols-2 gap-x-5 gap-y-12 sm:grid-cols-3 lg:grid-cols-4">
               {visibleProducts.map((p, i) => (
                 <li key={p.id}>
-                  {/* No fetchpriority="high" on cards — the hero image owns LCP. */}
                   <ProductCard product={p} index={i} priority={false} />
                 </li>
               ))}
             </ul>
             {hasMore && (
-              <div ref={sentinelRef} className="mt-12 flex justify-center">
-                <span className="text-xs uppercase tracking-[0.32em] text-foreground/50">
-                  Loading more stalls…
+              <div ref={sentinelRef} className="mt-16 flex justify-center">
+                <span className="font-untill-mono text-[11px] uppercase tracking-[0.3em] text-[hsl(155_18%_14%)]/40">
+                  Loading more…
                 </span>
               </div>
             )}
@@ -364,22 +304,57 @@ const Shop = () => {
         )}
       </section>
 
-      {/* ===== Sticky basket bar (only when items in cart) ===== */}
+      {/* ========== VALUES — "What we care about" 3×2 grid ========== */}
+      <section className="border-t border-[hsl(155_18%_14%)]/10 bg-[hsl(38_45%_96%)] px-6 py-24 sm:py-32">
+        <div className="mx-auto max-w-5xl">
+          <div className="mb-14 text-center">
+            <p className="font-untill-mono text-[12px] uppercase tracking-[0.05em] text-[hsl(155_18%_14%)]/55">
+              ( Our principles )
+            </p>
+            <h2 className="font-untill-display mt-5 text-[clamp(2rem,4.5vw,3rem)] text-[hsl(155_18%_14%)]">
+              What we care about.
+            </h2>
+            <p className="mx-auto mt-6 max-w-xl text-[15px] leading-relaxed text-[hsl(155_18%_14%)]/70">
+              We're building a grocer that earns the trust of one neighbourhood at
+              a time. To this end, we hold ourselves to the standards we'd want of
+              the people feeding our families.
+            </p>
+          </div>
+
+          <ul className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl bg-[hsl(155_18%_14%)]/12 sm:grid-cols-2 lg:grid-cols-3">
+            {values.map((v) => (
+              <li
+                key={v.label}
+                className="bg-[hsl(38_45%_96%)] px-7 py-8 transition-colors hover:bg-[hsl(38_45%_94%)]"
+              >
+                <h3 className="font-untill-display text-lg text-[hsl(155_18%_14%)]">
+                  {v.label}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-[hsl(155_18%_14%)]/65">
+                  {v.copy}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* ========== Sticky basket bar ========== */}
       {cartCount > 0 && (
         <div className="pointer-events-none fixed inset-x-0 bottom-4 z-40 flex justify-center px-4">
-          <div className="bg-chalkboard pointer-events-auto flex items-center gap-4 rounded-full border border-[hsl(38_45%_94%)]/15 px-4 py-2.5 shadow-elegant">
-            <span className="grid h-9 w-9 place-items-center rounded-full bg-[hsl(45_96%_60%)] text-[hsl(150_35%_14%)]">
+          <div className="pointer-events-auto flex items-center gap-4 rounded-full border border-[hsl(38_45%_94%)]/15 bg-[hsl(155_18%_14%)] px-4 py-2.5 shadow-elegant">
+            <span className="grid h-9 w-9 place-items-center rounded-full bg-[hsl(8_72%_42%)] text-[hsl(38_45%_96%)]">
               <ShoppingBasket className="h-4 w-4" />
             </span>
             <div className="flex flex-col leading-tight">
-              <span className="font-chalk text-base text-[hsl(38_45%_94%)]/80">
-                {cartCount} {cartCount === 1 ? "item" : "items"} in basket
+              <span className="font-untill-mono text-[11px] uppercase tracking-[0.18em] text-[hsl(38_45%_94%)]/75">
+                {cartCount} {cartCount === 1 ? "item" : "items"}
               </span>
-              <span className="font-display text-sm text-[hsl(45_96%_60%)]">
+              <span className="font-untill-display text-sm text-[hsl(38_45%_94%)]">
                 {formatBDT(cartTotal)} · free over ৳999
               </span>
             </div>
-            <BtnLink to="/checkout" variant="accent" size="sm" className="ml-2">
+            <BtnLink to="/checkout" variant="ivory" size="sm" className="ml-2">
               Checkout
             </BtnLink>
           </div>
