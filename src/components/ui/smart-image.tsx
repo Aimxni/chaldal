@@ -25,6 +25,8 @@ const SmartImage = ({
   loading = "lazy",
   decoding = "async",
   src,
+  srcSet,
+  sizes,
   onLoad,
   ...props
 }: SmartImageProps) => {
@@ -57,6 +59,8 @@ const SmartImage = ({
       <img
         ref={ref}
         src={src}
+        srcSet={srcSet}
+        sizes={sizes}
         loading={loading}
         decoding={decoding}
         onLoad={(e) => {

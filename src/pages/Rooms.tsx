@@ -1,4 +1,4 @@
-import { useDeferredValue, useEffect, useMemo, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { ShoppingBasket, Search } from "lucide-react";
 import Navbar from "@/components/site/Navbar";
@@ -44,6 +44,13 @@ const Shop = () => {
     s.items.reduce((sum, i) => sum + i.qty * i.price, 0),
   );
 
+  // Progressive disclosure — render the first PAGE_SIZE products immediately
+  // and load more as the user nears the bottom. Avoids requesting all 41+
+  // product images on initial paint, which crushes mobile LCP/TBT.
+  const PAGE_SIZE = 12;
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
   const filtered = useMemo(() => {
     let list = products.filter((p) => p.price <= deferredMaxPrice);
     if (aisle !== "All") {
@@ -84,6 +91,32 @@ const Shop = () => {
     }
     return list;
   }, [aisle, sort, pickOnly, deferredMaxPrice, deferredQuery]);
+
+  // Reset pagination whenever filters change (different list → start fresh).
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [aisle, sort, pickOnly, deferredMaxPrice, deferredQuery]);
+
+  // Auto-load more when sentinel scrolls into view.
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            setVisibleCount((n) => Math.min(n + PAGE_SIZE, filtered.length));
+          }
+        }
+      },
+      { rootMargin: "600px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [filtered.length]);
+
+  const visibleProducts = filtered.slice(0, visibleCount);
+  const hasMore = visibleCount < filtered.length;
 
   // Aisle chip list — "All" first, then real categories
   const aisleChips: { key: AisleKey; label: string; chalk: string }[] = [
@@ -311,13 +344,23 @@ const Shop = () => {
             </p>
           </div>
         ) : (
-          <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            {filtered.map((p, i) => (
-              <li key={p.id}>
-                <ProductCard product={p} index={i} priority={i < 5} />
-              </li>
-            ))}
-          </ul>
+          <>
+            <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+              {visibleProducts.map((p, i) => (
+                <li key={p.id}>
+                  {/* No fetchpriority="high" on cards — the hero image owns LCP. */}
+                  <ProductCard product={p} index={i} priority={false} />
+                </li>
+              ))}
+            </ul>
+            {hasMore && (
+              <div ref={sentinelRef} className="mt-12 flex justify-center">
+                <span className="text-xs uppercase tracking-[0.32em] text-foreground/50">
+                  Loading more stalls…
+                </span>
+              </div>
+            )}
+          </>
         )}
       </section>
 

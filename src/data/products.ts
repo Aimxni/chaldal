@@ -65,8 +65,21 @@ export const CATEGORIES: { key: ProductCategory; chalk: string }[] = [
 ];
 
 // Tiny helper to build cleanly compressed Unsplash URLs.
+// Default `src` is mid-range (480w) to suit ~240–300 px display widths at 2x DPR.
+// Use `uSet(id)` to emit a responsive srcSet for ProductCard / detail hero.
 const u = (id: string) =>
-  `https://images.unsplash.com/${id}?w=800&q=75&auto=format&fit=crop`;
+  `https://images.unsplash.com/${id}?w=480&q=70&auto=format&fit=crop`;
+
+/** Responsive srcSet for product imagery — covers 1x and 2x DPR for typical
+ *  card widths (160–320 px on phones, ~280 px on desktop grid). */
+export const uSet = (src: string) => {
+  // src looks like "...unsplash.com/<id>?w=480&q=70&auto=format&fit=crop"
+  const base = src.replace(/\?.*$/, "");
+  const opts = "&q=70&auto=format&fit=crop";
+  return [240, 360, 480, 640, 800]
+    .map((w) => `${base}?w=${w}${opts} ${w}w`)
+    .join(", ");
+};
 
 export const products: Product[] = [
   // ───── Fruits & Vegetables ─────

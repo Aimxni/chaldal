@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import SmartImage from "@/components/ui/smart-image";
 import { Btn } from "@/components/ui/btn";
 import { useCart } from "@/stores/cart";
-import { Product, formatBDT } from "@/data/products";
+import { Product, formatBDT, uSet } from "@/data/products";
 
 type Props = {
   product: Product;
@@ -67,9 +67,11 @@ const ProductCard = ({ product, index = 0, priority = false }: Props) => {
       <div className="relative aspect-[4/5] overflow-hidden rounded-[0.95rem] bg-secondary">
         <SmartImage
           src={product.image}
+          srcSet={uSet(product.image)}
+          sizes="(min-width: 1280px) 280px, (min-width: 1024px) 240px, (min-width: 640px) 30vw, 45vw"
           alt={product.name}
-          width={640}
-          height={800}
+          width={480}
+          height={600}
           loading={priority ? "eager" : "lazy"}
           fetchPriority={priority ? "high" : "auto"}
           className="transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.04]"
