@@ -396,6 +396,42 @@
   .marquee {
     animation: marquee 40s linear infinite;
   }
+
+  /* ===== Untill-style typography utilities (used on /rooms shop page) ===== */
+  /* Small parenthetical tagline — JetBrains Mono, ivory, letter-spaced */
+  .font-untill-mono {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  /* Oversized hero display — Inter Black, super tight tracking */
+  .font-untill-display {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 900;
+    letter-spacing: -0.045em;
+    line-height: 0.86;
+  }
+
+  /* Cloudy red atmospheric background — soft radial blurs over tomato red.
+     Mimics the dreamy sky on untillabs.com but in our brand palette. */
+  .bg-untill-sky {
+    background-color: hsl(8 72% 42%);
+    background-image:
+      radial-gradient(ellipse 60% 45% at 18% 30%, hsl(8 70% 62% / 0.55) 0%, transparent 60%),
+      radial-gradient(ellipse 55% 40% at 82% 25%, hsl(15 78% 65% / 0.45) 0%, transparent 65%),
+      radial-gradient(ellipse 70% 50% at 50% 80%, hsl(8 78% 58% / 0.50) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 80% 70%, hsl(20 80% 70% / 0.35) 0%, transparent 60%),
+      linear-gradient(180deg, hsl(8 72% 42%) 0%, hsl(8 72% 38%) 100%);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+    animation: untill-sky-drift 32s ease-in-out infinite alternate;
+  }
+  @keyframes untill-sky-drift {
+    0%   { background-position: 0% 0%, 100% 0%, 50% 100%, 80% 70%, 0 0; }
+    100% { background-position: 8% 4%, 92% 6%, 54% 96%, 76% 74%, 0 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bg-untill-sky { animation: none; }
+  }
 }
 
 /* ====== Farmers-market components: price tag, fresh badge, aisle divider ====== */
